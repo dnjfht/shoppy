@@ -20,13 +20,3 @@ code {
   font-family: "strawberry";
   src: url("./assets/fonts/고령딸기체+TTF.ttf");
 }
-
-@font-face {
-  font-family: "chab";
-  src: url("./assets/fonts/chab.ttf");
-}
-
-@font-face {
-  font-family: "ddag";
-  src: url("./assets/fonts/ddag.ttf");
-}

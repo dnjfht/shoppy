@@ -14,7 +14,7 @@ export default function Navbar() {
 
       <form className="w-3/12 relative">
         <input
-          className="w-full h-[68px] px-6 box-border rounded-full border-[2px] border-solid border-black outline-none text-[1.1rem]"
+          className="w-full h-[68px] px-10 box-border rounded-full border-[2px] border-solid border-black outline-none text-[1.1rem]"
           type="text"
           placeholder="검색어를 입력하세요."
         />

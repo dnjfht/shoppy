@@ -15,18 +15,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-@font-face {
-  font-family: "strawberry";
-  src: url("./assets/fonts/고령딸기체+TTF.ttf");
-}
-
-@font-face {
-  font-family: "chab";
-  src: url("./assets/fonts/chab.ttf");
-}
-
-@font-face {
-  font-family: "ddag";
-  src: url("./assets/fonts/ddag.ttf");
-}
