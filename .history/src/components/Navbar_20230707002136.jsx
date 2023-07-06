@@ -11,14 +11,14 @@ export default function Navbar() {
       <ul className="flex items-center text-[2.5rem]">
         <li
           onClick={() => navigate("/")}
-          className="flex items-center font-[InkLipquid] cursor-pointer"
+          className="flex items-center font-[chab] cursor-pointer"
         >
           <img
-            className="w-[5rem] object-cover"
+            className="w-[100px]"
             src={process.env.PUBLIC_URL + "/logo.png"}
             alt="logo"
           />
-          <p className="ml-3">Birthday Party</p>
+          <p className="ml-2">Birthday Party</p>
         </li>
       </ul>
 

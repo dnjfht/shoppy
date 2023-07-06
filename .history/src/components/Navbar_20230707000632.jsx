@@ -9,16 +9,9 @@ export default function Navbar() {
   return (
     <div className="w-10/12 h-[130px] mx-auto flex items-center justify-between fixed left-0 right-0">
       <ul className="flex items-center text-[2.5rem]">
-        <li
-          onClick={() => navigate("/")}
-          className="flex items-center font-[InkLipquid] cursor-pointer"
-        >
-          <img
-            className="w-[5rem] object-cover"
-            src={process.env.PUBLIC_URL + "/logo.png"}
-            alt="logo"
-          />
-          <p className="ml-3">Birthday Party</p>
+        <li onClick={navigate("/")} className="flex items-center font-[chab]">
+          <PiCakeFill />
+          <p className="ml-2">Birthday Party</p>
         </li>
       </ul>
 

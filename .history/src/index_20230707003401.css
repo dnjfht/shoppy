@@ -17,6 +17,21 @@ code {
 }
 
 @font-face {
+  font-family: "strawberry";
+  src: url("./assets/fonts/고령딸기체+TTF.ttf");
+}
+
+@font-face {
+  font-family: "chab";
+  src: url("./assets/fonts/chab.ttf");
+}
+
+@font-face {
+  font-family: "ddag";
+  src: url("./assets/fonts/ddag.ttf");
+}
+
+@font-face {
   font-family: "InkLipquid";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/InkLipquid.woff")
     format("woff");

@@ -4,7 +4,6 @@ import Root from "./pages/Root";
 import AllProduct from "./pages/AllProduct";
 import NewProduct from "./pages/NewProduct";
 import Detail from "./pages/Detail";
-import MyCart from "./pages/MyCart";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -17,7 +16,6 @@ function App() {
         { path: "/products", element: <AllProduct /> },
         { path: "/products/new", element: <NewProduct /> },
         { path: "/products/:productId", element: <Detail /> },
-        { path: "/carts", element: <MyCart /> },
         { path: "*", element: <NotFoundPage /> },
       ],
     },

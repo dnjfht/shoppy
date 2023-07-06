@@ -17,7 +17,6 @@ function App() {
         { path: "/products", element: <AllProduct /> },
         { path: "/products/new", element: <NewProduct /> },
         { path: "/products/:productId", element: <Detail /> },
-        { path: "/carts", element: <MyCart /> },
         { path: "*", element: <NotFoundPage /> },
       ],
     },
