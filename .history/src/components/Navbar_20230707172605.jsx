@@ -27,7 +27,7 @@ export default function Navbar() {
       } w-full h-[130px] fixed left-0 right-0 z-[999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
     >
       <div className="w-10/12 h-full mx-auto flex items-center justify-between">
-        <ul className="flex items-center text-[2.5rem] font-[InkLipquid]">
+        <ul className="flex items-center text-[2rem] font-[InkLipquid]">
           <li
             onClick={() => navigate("/")}
             className="flex items-center cursor-pointer"
@@ -41,7 +41,7 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <ul className="w-1/4 flex items-center justify-between text-[1.2rem]">
+        <ul className="w-2/6 flex items-center justify-between text-[2rem]">
           <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
             All
           </li>
@@ -56,7 +56,7 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <ul className="flex items-center text-[1.2rem]">
+        <ul className="flex items-center text-[1.7rem]">
           <li className="mr-7">
             <FiSearch />
           </li>

@@ -1,0 +1,76 @@
+{
+  "products": [
+    {
+      "id": "141865cd-1c56-4e08-bd17-f1c04ff9545f",
+      "title": "나이키 형광 런닝화",
+      "image": "./image/products/shoes/1.png",
+      "type": "shoes",
+      "price": 209000,
+      "salePrice": 184000,
+      "option": {
+        "size": [230, 240, 250, 260, 270, 280],
+        "color": [
+          "black",
+          "white",
+          "red",
+          "pink",
+          "gray",
+          "blue",
+          "yellow",
+          "beige"
+        ]
+      },
+      "description": "깨끗한 화이트 컬러이고, 깔끔한 디자인의 소가죽 소재 스니커즈에요 투박하거나 캐주얼하기만 한 운동화 디자인이 아니어서 원피스 혹은 스커트를 입을 때도 신기 좋은 스니커즈에요 라운드 쉐입의 앞 코 라인은 발을 동글동글 귀여워 보이게 해준답니다"
+    },
+    {
+      "id": "2dd1f428-0ef3-44c2-b02e-4ae0733a53a5",
+      "title": "나이키 런닝화",
+      "image": "./image/products/shoes/2.png",
+      "type": "shoes",
+      "price": 249000,
+      "salePrice": 212000,
+      "option": {
+        "size": [230, 240, 250, 260, 270, 280],
+        "color": [
+          "black",
+          "white",
+          "red",
+          "pink",
+          "gray",
+          "blue",
+          "yellow",
+          "beige"
+        ]
+      },
+      "description": "깨끗한 화이트 컬러이고, 깔끔한 디자인의 소가죽 소재 스니커즈에요 투박하거나 캐주얼하기만 한 운동화 디자인이 아니어서 원피스 혹은 스커트를 입을 때도 신기 좋은 스니커즈에요 라운드 쉐입의 앞 코 라인은 발을 동글동글 귀여워 보이게 해준답니다"
+    },
+    {
+      "id": "aade1a90-0e92-4331-89be-f864fda9bd09",
+      "title": "나이키 런닝화",
+      "image": "./image/products/shoes/3.png",
+      "type": "shoes",
+      "price": 179000,
+      "salePrice": 168000,
+      "option": {
+        "size": [230, 240, 250, 260, 270, 280],
+        "color": [
+          "black",
+          "white",
+          "red",
+          "pink",
+          "gray",
+          "blue",
+          "yellow",
+          "beige"
+        ]
+      },
+      "description": "깨끗한 화이트 컬러이고, 깔끔한 디자인의 소가죽 소재 스니커즈에요 투박하거나 캐주얼하기만 한 운동화 디자인이 아니어서 원피스 혹은 스커트를 입을 때도 신기 좋은 스니커즈에요 라운드 쉐입의 앞 코 라인은 발을 동글동글 귀여워 보이게 해준답니다"
+
+  ],
+  "banner": [
+    {
+      "id": "8ca7444e-9939-463e-88e1-fe5057e87b9e",
+      "image": "./image/banner/mainBanner1.png"
+    }
+  ]
+}

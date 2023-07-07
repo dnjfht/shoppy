@@ -24,10 +24,10 @@ export default function Navbar() {
         scrollHeight >= 140
           ? "bg-[rgba(255,255,255,100)] shadow-lg"
           : "bg-[rgba(255,255,255,0)]"
-      } w-full h-[130px] fixed left-0 right-0 z-[999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
+      } w-full h-[130px] fixed left-0 right-0 z-[999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer font-[InkLipquid]`}
     >
       <div className="w-10/12 h-full mx-auto flex items-center justify-between">
-        <ul className="flex items-center text-[2.5rem] font-[InkLipquid]">
+        <ul className="flex items-center text-[2.5rem]">
           <li
             onClick={() => navigate("/")}
             className="flex items-center cursor-pointer"
@@ -41,22 +41,16 @@ export default function Navbar() {
           </li>
         </ul>
 
-        <ul className="w-1/4 flex items-center justify-between text-[1.2rem]">
-          <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
+        <ul className="w-2/6 flex items-center justify-between text-[2rem] relative">
+          <li className="after:absolute after:bottom-0 after:left-0 after:w-8 after:h-[1rem] after:bg-[#282828]">
             All
           </li>
-          <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
-            Women
-          </li>
-          <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
-            Men
-          </li>
-          <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
-            Shoes
-          </li>
+          <li>Women</li>
+          <li>Men</li>
+          <li>Shoes</li>
         </ul>
 
-        <ul className="flex items-center text-[1.2rem]">
+        <ul className="flex items-center text-[1.7rem]">
           <li className="mr-7">
             <FiSearch />
           </li>
