@@ -22,9 +22,9 @@ export default function Navbar() {
     <div
       className={`${
         scrollHeight >= 140
-          ? "bg-[rgba(255,255,255,100)] shadow-lg"
+          ? "bg-[rgba(255,255,255,100)]"
           : "bg-[rgba(255,255,255,0)]"
-      } w-full h-[130px] fixed left-0 right-0 z-[999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
+      } w-full h-[130px] fixed left-0 right-0 z-[999999] transition-all duration-700`}
     >
       <div className="w-10/12 h-full mx-auto flex items-center justify-between">
         <ul className="flex items-center text-[2.5rem]">
