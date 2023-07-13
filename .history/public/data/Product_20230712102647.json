@@ -133,7 +133,7 @@
       "description": "럭셔리 소가죽 소재이며 앞코 부분은 살짝 각이 잡힌 동글동글한 느낌이고 신었을 때 발이 딱 예뻐보이는 그런 쉐입으로 잡아주었어요 "
     },
     {
-      "id": "d80bd706-02f1-484e-ab71-f667acabfa50",
+      "id": "58cde64b-0736-4307-ada0-e10c00efdc25",
       "title": "멋스런 나이키 운동화",
       "image": "./image/products/shoes/7.png",
       "type": "shoes",
@@ -159,14 +159,6 @@
     {
       "id": "8ca7444e-9939-463e-88e1-fe5057e87b9e",
       "image": "./image/banner/mainBanner1.png"
-    },
-    {
-      "id": "45c0c9d9-ba72-4361-9830-c57d950dbe3e",
-      "image": "./image/banner/mainBanner2.png"
-    },
-    {
-      "id": "ad04ebb8-cd96-4eae-a6a0-30571212b05c",
-      "image": "./image/banner/mainBanner3.png"
     }
   ]
 }
