@@ -19,10 +19,13 @@ export default function Main() {
     <div>
       <MainSlider />
 
-      {isLoading && "Loading..."}
-      {error && "Occured error...!"}
-
-      {items && <NewProduct items={items} />}
+      {items && (
+        <ul>
+          {items.products.map((item) => {
+            return <NewProduct />;
+          })}
+        </ul>
+      )}
     </div>
   );
 }

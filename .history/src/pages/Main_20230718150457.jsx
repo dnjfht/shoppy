@@ -19,10 +19,7 @@ export default function Main() {
     <div>
       <MainSlider />
 
-      {isLoading && "Loading..."}
-      {error && "Occured error...!"}
-
-      {items && <NewProduct items={items} />}
+      {items && <NewProduct />}
     </div>
   );
 }

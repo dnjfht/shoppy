@@ -21,7 +21,6 @@ export default function Main() {
 
       {isLoading && "Loading..."}
       {error && "Occured error...!"}
-
       {items && <NewProduct items={items} />}
     </div>
   );

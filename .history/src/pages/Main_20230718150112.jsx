@@ -18,11 +18,7 @@ export default function Main() {
   return (
     <div>
       <MainSlider />
-
-      {isLoading && "Loading..."}
-      {error && "Occured error...!"}
-
-      {items && <NewProduct items={items} />}
+      <NewProduct />
     </div>
   );
 }

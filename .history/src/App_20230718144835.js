@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Main from "./pages/Main";
 import Root from "./pages/Root";
 import AllProduct from "./pages/AllProduct";
+import NewProduct from "./pages/NewProducts";
 import Detail from "./pages/Detail";
 import MyCart from "./pages/MyCart";
 import NotFoundPage from "./pages/NotFoundPage";

@@ -42,14 +42,7 @@ export default function Navbar() {
         </ul>
 
         <ul className="w-1/4 flex items-center justify-between text-[1.2rem]">
-          <li
-            onClick={() => {
-              navigate("/products/new");
-            }}
-            className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700"
-          >
-            New
-          </li>
+          <li>New</li>
           <li className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700">
             All
           </li>
