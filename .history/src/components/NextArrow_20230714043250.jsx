@@ -6,7 +6,7 @@ export default function NextArrow({ onClick }) {
     <>
       <div
         onClick={onClick}
-        className="text-[4.4rem] text-[rgba(255,255,255,0.6)] absolute top-[42%] right-[14%] z-[9999999] cursor-pointer"
+        className="text-[4rem] text-[white] absolute top-[40%] right-[10px] z-[9999999] cursor-pointer"
       >
         <BsChevronRight />
       </div>

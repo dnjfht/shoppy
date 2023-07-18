@@ -28,7 +28,7 @@ export default function MainSlider({ autoplay = true }) {
   } = useQuery(["bannerImg"], async () => {
     return axios //
       .get("/data/Product.json") //
-      .then((res) => res.data.items);
+      .then((res) => res.data.items.banner);
   });
 
   console.log(bannerImg);
@@ -39,7 +39,7 @@ export default function MainSlider({ autoplay = true }) {
       {error && "Occured error...!"}
       <Slider {...settings}>
         {bannerImg &&
-          bannerImg.banner.map((img) => {
+          bannerImg.map((img) => {
             return (
               <div key={img.id}>
                 <img

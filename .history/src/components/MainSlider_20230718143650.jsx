@@ -39,7 +39,7 @@ export default function MainSlider({ autoplay = true }) {
       {error && "Occured error...!"}
       <Slider {...settings}>
         {bannerImg &&
-          bannerImg.banner.map((img) => {
+          bannerImg.banners.map((img) => {
             return (
               <div key={img.id}>
                 <img
