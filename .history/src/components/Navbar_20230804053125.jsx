@@ -46,13 +46,11 @@ export default function Navbar() {
             className="flex items-center cursor-pointer"
           >
             <img
-              className="xl:w-[5rem] md:w-[3.6rem] object-cover"
+              className="w-[5rem] object-cover"
               src={process.env.PUBLIC_URL + "/image/logo.png"}
               alt="logo"
             />
-            <p className="xl:text-[2.5rem] md:text-[1.6rem] ml-3">
-              Birthday Party
-            </p>
+            <p className="ml-3">Birthday Party</p>
           </li>
         </ul>
 

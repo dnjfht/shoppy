@@ -57,20 +57,6 @@ export function logout() {
 // 이제는 null을 리턴해 setUser에 직접 담아줄 필요가 없어졌다.
 // onUserStateChange 함수가 유저 값의 변화를 인지해 setUser에 인수로 유저를 담아줄 것이기 때문이다.
 
-// NAvbar 컴포넌트 handleLogin 함수 =>
-// const handleLogin = () => {
-//   login().then(setUser);
-//}
-
-// NAvbar 컴포넌트 handleLogout 함수 =>
-// const handleLogout = () => {
-//   logout().then(setUser);
-// }
-
-// 자연스레 Navbar 컴포넌트에서 handleLogin, handleLogout 함수가 실행되면서
-// login, logout 함수가 실행에 성공하면 setUser에 유저 값 또는 null을 담아주는 행위 역시 필요가 없어졌다.
-// 이렇게 then을 생략하고 login, logout 함수만 호출하면 되게끔 바뀌었기 때문에 굳이 handleLogin, handleLogout 함수를 만들 필요가 없어졌다.
-
 // 유저의 상태가 변경될 때마다 콜백함수를 호출한다.
 export function onUserStateChange(callback) {
   onAuthStateChanged(auth, (user) => {

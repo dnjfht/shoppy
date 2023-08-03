@@ -3,7 +3,6 @@ import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { login, logout, onUserStateChange } from "../api/firebase";
-import User from "./User";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -31,6 +30,16 @@ export default function Navbar() {
 
   const category = ["All", "Woman", "Man", "Shoes"];
 
+  const handleLogin = () => {
+    login().then(setUser);
+    // ((user) => setUser(user));
+  };
+
+  const handleLogout = () => {
+    logout().then(setUser);
+    // ((null) => setUser(null));
+  };
+
   return (
     <div
       className={`${
@@ -46,13 +55,11 @@ export default function Navbar() {
             className="flex items-center cursor-pointer"
           >
             <img
-              className="xl:w-[5rem] md:w-[3.6rem] object-cover"
+              className="w-[5rem] object-cover"
               src={process.env.PUBLIC_URL + "/image/logo.png"}
               alt="logo"
             />
-            <p className="xl:text-[2.5rem] md:text-[1.6rem] ml-3">
-              Birthday Party
-            </p>
+            <p className="ml-3">Birthday Party</p>
           </li>
         </ul>
 
@@ -89,12 +96,12 @@ export default function Navbar() {
           })}
         </ul>
 
-        <ul className="w-[24%] flex justify-between items-center text-[1.2rem] text-center">
+        <ul className="flex items-center text-[1.2rem]">
           <li
             onClick={() => {
               navigate("/search");
             }}
-            className="flex justify-center items-center"
+            className="mr-7"
           >
             <FiSearch />
           </li>
@@ -102,19 +109,16 @@ export default function Navbar() {
             onClick={() => {
               navigate("/carts");
             }}
-            className="flex justify-center items-center"
+            className="mr-7"
           >
             Carts
           </li>
-          <li className="flex justify-center items-center">
+          <li className="mr-7">
             <BiSolidMessageSquareEdit />
           </li>
-          <li className="flex justify-center items-center">
-            {user && <User user={user} />}
-          </li>
-          <li className="flex justify-center items-center">
-            {!user && <button onClick={login}>Login</button>}
-            {user && <button onClick={logout}>Logout</button>}
+          <li>
+            {!user && <button onClick={handleLogin}>Login</button>}
+            {user && <button onClick={handleLogout}>Logout</button>}
           </li>
         </ul>
       </div>

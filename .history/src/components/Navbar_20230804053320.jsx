@@ -50,9 +50,7 @@ export default function Navbar() {
               src={process.env.PUBLIC_URL + "/image/logo.png"}
               alt="logo"
             />
-            <p className="xl:text-[2.5rem] md:text-[1.6rem] ml-3">
-              Birthday Party
-            </p>
+            <p className="ml-3">Birthday Party</p>
           </li>
         </ul>
 
