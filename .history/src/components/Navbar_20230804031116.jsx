@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { login, logout, onUserStateChange } from "../api/firebase";
+import { login, logout } from "../api/firebase";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -10,14 +10,7 @@ export default function Navbar() {
   const [scrollHeight, setScrollHeight] = useState(0);
   const [user, setUser] = useState();
 
-  useEffect(() => {
-    onUserStateChange((user) => {
-      console.log(user);
-      setUser(user);
-      // 로그인을 했거나 로그인을 했었던 상태라면 user 값이 들어오고
-      // 로그아웃을 하면 user 값이 비어 있어 null이 들어옴.
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   function onScroll() {
     setScrollHeight(window.scrollY);

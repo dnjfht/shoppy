@@ -14,8 +14,6 @@ export default function Navbar() {
     onUserStateChange((user) => {
       console.log(user);
       setUser(user);
-      // 로그인을 했거나 로그인을 했었던 상태라면 user 값이 들어오고
-      // 로그아웃을 하면 user 값이 비어 있어 null이 들어옴.
     });
   }, []);
 
