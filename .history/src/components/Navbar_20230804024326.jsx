@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { login, logout } from "../api/firebase";
+import { login } from "../api/firebase";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -23,13 +23,7 @@ export default function Navbar() {
   const category = ["All", "Woman", "Man", "Shoes"];
 
   const handleLogin = () => {
-    login().then(setUser);
-    // ((user) => setUser(user));
-  };
-
-  const handleLogout = () => {
-    logout().then(setUser);
-    // ((null) => setUser(null));
+    login().then((user) => setUser(user));
   };
 
   return (
@@ -110,7 +104,7 @@ export default function Navbar() {
           </li>
           <li>
             {!user && <button onClick={handleLogin}>Login</button>}
-            {user && <button onClick={handleLogout}>Logout</button>}
+            {user && <button onClick={handleLogout}>Loout</button>}
           </li>
         </ul>
       </div>

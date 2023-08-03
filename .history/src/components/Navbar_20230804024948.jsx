@@ -23,13 +23,11 @@ export default function Navbar() {
   const category = ["All", "Woman", "Man", "Shoes"];
 
   const handleLogin = () => {
-    login().then(setUser);
-    // ((user) => setUser(user));
+    login().then((user) => setUser(user));
   };
 
   const handleLogout = () => {
-    logout().then(setUser);
-    // ((null) => setUser(null));
+    logout().then((null) => setUser(null));
   };
 
   return (

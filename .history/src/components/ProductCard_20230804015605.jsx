@@ -8,18 +8,16 @@ export default function ProductCard({ item, index }) {
 
   return (
     <li
+      key={item.id}
       className={`w-[24%] mb-6 ${
         index % 4 === 3 || index === 3 ? "mr-0" : "mr-[1.3%]"
       } cursor-pointer relative text-center`}
     >
       <div className="w-full group relative">
         <ul className="px-4 py-3 rounded-full bg-black flex flex-wrap justify-between items-center absolute top-2 left-2 [&>*:last-child]:mr-0 [&>*:last-child]:pr-0 [&>*:last-child]:border-none">
-          {item.type?.map((t, index) => {
+          {item.type?.map((t) => {
             return (
-              <li
-                key={index}
-                className="text-white text-[0.9rem] pr-2 mr-2 border-r-[1px] border-solid border-white"
-              >
+              <li className="text-white text-[0.9rem] pr-2 mr-2 border-r-[1px] border-solid border-white">
                 {t}
               </li>
             );

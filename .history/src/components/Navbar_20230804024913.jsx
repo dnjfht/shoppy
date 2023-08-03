@@ -23,13 +23,11 @@ export default function Navbar() {
   const category = ["All", "Woman", "Man", "Shoes"];
 
   const handleLogin = () => {
-    login().then(setUser);
-    // ((user) => setUser(user));
+    login().then((user) => setUser(user));
   };
 
   const handleLogout = () => {
-    logout().then(setUser);
-    // ((null) => setUser(null));
+    logout().then((null) => setUser(null));
   };
 
   return (
@@ -110,7 +108,7 @@ export default function Navbar() {
           </li>
           <li>
             {!user && <button onClick={handleLogin}>Login</button>}
-            {user && <button onClick={handleLogout}>Logout</button>}
+            {user && <button onClick={handleLogout}>Loout</button>}
           </li>
         </ul>
       </div>
