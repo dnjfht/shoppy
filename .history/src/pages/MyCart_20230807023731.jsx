@@ -30,7 +30,12 @@ export default function MyCart({
     const carts = localStorage.getItem("carts");
     const nonMemberCarts = JSON.parse(carts);
     console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
+
+    if (nonMemberCarts !== null) {
+      setNonMemberAllCarts((prev) => [...prev, ...nonMemberCarts]);
+    }
+
+    console.log(nonMemberAllCarts);
   }, []);
 
   const [products, setProducts] = useState([]);
@@ -41,17 +46,12 @@ export default function MyCart({
     setProducts(allCarts.map((cart) => ({ ...cart })));
   }, [allCarts]);
 
-  const totalCount =
-    user !== null
-      ? allCarts
-      : nonMemberAllCarts.reduce((acc, item) => acc + item.count, 0);
-  const totalPrice =
-    user !== null
-      ? allCarts
-      : nonMemberAllCarts.reduce(
-          (acc, item) => acc + item.count * item.price,
-          0
-        );
+  const totalCount = user
+    ? allCarts
+    : nonMemberAllCarts.reduce((acc, item) => acc + item.count, 0);
+  const totalPrice = user
+    ? allCarts
+    : nonMemberAllCarts.reduce((acc, item) => acc + item.count * item.price, 0);
 
   const freeDeliveryPercent = (totalPrice / 50000) * 100;
   console.log(totalPrice, freeDeliveryPercent);
@@ -125,12 +125,10 @@ export default function MyCart({
           Cart
         </h1>
         <div className="w-full py-14 border-t-[1px] border-solid border-[#333] flex justify-between items-start">
-          {allCarts && user !== null && allCarts.length < 1 && (
+          {allCarts && allCarts.length < 1 && <p>장바구니가 비어 있습니다.</p>}
+          {nonMemberAllCarts && nonMemberAllCarts.length < 1 && (
             <p>장바구니가 비어 있습니다.</p>
           )}
-          {nonMemberAllCarts &&
-            user === null &&
-            nonMemberAllCarts.length < 1 && <p>장바구니가 비어 있습니다.</p>}
 
           {allCarts && user && allCarts.length > 0 && (
             <>

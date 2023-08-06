@@ -30,7 +30,12 @@ export default function MyCart({
     const carts = localStorage.getItem("carts");
     const nonMemberCarts = JSON.parse(carts);
     console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
+
+    if (nonMemberCarts !== null) {
+      setNonMemberAllCarts((prev) => [...prev, ...nonMemberCarts]);
+    }
+
+    console.log(nonMemberAllCarts);
   }, []);
 
   const [products, setProducts] = useState([]);

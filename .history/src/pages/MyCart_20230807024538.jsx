@@ -30,7 +30,7 @@ export default function MyCart({
     const carts = localStorage.getItem("carts");
     const nonMemberCarts = JSON.parse(carts);
     console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
+    setAllCarts(nonMemberCarts);
   }, []);
 
   const [products, setProducts] = useState([]);
