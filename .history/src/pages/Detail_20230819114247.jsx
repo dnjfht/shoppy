@@ -766,7 +766,7 @@ export default function Detail({ user }) {
             />
           )}
           {cat === "교환 및 반품" && <DetailCS />}
-          {cat === "상품문의" && <DetailQuestion user={user} item={item} />}
+          {cat === "상품문의" && <DetailQuestion user={user} />}
         </div>
       </div>
 

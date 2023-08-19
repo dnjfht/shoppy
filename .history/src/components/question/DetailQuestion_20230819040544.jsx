@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { CiEdit } from "react-icons/ci";
 
-export default function DetailQuestion({ user, item }) {
+export default function DetailQuestion({ user }) {
   // 문의 작성하는 모달 useState
 
   // user가 없을 때만
@@ -20,7 +20,6 @@ export default function DetailQuestion({ user, item }) {
   const [questionContent, setQuestionContent] = useState("");
   const [questionData, setQuestionData] = useState([
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692329192479,
       phoneNumber: "01078543278",
@@ -30,7 +29,6 @@ export default function DetailQuestion({ user, item }) {
         "배송이 언제쯤 오는지 알 수 있을까요? 일 주일 안에 꼭 받아봤으면 해서요...ㅠㅠㅠ",
     },
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692339192948,
       phoneNumber: "01047742186",
@@ -40,7 +38,6 @@ export default function DetailQuestion({ user, item }) {
         "이 상품 베이지 컬러가 품절됐던데 언제쯤 다시 들어오는지 알 수 있을까요?",
     },
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692368145890,
       phoneNumber: "01059481592",
@@ -50,7 +47,6 @@ export default function DetailQuestion({ user, item }) {
         "배송이 계속 늦어지고 있어요...ㅠㅠㅠㅠㅠㅠㅠ 언제쯤 배송이 오는 거죠 벌써 일 주일이 지났는데",
     },
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692372509273,
       phoneNumber: "01049036145",
@@ -60,7 +56,6 @@ export default function DetailQuestion({ user, item }) {
         "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
     },
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692375824586,
       phoneNumber: "01052837558",
@@ -69,7 +64,6 @@ export default function DetailQuestion({ user, item }) {
       questionContent: "기타문의 입니다...!",
     },
     {
-      productId: item.id,
       id: uuidv4(),
       date: 1692379405289,
       phoneNumber: "01020968754",
@@ -78,64 +72,11 @@ export default function DetailQuestion({ user, item }) {
       questionContent:
         "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
     },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692395845329,
-      phoneNumber: "01059088234",
-      password: "5772",
-      questionType: "배송문의",
-      questionContent:
-        "주문한지 시간이 꽤 지났는데 아직도 배송이 오질 않네요...",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692399187645,
-      phoneNumber: "01041205863",
-      password: "6341",
-      questionType: "기타문의",
-      questionContent: "기타 문의 드립니다.",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692399405728,
-      phoneNumber: "01020968754",
-      password: "4832",
-      questionType: "사이즈문의",
-      questionContent:
-        "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692411686304,
-      phoneNumber: "01089004730",
-      password: "2948",
-      questionType: "배송문의",
-      questionContent:
-        "2주 전에 주문했는데 아직도 배송이 오지 않았습니다... 진짜 늦네요;",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692411886304,
-      phoneNumber: "01032345610",
-      password: "9050",
-      questionType: "기타문의",
-      questionContent: "기타 문의 드립니다.",
-    },
   ]);
 
   // 문의 상세페이지 모달 관련 useState
   const [questionDetailModalOpen, setQuestionDetailModalOpen] = useState(false);
   const [QuestionModalIdBucket, setQuestionModalIdBucket] = useState("");
-  // 문의 상세페이지 모달 수정
-  const [questionDetailModalEdit, setQuestionDetailModalEdit] = useState(false);
-  const [questionDetailModalEditIdBucket, setQuestionDetailModalEditIdBucket] =
-    useState("");
-  const [changeContent, setChangeContent] = useState("");
 
   const questionTypeInputRef = useRef(null);
 
@@ -167,9 +108,13 @@ export default function DetailQuestion({ user, item }) {
     e.preventDefault();
 
     if (user !== null) {
-      if (questionType !== "" && questionContent !== "") {
+      if (
+        phoneNumber !== "" &&
+        password !== "" &&
+        questionType !== "" &&
+        questionContent !== ""
+      ) {
         const newQuestionData = {
-          productId: item.id,
           id: uuidv4(),
           date: Date.now(),
           userId: user.uid,
@@ -195,7 +140,6 @@ export default function DetailQuestion({ user, item }) {
         questionContent !== ""
       ) {
         const newQuestionData = {
-          productId: item.id,
           id: uuidv4(),
           date: Date.now(),
           phoneNumber: phoneNumber,
@@ -219,44 +163,6 @@ export default function DetailQuestion({ user, item }) {
       }
     }
   };
-
-  const handleDeleteQuestion = (e, idx) => {
-    e.preventDefault();
-
-    const result = window.confirm("게시물을 삭제하시겠습니까?");
-
-    if (result) {
-      setQuestionData((prev) => prev.filter((data) => data.id !== idx));
-      setQuestionDetailModalOpen(false);
-    }
-  };
-
-  const handleEditQuestion = (e, idx) => {
-    e.preventDefault();
-
-    const result = window.confirm("게시물을 수정하시겠습니까?");
-
-    if (result) {
-      setQuestionDetailModalEdit(true);
-      setQuestionDetailModalEditIdBucket(idx);
-    }
-  };
-
-  const handleEditQuestionSuccess = (e, idx) => {
-    e.preventDefault();
-
-    setQuestionData((prev) =>
-      prev.map((data) => {
-        return data.id === idx
-          ? { ...data, questionContent: changeContent }
-          : data;
-      })
-    );
-    setQuestionDetailModalEditIdBucket("");
-    setQuestionDetailModalEdit(false);
-  };
-
-  console.log(questionDetailModalEditIdBucket, changeContent);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -288,7 +194,6 @@ export default function DetailQuestion({ user, item }) {
         setQuestionDetailModalOpen={setQuestionDetailModalOpen}
         questionDetailModalOpen={questionDetailModalOpen}
         setQuestionModalIdBucket={setQuestionModalIdBucket}
-        item={item}
       />
 
       {questionModalOpen && (
@@ -402,84 +307,31 @@ export default function DetailQuestion({ user, item }) {
             setQuestionDetailModalOpen(false);
           }}
         >
-          {questionData &&
-            questionData
-              ?.filter((data) => data.id === QuestionModalIdBucket)
-              ?.map((data) => {
-                return (
-                  <div className="p-5 box-border">
-                    <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
-                      <div className="flex items-end">
-                        <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
-                        <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
-                          {formatDate(data.date)}
-                        </p>
-                      </div>
-
-                      <p className="mt-1 text-[0.9rem] text-[#5b5b5b]">
-                        {user !== null
-                          ? data?.userId?.slice(0, 4) + "***"
-                          : data?.phoneNumber?.slice(0, 7) + "****"}
+          {questionData
+            .filter((data) => data.id === QuestionModalIdBucket)
+            .map((data) => {
+              return (
+                <div className="p-5 box-border">
+                  <div className="pb-4 border-b-[1px] border-solid border-[#ccc]">
+                    <div className="flex items-end">
+                      <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
+                      <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
+                        {formatDate(data.date)}
                       </p>
                     </div>
 
-                    {questionDetailModalEdit &&
-                    questionDetailModalEditIdBucket === data.id ? (
-                      <form
-                        onSubmit={(e) => {
-                          handleEditQuestionSuccess(e, data.id);
-                        }}
-                      >
-                        <div className="w-full mt-5 mb-80 flex justify-between items-center">
-                          <input
-                            value={changeContent}
-                            onChange={(e) => {
-                              e.preventDefault();
-                              setChangeContent(e.target.value);
-                            }}
-                            type="text"
-                            placeholder="수정할 내용을 입력하세요."
-                            className="w-4/5 p-3 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
-                          />
-                          <button className="w-[18%] py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
-                            수정 완료
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <p className="mt-5 mb-80 text-[1rem]">
-                        {data.questionContent}
-                      </p>
-                    )}
-
-                    <div>
-                      {questionDetailModalEditIdBucket !== data.id && (
-                        <button
-                          onClick={(e) => {
-                            handleEditQuestion(e, data.id);
-                          }}
-                          className="w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
-                        >
-                          <p>수정</p>
-                        </button>
-                      )}
-
-                      <button
-                        onClick={(e) => {
-                          handleDeleteQuestion(e, data.id);
-                        }}
-                        className={`${
-                          questionDetailModalEditIdBucket !== data.id
-                            ? "ml-2"
-                            : ""
-                        } w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
-                      >
-                        <p>삭제</p>
-                      </button>
-                    </div>
+                    <p className="text-[0.9rem] text-[#5b5b5b]">
+                      {`작성자 : ${
+                        user !== null
+                          ? data.userId.slice(0, 4) + "***"
+                          : data.phoneNumber.slice(0, 7) + "****"
+                      }`}
+                    </p>
                   </div>
-                );
-              })}
+                  <p className="mt-5 text-[1rem]">{data.questionContent}</p>
+                </div>
+              );
+            })}
         </DetailQuestionModal>
       )}
     </div>

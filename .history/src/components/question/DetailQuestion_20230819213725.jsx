@@ -472,7 +472,7 @@ export default function DetailQuestion({ user, item }) {
                           questionDetailModalEditIdBucket !== data.id
                             ? "ml-2"
                             : ""
-                        } w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
+                        } w-32 py-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
                       >
                         <p>삭제</p>
                       </button>

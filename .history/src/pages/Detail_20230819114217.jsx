@@ -22,7 +22,12 @@ import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
 
-export default function Detail({ user }) {
+export default function Detail({
+  user,
+  setAllCarts,
+  nonMemberAllCarts,
+  setNonMemberAllCarts,
+}) {
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const [cart, setCart] = useState([]);
@@ -766,7 +771,7 @@ export default function Detail({ user }) {
             />
           )}
           {cat === "교환 및 반품" && <DetailCS />}
-          {cat === "상품문의" && <DetailQuestion user={user} item={item} />}
+          {cat === "상품문의" && <DetailQuestion user={user} />}
         </div>
       </div>
 

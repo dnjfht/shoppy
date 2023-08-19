@@ -245,18 +245,17 @@ export default function DetailQuestion({ user, item }) {
   const handleEditQuestionSuccess = (e, idx) => {
     e.preventDefault();
 
-    setQuestionData((prev) =>
+    setQuestionData((prev) => {
       prev.map((data) => {
-        return data.id === idx
-          ? { ...data, questionContent: changeContent }
-          : data;
-      })
-    );
+        if (data.id === idx) {
+          return { ...data, questionContent: changeContent };
+        } else {
+          return data;
+        }
+      });
+    });
     setQuestionDetailModalEditIdBucket("");
-    setQuestionDetailModalEdit(false);
   };
-
-  console.log(questionDetailModalEditIdBucket, changeContent);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -402,84 +401,75 @@ export default function DetailQuestion({ user, item }) {
             setQuestionDetailModalOpen(false);
           }}
         >
-          {questionData &&
-            questionData
-              ?.filter((data) => data.id === QuestionModalIdBucket)
-              ?.map((data) => {
-                return (
-                  <div className="p-5 box-border">
-                    <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
-                      <div className="flex items-end">
-                        <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
-                        <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
-                          {formatDate(data.date)}
-                        </p>
-                      </div>
-
-                      <p className="mt-1 text-[0.9rem] text-[#5b5b5b]">
-                        {user !== null
-                          ? data?.userId?.slice(0, 4) + "***"
-                          : data?.phoneNumber?.slice(0, 7) + "****"}
+          {questionData
+            .filter((data) => data.id === QuestionModalIdBucket)
+            .map((data) => {
+              return (
+                <div className="p-5 box-border">
+                  <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
+                    <div className="flex items-end">
+                      <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
+                      <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
+                        {formatDate(data.date)}
                       </p>
                     </div>
 
-                    {questionDetailModalEdit &&
-                    questionDetailModalEditIdBucket === data.id ? (
-                      <form
-                        onSubmit={(e) => {
-                          handleEditQuestionSuccess(e, data.id);
+                    <p className="mt-1 text-[0.9rem] text-[#5b5b5b]">
+                      {user !== null
+                        ? data?.userId?.slice(0, 4) + "***"
+                        : data?.phoneNumber?.slice(0, 7) + "****"}
+                    </p>
+                  </div>
+
+                  {questionDetailModalEdit &&
+                  questionDetailModalEditIdBucket === data.id ? (
+                    <form
+                      onSubmit={(e) => {
+                        handleEditQuestionSuccess(e, data.id);
+                      }}
+                    >
+                      <input
+                        value={changeContent}
+                        onChange={(e) => {
+                          e.preventDefault();
+                          setChangeContent(setChangeContent(e.target.value));
                         }}
-                      >
-                        <div className="w-full mt-5 mb-80 flex justify-between items-center">
-                          <input
-                            value={changeContent}
-                            onChange={(e) => {
-                              e.preventDefault();
-                              setChangeContent(e.target.value);
-                            }}
-                            type="text"
-                            placeholder="수정할 내용을 입력하세요."
-                            className="w-4/5 p-3 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
-                          />
-                          <button className="w-[18%] py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
-                            수정 완료
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <p className="mt-5 mb-80 text-[1rem]">
-                        {data.questionContent}
-                      </p>
-                    )}
+                        type="text"
+                        placeholder="수정할 내용을 입력하세요."
+                        className="w-full p-3 mt-5 mb-80 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
+                      />
+                      <button>수정 완료</button>
+                    </form>
+                  ) : (
+                    <p className="mt-5 mb-80 text-[1rem]">
+                      {data.questionContent}
+                    </p>
+                  )}
 
-                    <div>
-                      {questionDetailModalEditIdBucket !== data.id && (
-                        <button
-                          onClick={(e) => {
-                            handleEditQuestion(e, data.id);
-                          }}
-                          className="w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
-                        >
-                          <p>수정</p>
-                        </button>
-                      )}
-
+                  <div>
+                    {questionDetailModalEditIdBucket !== data.id && (
                       <button
                         onClick={(e) => {
-                          handleDeleteQuestion(e, data.id);
+                          handleEditQuestion(e, data.id);
                         }}
-                        className={`${
-                          questionDetailModalEditIdBucket !== data.id
-                            ? "ml-2"
-                            : ""
-                        } w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
+                        className="w-32 py-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
                       >
-                        <p>삭제</p>
+                        <p>수정</p>
                       </button>
-                    </div>
+                    )}
+
+                    <button
+                      onClick={(e) => {
+                        handleDeleteQuestion(e, data.id);
+                      }}
+                      className="w-32 py-2 ml-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
+                    >
+                      <p>삭제</p>
+                    </button>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
         </DetailQuestionModal>
       )}
     </div>

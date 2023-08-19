@@ -430,21 +430,17 @@ export default function DetailQuestion({ user, item }) {
                           handleEditQuestionSuccess(e, data.id);
                         }}
                       >
-                        <div className="w-full mt-5 mb-80 flex justify-between items-center">
-                          <input
-                            value={changeContent}
-                            onChange={(e) => {
-                              e.preventDefault();
-                              setChangeContent(e.target.value);
-                            }}
-                            type="text"
-                            placeholder="수정할 내용을 입력하세요."
-                            className="w-4/5 p-3 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
-                          />
-                          <button className="w-[18%] py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
-                            수정 완료
-                          </button>
-                        </div>
+                        <input
+                          value={changeContent}
+                          onChange={(e) => {
+                            e.preventDefault();
+                            setChangeContent(e.target.value);
+                          }}
+                          type="text"
+                          placeholder="수정할 내용을 입력하세요."
+                          className="w-full p-3 mt-5 mb-80 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
+                        />
+                        <button>수정 완료</button>
                       </form>
                     ) : (
                       <p className="mt-5 mb-80 text-[1rem]">
@@ -458,7 +454,7 @@ export default function DetailQuestion({ user, item }) {
                           onClick={(e) => {
                             handleEditQuestion(e, data.id);
                           }}
-                          className="w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
+                          className="w-32 py-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
                         >
                           <p>수정</p>
                         </button>
@@ -472,7 +468,7 @@ export default function DetailQuestion({ user, item }) {
                           questionDetailModalEditIdBucket !== data.id
                             ? "ml-2"
                             : ""
-                        } w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
+                        } w-32 py-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
                       >
                         <p>삭제</p>
                       </button>

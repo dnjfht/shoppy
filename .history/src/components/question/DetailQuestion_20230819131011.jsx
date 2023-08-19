@@ -131,11 +131,6 @@ export default function DetailQuestion({ user, item }) {
   // 문의 상세페이지 모달 관련 useState
   const [questionDetailModalOpen, setQuestionDetailModalOpen] = useState(false);
   const [QuestionModalIdBucket, setQuestionModalIdBucket] = useState("");
-  // 문의 상세페이지 모달 수정
-  const [questionDetailModalEdit, setQuestionDetailModalEdit] = useState(false);
-  const [questionDetailModalEditIdBucket, setQuestionDetailModalEditIdBucket] =
-    useState("");
-  const [changeContent, setChangeContent] = useState("");
 
   const questionTypeInputRef = useRef(null);
 
@@ -167,7 +162,12 @@ export default function DetailQuestion({ user, item }) {
     e.preventDefault();
 
     if (user !== null) {
-      if (questionType !== "" && questionContent !== "") {
+      if (
+        phoneNumber !== "" &&
+        password !== "" &&
+        questionType !== "" &&
+        questionContent !== ""
+      ) {
         const newQuestionData = {
           productId: item.id,
           id: uuidv4(),
@@ -219,44 +219,6 @@ export default function DetailQuestion({ user, item }) {
       }
     }
   };
-
-  const handleDeleteQuestion = (e, idx) => {
-    e.preventDefault();
-
-    const result = window.confirm("게시물을 삭제하시겠습니까?");
-
-    if (result) {
-      setQuestionData((prev) => prev.filter((data) => data.id !== idx));
-      setQuestionDetailModalOpen(false);
-    }
-  };
-
-  const handleEditQuestion = (e, idx) => {
-    e.preventDefault();
-
-    const result = window.confirm("게시물을 수정하시겠습니까?");
-
-    if (result) {
-      setQuestionDetailModalEdit(true);
-      setQuestionDetailModalEditIdBucket(idx);
-    }
-  };
-
-  const handleEditQuestionSuccess = (e, idx) => {
-    e.preventDefault();
-
-    setQuestionData((prev) =>
-      prev.map((data) => {
-        return data.id === idx
-          ? { ...data, questionContent: changeContent }
-          : data;
-      })
-    );
-    setQuestionDetailModalEditIdBucket("");
-    setQuestionDetailModalEdit(false);
-  };
-
-  console.log(questionDetailModalEditIdBucket, changeContent);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -402,84 +364,40 @@ export default function DetailQuestion({ user, item }) {
             setQuestionDetailModalOpen(false);
           }}
         >
-          {questionData &&
-            questionData
-              ?.filter((data) => data.id === QuestionModalIdBucket)
-              ?.map((data) => {
-                return (
-                  <div className="p-5 box-border">
-                    <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
-                      <div className="flex items-end">
-                        <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
-                        <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
-                          {formatDate(data.date)}
-                        </p>
-                      </div>
-
-                      <p className="mt-1 text-[0.9rem] text-[#5b5b5b]">
-                        {user !== null
-                          ? data?.userId?.slice(0, 4) + "***"
-                          : data?.phoneNumber?.slice(0, 7) + "****"}
+          {questionData
+            .filter((data) => data.id === QuestionModalIdBucket)
+            .map((data) => {
+              return (
+                <div className="p-5 box-border">
+                  <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
+                    <div className="flex items-end">
+                      <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
+                      <p className="ml-3 text-[0.9rem] text-[#909090] font-light">
+                        {formatDate(data.date)}
                       </p>
                     </div>
 
-                    {questionDetailModalEdit &&
-                    questionDetailModalEditIdBucket === data.id ? (
-                      <form
-                        onSubmit={(e) => {
-                          handleEditQuestionSuccess(e, data.id);
-                        }}
-                      >
-                        <div className="w-full mt-5 mb-80 flex justify-between items-center">
-                          <input
-                            value={changeContent}
-                            onChange={(e) => {
-                              e.preventDefault();
-                              setChangeContent(e.target.value);
-                            }}
-                            type="text"
-                            placeholder="수정할 내용을 입력하세요."
-                            className="w-4/5 p-3 box-border border-[1px] border-solid border-[#ccc] rounded-lg outline-none"
-                          />
-                          <button className="w-[18%] py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
-                            수정 완료
-                          </button>
-                        </div>
-                      </form>
-                    ) : (
-                      <p className="mt-5 mb-80 text-[1rem]">
-                        {data.questionContent}
-                      </p>
-                    )}
-
-                    <div>
-                      {questionDetailModalEditIdBucket !== data.id && (
-                        <button
-                          onClick={(e) => {
-                            handleEditQuestion(e, data.id);
-                          }}
-                          className="w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700"
-                        >
-                          <p>수정</p>
-                        </button>
-                      )}
-
-                      <button
-                        onClick={(e) => {
-                          handleDeleteQuestion(e, data.id);
-                        }}
-                        className={`${
-                          questionDetailModalEditIdBucket !== data.id
-                            ? "ml-2"
-                            : ""
-                        } w-32 py-3 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700`}
-                      >
-                        <p>삭제</p>
-                      </button>
-                    </div>
+                    <p className="mt-1 text-[0.9rem] text-[#5b5b5b]">
+                      {user !== null
+                        ? data?.userId?.slice(0, 4) + "***"
+                        : data?.phoneNumber?.slice(0, 7) + "****"}
+                    </p>
                   </div>
-                );
-              })}
+                  <p className="mt-5 mb-80 text-[1rem]">
+                    {data.questionContent}
+                  </p>
+
+                  <div>
+                    <button className="w-32 py-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
+                      <p>수정</p>
+                    </button>
+                    <button className="w-32 py-2 ml-2 bg-black bg-opacity-100 border-[1px] border-solid border-black mt-6 rounded-lg text-[0.875rem] text-white hover:bg-transparent hover:text-black transition-all duration-700">
+                      <p>삭제</p>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
         </DetailQuestionModal>
       )}
     </div>
