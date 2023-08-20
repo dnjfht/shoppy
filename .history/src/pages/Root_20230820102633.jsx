@@ -18,7 +18,7 @@ export default function Root({
   const contentRef = useRef(null);
 
   return (
-    <div className="w-full" ref={contentRef}>
+    <div className="w-full">
       <div className="w-full">
         <Navbar
           user={user}

@@ -30,9 +30,7 @@ function App() {
           user={user}
           setUser={setUser}
           allCarts={allCarts}
-          setAllCarts={setAllCarts}
           nonMemberAllCarts={nonMemberAllCarts}
-          setNonMemberAllCarts={setNonMemberAllCarts}
         />
       ),
       children: [

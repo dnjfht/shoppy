@@ -1,9 +1,8 @@
-import React, { useRef } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Scroll from "../components/Scroll";
 
 export default function Root({
   user,
@@ -15,10 +14,8 @@ export default function Root({
 }) {
   const queryClient = new QueryClient();
 
-  const contentRef = useRef(null);
-
   return (
-    <div className="w-full" ref={contentRef}>
+    <div className="w-full">
       <div className="w-full">
         <Navbar
           user={user}
@@ -32,7 +29,6 @@ export default function Root({
           <Outlet />
         </QueryClientProvider>
         <Footer />
-        <Scroll contentRef={contentRef} />
       </div>
     </div>
   );

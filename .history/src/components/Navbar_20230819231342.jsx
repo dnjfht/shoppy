@@ -1,48 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  authService,
-  loadCartServer,
-  onUserStateChange,
-} from "../api/firebase";
+import { authService, onUserStateChange } from "../api/firebase";
 import { isLoggedIn } from "../utils/utils";
 import User from "./User";
 
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
 
-export default function Navbar({
-  user,
-  setUser,
-  allCarts,
-  setAllCarts,
-  nonMemberAllCarts,
-  setNonMemberAllCarts,
-}) {
+export default function Navbar({ user, setUser, allCarts, nonMemberAllCarts }) {
   useEffect(() => {
     onUserStateChange((user) => {
       console.log(user);
       setUser(user);
     });
-  }, []);
-
-  const getUserCart = async () => {
-    let cart;
-    if (user) {
-      cart = await loadCartServer(user);
-      setAllCarts(cart);
-    }
-  };
-
-  useEffect(() => {
-    getUserCart();
-  }, [user]);
-
-  useEffect(() => {
-    const carts = localStorage.getItem("carts");
-    const nonMemberCarts = JSON.parse(carts);
-    console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
   }, []);
 
   const navigate = useNavigate();
@@ -150,13 +120,11 @@ export default function Navbar({
             onClick={() => {
               navigate("/carts");
             }}
-            className="flex justify-center items-center text-[1.6rem] relative"
+            className="flex justify-center items-center text-[1.6rem]"
           >
             <IoIosCart />
-            <p className="w-5 h-5 bg-[#ff4273] text-white rounded-full text-[0.9rem] flex justify-center items-center absolute top-[-5px] right-[-8px]">
-              {user !== null && allCarts.length}
-              {user === null && nonMemberAllCarts.length}
-            </p>
+            {user !== null && <p>{allCarts.length}</p>}
+            {user === null && <p>{nonMemberAllCarts.length}</p>}
           </li>
           {isLoggedIn() && (
             <li className="flex justify-center items-center">

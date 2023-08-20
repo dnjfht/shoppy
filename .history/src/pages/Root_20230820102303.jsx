@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
@@ -15,10 +15,8 @@ export default function Root({
 }) {
   const queryClient = new QueryClient();
 
-  const contentRef = useRef(null);
-
   return (
-    <div className="w-full" ref={contentRef}>
+    <div className="w-full relative">
       <div className="w-full">
         <Navbar
           user={user}
@@ -32,7 +30,7 @@ export default function Root({
           <Outlet />
         </QueryClientProvider>
         <Footer />
-        <Scroll contentRef={contentRef} />
+        <Scroll />
       </div>
     </div>
   );

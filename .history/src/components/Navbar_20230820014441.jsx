@@ -17,7 +17,6 @@ export default function Navbar({
   allCarts,
   setAllCarts,
   nonMemberAllCarts,
-  setNonMemberAllCarts,
 }) {
   useEffect(() => {
     onUserStateChange((user) => {

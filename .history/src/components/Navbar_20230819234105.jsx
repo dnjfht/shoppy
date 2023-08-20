@@ -17,7 +17,6 @@ export default function Navbar({
   allCarts,
   setAllCarts,
   nonMemberAllCarts,
-  setNonMemberAllCarts,
 }) {
   useEffect(() => {
     onUserStateChange((user) => {
@@ -37,13 +36,6 @@ export default function Navbar({
   useEffect(() => {
     getUserCart();
   }, [user]);
-
-  useEffect(() => {
-    const carts = localStorage.getItem("carts");
-    const nonMemberCarts = JSON.parse(carts);
-    console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
-  }, []);
 
   const navigate = useNavigate();
 
