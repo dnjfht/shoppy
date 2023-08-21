@@ -1,4 +1,6 @@
-# 개인 쇼핑몰 사이트 프로젝트
+# - 개인 쇼핑몰 사이트 프로젝트
+
+React X React-Router-Dom X Tailwind X React-Query X Firebase
 
 
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/bd7f688d-4a49-4537-8e1c-b7baf5eadac9)
