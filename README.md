@@ -1,7 +1,6 @@
 # 개인 쇼핑몰 사이트 프로젝트
 
 
-![image](https://github.com/dnjfht/shoppy/assets/117057638/4fa434b7-be27-4284-9808-b941b3b64129)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/bd7f688d-4a49-4537-8e1c-b7baf5eadac9)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/60255204-6a4a-493b-a431-76d8541d1bf9)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/d363e7b9-6d33-4f5a-b1d0-61277883dca8)
@@ -23,3 +22,4 @@
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/36f91541-c816-4c71-8aad-d6fe033d7416)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/2d370126-e385-42a4-a5fd-eea3ff61346e)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/1943ac31-216a-4503-9069-4788026affeb)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/4fa434b7-be27-4284-9808-b941b3b64129)
