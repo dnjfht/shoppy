@@ -1,36 +1,18 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
-import { readFile } from "fs/promises";
-import { initializeApp, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { cart } from './cart.js';
+import { body } from './body.js';
+import { inquiry } from './inquiry.js';
+import { review } from './review.js';
 
 const fastify = Fastify();
 
 const initApp = async () => {
   await fastify.register(cors);
-
-  const firebaseServiceAccount = JSON.parse(
-    await readFile("./service_account.json")
-  );
-  initializeApp({ credential: cert(firebaseServiceAccount) });
-  const db = getFirestore();
-
-  fastify.post("/cart/:userId", async (request, reply) => {
-    const userId = request.params["userId"];
-    const data = request.body["data"];
-
-    const docRef = db.collection("cart").doc(userId);
-    await docRef.set(data);
-    return "OK!";
-  });
-
-  fastify.get("/cart/:userId", async (request, reply) => {
-    const userId = request.params["userId"];
-
-    const docRef = db.collection("cart").doc(userId);
-    const doc = await docRef.get();
-    return doc.data();
-  });
+  cart(fastify);
+  body(fastify);
+  inquiry(fastify);
+  review(fastify);
 };
 
 try {
