@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChangePassword from "../../components/MyPage/UserAccount/ChangePassword";
 import ChangeNickname from "../../components/MyPage/UserAccount/ChangeNickname";
 import {

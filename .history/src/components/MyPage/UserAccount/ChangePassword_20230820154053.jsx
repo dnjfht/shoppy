@@ -136,9 +136,7 @@ function ChangePassword({
             {passwordMessage}
           </p>
         ) : (
-          <p style={{ color: "red" }} className="passwordMessage">
-            {passwordMessage}
-          </p>
+          <p className="passwordMessage">{passwordMessage}</p>
         )}
 
         {/* 새비밀번호 */}

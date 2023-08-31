@@ -127,6 +127,7 @@ function ChangePassword({
         <h3>비밀번호 변경</h3>
         <p className="password">기존 비밀번호 </p>
         <UserInput
+          className="py-4 text-[0.8rem] outline-none"
           type="password"
           onChange={debounceFunc}
           placeholder="현재 비밀번호를 입력해주세요"
@@ -136,9 +137,7 @@ function ChangePassword({
             {passwordMessage}
           </p>
         ) : (
-          <p style={{ color: "red" }} className="passwordMessage">
-            {passwordMessage}
-          </p>
+          <p className="passwordMessage">{passwordMessage}</p>
         )}
 
         {/* 새비밀번호 */}
@@ -153,6 +152,7 @@ function ChangePassword({
           value={password}
           onChange={(e) => changePassword(e)}
           disabled={inputValidation}
+          className="py-4 text-[0.8rem] outline-none"
         />
         {isPasswordConfirm === true ? (
           <p style={{ color: "green" }} className="passwordMessage">

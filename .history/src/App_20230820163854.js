@@ -3,7 +3,7 @@ import Main from "./pages/Main";
 import Root from "./pages/Root";
 import Detail from "./pages/Detail";
 import MyCart from "./pages/MyCart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NotFoundPage from "./pages/NotFoundPage";
 import NewProducts from "./pages/NewProducts";
 import BestProducts from "./pages/BestProducts";
@@ -12,38 +12,11 @@ import Search from "./pages/Search";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import MyPage from "./pages/MyPage/MyPage";
-import { loadCartServer, onUserStateChange } from "./api/firebase";
 
 function App() {
   const [user, setUser] = useState();
   const [allCarts, setAllCarts] = useState([]);
   const [nonMemberAllCarts, setNonMemberAllCarts] = useState([]);
-
-  useEffect(() => {
-    onUserStateChange((user) => {
-      console.log(user);
-      setUser(user);
-    });
-  }, []);
-
-  const getUserCart = async () => {
-    let cart;
-    if (user) {
-      cart = await loadCartServer(user);
-      setAllCarts(cart);
-    }
-  };
-
-  useEffect(() => {
-    getUserCart();
-  }, [user]);
-
-  useEffect(() => {
-    const carts = localStorage.getItem("carts");
-    const nonMemberCarts = JSON.parse(carts);
-    console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
-  }, []);
 
   const router = createBrowserRouter([
     {

@@ -39,7 +39,7 @@ import { CiLock } from "react-icons/ci";
 import { GiCutDiamond } from "react-icons/gi";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 
-function MyPage({ setAllCarts, allCarts }) {
+function MyPage({ allCarts }) {
   const navigate = useNavigate();
   // 세션스토리지에서 로그인했을 때 저장된 current user 가져오기
   const userSession = sessionStorage.getItem(

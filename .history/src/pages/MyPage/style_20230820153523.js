@@ -4,12 +4,12 @@ export const MyPageWrapper = styled.div`
   background-color: #f4f5f6;
   width: 100%;
   display: flex;
-  gap: 30px;
+  gap: 100px;
   min-height: calc(100vh - 102px);
   /* align-items: center; */
   /* justify-content: center; */
   @media screen and (max-width: 1200px) {
-    gap: 30px;
+    gap: 100px;
     font-size: 15px;
   }
   @media screen and (max-width: 900px) {
@@ -220,6 +220,7 @@ export const HistoryCategory = styled.div`
 //여기서부터는 오른쪽 박스 스타일 구역
 export const RightBox = styled.div`
   /* width: 900px; */
+  height: 810px;
   /* background-color: #f4f5f6; */
   padding: 20px;
   display: flex;
@@ -282,6 +283,7 @@ export const RightSecondWrapper = styled.div`
 
 export const ChangePasswordDiv = styled.div`
   display: flex;
+  height: 400px;
   flex-direction: column;
   gap: 20px;
   h3 {
@@ -320,9 +322,7 @@ export const UserInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 10px;
   height: 50px;
-  padding: 20px 10px;
-  font-size: 0.8rem;
-  outline: none;
+  padding-left: 10px;
   @media screen and (max-width: 900px) {
     width: 500px;
     border-radius: 5px;
@@ -349,8 +349,10 @@ export const ChangePwtext = styled.p`
 export const ChangeNickNameDiv = styled.div`
   display: flex;
   flex-direction: column;
+  height: 115px;
   gap: 5px;
   margin-top: 10px;
+  font-size: 25px;
   @media screen and (max-width: 600px) {
     h3 {
       font-size: 16px;
@@ -385,13 +387,11 @@ export const CategoryImg = styled.div`
 
 export const SaveBtn = styled.button`
   background-color: #6a24ff;
-  width: 140px;
+  width: 240px;
   height: 50px;
   border-radius: 10px;
   color: white;
-  margin-top: 40px;
-  font-size: 0.8rem;
-  cursor: pointer;
+  margin-top: 10px;
 
   @media screen and (max-width: 900px) {
     width: 210px;

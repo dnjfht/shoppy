@@ -28,7 +28,7 @@ import {
   ResCategoryTab,
 } from "./style";
 import { updatePassword, updateProfile, deleteUser } from "firebase/auth";
-import { firebaseConfig, loadCartServer } from "../../api/firebase";
+import { firebaseConfig } from "../../api/firebase";
 import { RiLogoutBoxLine } from "react-icons/ri";
 // import BookmarkPrdtList from "../../components/Mypage/BookmarkPrdtList";
 import { authService } from "../../api/firebase";

@@ -30,7 +30,7 @@ function ChangeNickname({
   };
   return (
     <ChangeNickNameDiv className="닉네임변경">
-      <h3 className="mb-4 text-[#ff4273]">닉네임 변경</h3>
+      <h3 className="mb-4 text-[#ff4273]]">닉네임 변경</h3>
       <UserInput
         type="text"
         value={newNickName}

@@ -349,6 +349,7 @@ export const ChangePwtext = styled.p`
 export const ChangeNickNameDiv = styled.div`
   display: flex;
   flex-direction: column;
+  height: 115px;
   gap: 5px;
   margin-top: 10px;
   @media screen and (max-width: 600px) {
@@ -385,13 +386,11 @@ export const CategoryImg = styled.div`
 
 export const SaveBtn = styled.button`
   background-color: #6a24ff;
-  width: 140px;
+  width: 240px;
   height: 50px;
   border-radius: 10px;
   color: white;
-  margin-top: 40px;
-  font-size: 0.8rem;
-  cursor: pointer;
+  margin-top: 10px;
 
   @media screen and (max-width: 900px) {
     width: 210px;

@@ -11,7 +11,14 @@ import User from "./User";
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
 
-export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
+export default function Navbar({
+  user,
+  setUser,
+  allCarts,
+  setAllCarts,
+  nonMemberAllCarts,
+  setNonMemberAllCarts,
+}) {
   const navigate = useNavigate();
 
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -48,7 +55,7 @@ export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
         scrollHeight >= 140
           ? "bg-[rgba(255,255,255,100)] shadow-lg"
           : "bg-[rgba(255,255,255,0)]"
-      } w-full h-[130px] fixed left-0 top-0 z-[99999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
+      } w-full h-[130px] fixed left-0 top-0 z-[9999999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
     >
       <div className="w-10/12 h-full mx-auto flex items-center justify-between">
         <ul className="flex items-center text-[2.5rem] font-[InkLipquid]">

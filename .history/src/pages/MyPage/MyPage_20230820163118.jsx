@@ -28,7 +28,7 @@ import {
   ResCategoryTab,
 } from "./style";
 import { updatePassword, updateProfile, deleteUser } from "firebase/auth";
-import { firebaseConfig, loadCartServer } from "../../api/firebase";
+import { firebaseConfig } from "../../api/firebase";
 import { RiLogoutBoxLine } from "react-icons/ri";
 // import BookmarkPrdtList from "../../components/Mypage/BookmarkPrdtList";
 import { authService } from "../../api/firebase";
@@ -256,7 +256,7 @@ function MyPage({ setAllCarts, allCarts }) {
               <p>찜한 상품</p>
             </ResUserHistory>
             <ResUserTips onClick={() => setTab(2)}>
-              <p>내 리뷰 / 문의</p>
+              <p>팁 관리</p>
             </ResUserTips>
           </ResCategoryTab>
         </ResponsiveMypage>

@@ -385,7 +385,7 @@ export const CategoryImg = styled.div`
 
 export const SaveBtn = styled.button`
   background-color: #6a24ff;
-  width: 140px;
+  width: 120px;
   height: 50px;
   border-radius: 10px;
   color: white;

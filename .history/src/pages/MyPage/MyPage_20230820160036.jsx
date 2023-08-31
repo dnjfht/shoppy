@@ -28,7 +28,7 @@ import {
   ResCategoryTab,
 } from "./style";
 import { updatePassword, updateProfile, deleteUser } from "firebase/auth";
-import { firebaseConfig, loadCartServer } from "../../api/firebase";
+import { firebaseConfig } from "../../api/firebase";
 import { RiLogoutBoxLine } from "react-icons/ri";
 // import BookmarkPrdtList from "../../components/Mypage/BookmarkPrdtList";
 import { authService } from "../../api/firebase";
@@ -37,9 +37,9 @@ import { useNavigate } from "react-router-dom";
 //import UserLikeList from "../../components/Mypage/UserHistory/UserLikeList";
 import { CiLock } from "react-icons/ci";
 import { GiCutDiamond } from "react-icons/gi";
-import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { MdTipsAndUpdates } from "react-icons/md";
 
-function MyPage({ setAllCarts, allCarts }) {
+function MyPage() {
   const navigate = useNavigate();
   // 세션스토리지에서 로그인했을 때 저장된 current user 가져오기
   const userSession = sessionStorage.getItem(
@@ -230,7 +230,7 @@ function MyPage({ setAllCarts, allCarts }) {
             >
               <CategoryImg>
                 <p className="text-[1.4rem]">
-                  <BiSolidMessageSquareEdit />
+                  <MdTipsAndUpdates />
                 </p>
                 <button
                   onClick={() => {
@@ -238,7 +238,7 @@ function MyPage({ setAllCarts, allCarts }) {
                   }}
                   style={{ fontSize: "18px" }}
                 >
-                  내 리뷰 / 문의
+                  팁 관리
                 </button>
               </CategoryImg>
               <p>〉</p>
@@ -256,7 +256,7 @@ function MyPage({ setAllCarts, allCarts }) {
               <p>찜한 상품</p>
             </ResUserHistory>
             <ResUserTips onClick={() => setTab(2)}>
-              <p>내 리뷰 / 문의</p>
+              <p>팁 관리</p>
             </ResUserTips>
           </ResCategoryTab>
         </ResponsiveMypage>
@@ -326,8 +326,7 @@ function MyPage({ setAllCarts, allCarts }) {
                   style={{
                     color: "#888",
                     cursor: "pointer",
-                    marginTop: "4px",
-                    marginRight: "20px",
+                    marginRight: "10px",
                     fontSize: "0.9rem",
                   }}
                 >
@@ -393,7 +392,7 @@ function MyPage({ setAllCarts, allCarts }) {
                     setProductTypes(1);
                   }}
                 >
-                  리뷰글
+                  좋아한 팁
                 </ProductTypesBtn>
                 <ProductTypesBtn
                   style={
@@ -405,7 +404,7 @@ function MyPage({ setAllCarts, allCarts }) {
                     setProductTypes(2);
                   }}
                 >
-                  문의글
+                  작성한 팁
                 </ProductTypesBtn>
               </div>
               {/*productTypes === 1 ? (
