@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# 개인 쇼핑몰 사이트 프로젝트
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 기술스택
+* React
+* React-Router-Dom
+* Tailwind
+* React-Query
+* Firebase
 
-## Available Scripts
+### 실행환경
+* Node.js 18.x
+* Yarn 1.x
 
-In the project directory, you can run:
+### 개발환경 실행방법
+* 실행 전, `service_account.json`과 `.env`파일이 세팅되었는지 확인합니다.
+```shell
+# 의존성 설치
+yarn && cd backend && yarn && cd ..
 
-### `yarn start`
+# 서버 실행 (터미널1)
+cd backend && yarn start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# 클라이언트 실행 (터미널2)
+yarn start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+### 스크린샷
+![image](https://github.com/dnjfht/shoppy/assets/117057638/bd7f688d-4a49-4537-8e1c-b7baf5eadac9)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/60255204-6a4a-493b-a431-76d8541d1bf9)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/d363e7b9-6d33-4f5a-b1d0-61277883dca8)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/fe738b25-db2d-46df-9783-c7694a9e6d45)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/7bd4379f-feab-4728-a46f-48c862a081fd)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/ce6b13d1-b4b2-48d7-b616-74af3058157b)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/98b36745-972f-4318-9ed1-1cc9310ce798)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/c72803f9-9415-493b-9e57-3c45408e50e6)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/af3cafaf-0cbf-4b5b-ab8b-d3bbbbccb0c2)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/5aa549ed-f589-4181-bc89-5050eeb168aa)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/66d8a607-9afa-4a8b-90ff-8f1f4f69e58b)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/89ffb7a4-e209-46e5-98a1-0cfdb9dfd9d1)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/de815090-2a32-45ef-bef2-256949ebbc80)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/e9a30fe0-f36a-4d0d-ad3b-d260ea5af055)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/f367a32d-dc34-4bb4-adf9-48a7bd2f36b3)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/56a9e9ff-3203-427d-9cd5-f3717b20212b)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/4fa434b7-be27-4284-9808-b941b3b64129)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/ce06d0b7-d9b1-45a2-a25d-c9296fb46cff)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/36f91541-c816-4c71-8aad-d6fe033d7416)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/2d370126-e385-42a4-a5fd-eea3ff61346e)
+![image](https://github.com/dnjfht/shoppy/assets/117057638/1943ac31-216a-4503-9069-4788026affeb)

@@ -121,8 +121,8 @@ export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
           >
             <IoIosCart />
             <p className="w-5 h-5 bg-[#ff4273] text-white rounded-full text-[0.9rem] flex justify-center items-center absolute top-[-5px] right-[-8px]">
-              {user !== null && allCarts.length}
-              {user === null && nonMemberAllCarts.length}
+              {user !== null && (allCarts?.length ?? 0)}
+              {user === null && (nonMemberAllCarts?.length ?? 0)}
             </p>
           </li>
           {isLoggedIn() && (
