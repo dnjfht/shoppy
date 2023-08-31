@@ -1,10 +1,31 @@
-# - 개인 쇼핑몰 사이트 프로젝트
+# 개인 쇼핑몰 사이트 프로젝트
 
-React X React-Router-Dom X Tailwind X React-Query X Firebase
-<br/>
-<br/>
-<br/>
+### 기술스택
+* React
+* React-Router-Dom
+* Tailwind
+* React-Query
+* Firebase
 
+### 실행환경
+* Node.js 18.x
+* Yarn 1.x
+
+### 개발환경 실행방법
+* 실행 전, `service_account.json`과 `.env`파일이 세팅되었는지 확인합니다.
+```shell
+# 의존성 설치
+yarn && cd backend && yarn && cd ..
+
+# 서버 실행 (터미널1)
+cd backend && yarn start
+
+# 클라이언트 실행 (터미널2)
+yarn start
+```
+
+---
+### 스크린샷
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/bd7f688d-4a49-4537-8e1c-b7baf5eadac9)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/60255204-6a4a-493b-a431-76d8541d1bf9)
 ![image](https://github.com/dnjfht/shoppy/assets/117057638/d363e7b9-6d33-4f5a-b1d0-61277883dca8)
