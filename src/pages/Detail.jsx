@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { attach_won, shortString } from "./Main";
 import { v4 as uuidv4 } from "uuid";
@@ -21,6 +21,7 @@ import Button from "../components/Button";
 import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
+import axios from "axios";
 
 export default function Detail({ user }) {
   const [color, setColor] = useState("");
@@ -373,7 +374,7 @@ export default function Detail({ user }) {
   };
 
   // 내 체형 등록하기
-  const handleStoreBodySizeInfo = (e) => {
+  async function handleStoreBodySizeInfo(e) {
     e.preventDefault();
 
     setMyBodyInfo((prev) => ({
@@ -384,8 +385,33 @@ export default function Detail({ user }) {
       myFootSize,
     }));
 
+    // 체형 정보 서버에 등록.
+    if (user !== null) {
+      await axios.post(`http://localhost:3001/body/${user.uid}`, {
+        data: {
+          myHeight,
+          myWeight,
+          mySize,
+          myFootSize,
+        },
+      });
+    }
+
     setMyBodySizeModalOpen(false);
-  };
+  }
+
+  useEffect(() => {
+    if (user) {
+      async function handleBodyDataReceive() {
+        const res = await axios.get(`http://localhost:3001/body/${user.uid}`);
+        setMyBodyInfo(res.data);
+      }
+
+      // 화면 렌더링시 체형 정보 서버에서 가져오기.
+      handleBodyDataReceive();
+    }
+  }, [user]);
+
   console.log(myBodyInfo);
 
   return (
