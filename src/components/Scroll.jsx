@@ -49,8 +49,6 @@ export default function Scroll({ contentRef }) {
     return () => window.removeEventListener("scroll", handleShowButton);
   }, []);
 
-  console.log(scrollY);
-
   return (
     <div className="flex flex-col text-[0.8rem] fixed bottom-5 right-5">
       <button

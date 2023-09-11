@@ -22,6 +22,7 @@ import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Detail({ user }) {
   const [color, setColor] = useState("");
@@ -231,11 +232,13 @@ export default function Detail({ user }) {
 
   const remainingBytes = maxBytes - content.length;
 
-  const handleStoreReviewData = (e) => {
+  async function handleStoreReviewData(e) {
     e.preventDefault();
 
     if (user) {
       const newReviewData = {
+        profileImgSrc: user.photoURL,
+        profileDisplayName: user.displayName,
         userId: user.uid,
         productId: item.id,
         image: item.image,
@@ -254,6 +257,30 @@ export default function Detail({ user }) {
         count: 0,
       };
       setReviewData((prev) => [...prev, newReviewData]);
+
+      // 문의 등록
+      await axios.post(`http://localhost:3001/review/${item.id}/${user.uid}`, {
+        data: {
+          profileImgSrc: user.photoURL,
+          profileDisplayName: user.displayName,
+          userId: user.uid,
+          productId: item.id,
+          image: item.image,
+          id: uuidv4(),
+          createdAt: Date.now(),
+          reviewColor: reviewColor,
+          reviewSize: reviewSize,
+          reviewWeight: reviewWeight,
+          reviewHeight: reviewHeight,
+          reviewBodySize: reviewBodySize,
+          reviewBodyFoot: reviewBodyFoot,
+          ratingValue: ratingValue,
+          reviewColorSatisfaction: reviewColorSatisfaction,
+          reviewSizeSatisfaction: reviewSizeSatisfaction,
+          content: content,
+          count: 0,
+        },
+      });
     } else if (user === null) {
       const newReviewData = {
         id: uuidv4(),
@@ -289,7 +316,7 @@ export default function Detail({ user }) {
     setReviewSizeSatisfaction("");
     setContent("");
     setModalOpen((prev) => !prev);
-  };
+  }
 
   // 리뷰 슬라이드 이미지 클릭 시 모달 열기
   const openReviewDetailModal = (id) => {
@@ -400,19 +427,43 @@ export default function Detail({ user }) {
     setMyBodySizeModalOpen(false);
   }
 
+  // 화면 렌더링시 체형 정보 서버에서 가져오기.
+  const {
+    error,
+    isLoading,
+    data: bodyData,
+  } = useQuery(
+    ["firestoreBodyData", user?.uid, myBodyInfo],
+    async () => {
+      const res = await axios.get(`http://localhost:3001/body/${user?.uid}`);
+      return res.data;
+    },
+    {
+      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
+    }
+  );
+
+  useEffect(() => {
+    if (user && bodyData) {
+      setMyBodyInfo(bodyData);
+    }
+  }, [user, bodyData]);
+
   useEffect(() => {
     if (user) {
-      async function handleBodyDataReceive() {
-        const res = await axios.get(`http://localhost:3001/body/${user.uid}`);
-        setMyBodyInfo(res.data);
+      async function handleReviewDataReceive() {
+        const resAll = await axios.get(
+          `http://localhost:3001/review/${item.id}`
+        );
+        setReviewData(resAll.data);
       }
 
-      // 화면 렌더링시 체형 정보 서버에서 가져오기.
-      handleBodyDataReceive();
+      // 화면 렌더링시 리뷰 데이터 서버에서 가져오기.
+      handleReviewDataReceive();
     }
-  }, [user]);
+  }, [user, item.id, reviewData]);
 
-  console.log(myBodyInfo);
+  console.log(myBodyInfo, reviewData);
 
   return (
     <div className="w-full">
@@ -1262,7 +1313,7 @@ export default function Detail({ user }) {
                   value={myHeight}
                   id="myHeight"
                   type="text"
-                  placeholder="0"
+                  placeholder={`${myBodyInfo ? myBodyInfo.myHeight : "0"}`}
                 />
               </div>
 
@@ -1281,7 +1332,7 @@ export default function Detail({ user }) {
                   value={myWeight}
                   id="myWeight"
                   type="text"
-                  placeholder="0"
+                  placeholder={`${myBodyInfo ? myBodyInfo.myWeight : "0"}`}
                 />
               </div>
 
@@ -1300,7 +1351,7 @@ export default function Detail({ user }) {
                   value={mySize}
                   id="mySize"
                   type="text"
-                  placeholder="0"
+                  placeholder={`${myBodyInfo ? myBodyInfo.mySize : "0"}`}
                 />
               </div>
 
@@ -1319,7 +1370,7 @@ export default function Detail({ user }) {
                   value={myFootSize}
                   id="myFoot"
                   type="text"
-                  placeholder="0"
+                  placeholder={`${myBodyInfo ? myBodyInfo.myFootSize : "0"}`}
                 />
               </div>
 

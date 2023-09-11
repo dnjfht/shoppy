@@ -376,7 +376,12 @@ export default function DetailReview({
                 >
                   {/* 리뷰 내용 출력 */}
                   <div className="w-2/12">
-                    {isLoggedIn && user && <User user={user} />}
+                    {isLoggedIn && user && (
+                      <div>
+                        <img src={review.profileImgSrc} alt="profileImg" />
+                        <p>{review.profileDisplayName}</p>
+                      </div>
+                    )}
                     {user === null && (
                       <div className="flex items-center">
                         <img

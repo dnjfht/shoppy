@@ -24,7 +24,7 @@ export default function MyCart({
 
   useEffect(() => {
     getUserCart();
-  }, [user]);
+  }, [user, allCarts]);
 
   // localstorage에 카트 데이터 저장한 후에 다시 nonMemberCarts에 저장해주기.
   useEffect(() => {
