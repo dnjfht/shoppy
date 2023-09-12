@@ -484,7 +484,12 @@ export default function DetailReview({
 
                           <button
                             onClick={(e) =>
-                              handleDeleteReview(e, review.password, review.id)
+                              handleDeleteReview(
+                                e,
+                                review.password,
+                                review.id,
+                                review.detailUserId
+                              )
                             }
                             className={`${
                               reviewEdit.id === review.id ? "ml-none" : "ml-2"

@@ -3,7 +3,9 @@ import { attach_won } from "./Main";
 import { GoX } from "react-icons/go";
 import { CiHeart, CiGift } from "react-icons/ci";
 import { BsBox2 } from "react-icons/bs";
-import { loadCartServer, setCartServer } from "../api/firebase";
+import { setCartServer } from "../api/firebase";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function MyCart({
   user,
@@ -14,17 +16,24 @@ export default function MyCart({
 }) {
   // user 배열 구조 : [{userId, id, title, color, size, price, count]}]
 
-  const getUserCart = async () => {
-    let cart;
-    if (user) {
-      cart = await loadCartServer(user);
-      setAllCarts(cart);
+  // 서버에서 cart data 받아오기
+  const { data: firestoreCartData } = useQuery(
+    ["firestoreCartData", user?.uid],
+    async () => {
+      const res = await axios.get(`http://localhost:3001/cart/${user.uid}`);
+      return res?.data?.cartData;
+    },
+    {
+      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
+      staleTime: 1000 * 6,
     }
-  };
+  );
 
   useEffect(() => {
-    getUserCart();
-  }, [user, allCarts]);
+    if (user && firestoreCartData) {
+      setAllCarts(firestoreCartData);
+    }
+  }, [user, firestoreCartData, allCarts, setAllCarts]);
 
   // localstorage에 카트 데이터 저장한 후에 다시 nonMemberCarts에 저장해주기.
   useEffect(() => {
@@ -197,7 +206,6 @@ export default function MyCart({
     setSelectAll(false);
   };
 
-  console.log(nonMemberAllCarts);
   return (
     <div className="w-full">
       <div className="w-[1400px] mx-auto mt-32 pt-10">

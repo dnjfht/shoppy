@@ -1,4 +1,4 @@
-import { getFirestore } from './db.js';
+import { getFirestore } from "./db.js";
 
 /**
  * @param {import('fastify').FastifyInstance} fastify
@@ -26,7 +26,7 @@ export const inquiry = async (fastify) => {
     const snapshot = await firestore.collection(`inquiry_${productId}`).get();
     snapshot.docs.map((doc) => {
       const data = doc.data();
-      delete data.content;
+      // delete data.content;
       docs.push(data);
     });
     return docs;
@@ -42,4 +42,4 @@ export const inquiry = async (fastify) => {
     const doc = await docRef.get();
     return doc.data();
   });
-}
+};

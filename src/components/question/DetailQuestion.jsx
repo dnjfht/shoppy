@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DetailQuestionInputModal from "./DetailQuestionInputModal";
 import Button from "../../components/Button";
 import DetailQuestionList, { formatDate } from "./DetailQuestionList";
@@ -6,6 +6,8 @@ import DetailQuestionModal from "./DatailQuestionModal";
 import { v4 as uuidv4 } from "uuid";
 
 import { CiEdit } from "react-icons/ci";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 export default function DetailQuestion({ user, item }) {
   // 문의 작성하는 모달 useState
@@ -18,115 +20,7 @@ export default function DetailQuestion({ user, item }) {
   const [questionModalOpen, setQuestionModalOpen] = useState(false);
   const [questionType, setQuestionType] = useState("");
   const [questionContent, setQuestionContent] = useState("");
-  const [questionData, setQuestionData] = useState([
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692329192479,
-      phoneNumber: "01078543278",
-      password: "0913",
-      questionType: "배송문의",
-      questionContent:
-        "배송이 언제쯤 오는지 알 수 있을까요? 일 주일 안에 꼭 받아봤으면 해서요...ㅠㅠㅠ",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692339192948,
-      phoneNumber: "01047742186",
-      password: "3621",
-      questionType: "상품문의",
-      questionContent:
-        "이 상품 베이지 컬러가 품절됐던데 언제쯤 다시 들어오는지 알 수 있을까요?",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692368145890,
-      phoneNumber: "01059481592",
-      password: "6953",
-      questionType: "배송문의",
-      questionContent:
-        "배송이 계속 늦어지고 있어요...ㅠㅠㅠㅠㅠㅠㅠ 언제쯤 배송이 오는 거죠 벌써 일 주일이 지났는데",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692372509273,
-      phoneNumber: "01049036145",
-      password: "9827",
-      questionType: "사이즈문의",
-      questionContent:
-        "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692375824586,
-      phoneNumber: "01052837558",
-      password: "0119",
-      questionType: "기타문의",
-      questionContent: "기타문의 입니다...!",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692379405289,
-      phoneNumber: "01020968754",
-      password: "4832",
-      questionType: "사이즈문의",
-      questionContent:
-        "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692395845329,
-      phoneNumber: "01059088234",
-      password: "5772",
-      questionType: "배송문의",
-      questionContent:
-        "주문한지 시간이 꽤 지났는데 아직도 배송이 오질 않네요...",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692399187645,
-      phoneNumber: "01041205863",
-      password: "6341",
-      questionType: "기타문의",
-      questionContent: "기타 문의 드립니다.",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692399405728,
-      phoneNumber: "01020968754",
-      password: "4832",
-      questionType: "사이즈문의",
-      questionContent:
-        "배송온 옷의 사이즈가 저한테 조금 작은 것 같은데 교환 가능할까요?",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692411686304,
-      phoneNumber: "01089004730",
-      password: "2948",
-      questionType: "배송문의",
-      questionContent:
-        "2주 전에 주문했는데 아직도 배송이 오지 않았습니다... 진짜 늦네요;",
-    },
-    {
-      productId: item.id,
-      id: uuidv4(),
-      date: 1692411886304,
-      phoneNumber: "01032345610",
-      password: "9050",
-      questionType: "기타문의",
-      questionContent: "기타 문의 드립니다.",
-    },
-  ]);
+  const [questionData, setQuestionData] = useState([]);
 
   // 문의 상세페이지 모달 관련 useState
   const [questionDetailModalOpen, setQuestionDetailModalOpen] = useState(false);
@@ -163,10 +57,10 @@ export default function DetailQuestion({ user, item }) {
     setPassword(numericValue);
   };
 
-  const handleAddQuestionData = (e) => {
+  async function handleAddQuestionData(e) {
     e.preventDefault();
 
-    if (user !== null) {
+    if (user) {
       if (questionType !== "" && questionContent !== "") {
         const newQuestionData = {
           productId: item.id,
@@ -177,9 +71,26 @@ export default function DetailQuestion({ user, item }) {
           questionContent: questionContent,
         };
 
+        await axios.post(
+          `http://localhost:3001/inquiry/${item.id}/${user.uid}${
+            questionData.filter((data) => data.userId === user.uid).length + 1
+          }`,
+          {
+            data: {
+              productId: item.id,
+              id: uuidv4(),
+              date: Date.now(),
+              userId: user.uid,
+              questionType: questionType,
+              questionContent: questionContent,
+            },
+          }
+        );
+
         setQuestionData((prev) => {
           return [...prev, newQuestionData];
         });
+
         setQuestionType("");
         setQuestionContent("");
 
@@ -218,7 +129,7 @@ export default function DetailQuestion({ user, item }) {
         alert("빈 칸을 채워주세요.");
       }
     }
-  };
+  }
 
   const handleDeleteQuestion = (e, idx) => {
     e.preventDefault();
@@ -256,7 +167,25 @@ export default function DetailQuestion({ user, item }) {
     setQuestionDetailModalEdit(false);
   };
 
-  console.log(questionDetailModalEditIdBucket, changeContent);
+  // 서버에서 문의글 데이터 받아오기
+  const { data: inquiryData } = useQuery(
+    ["firestoreInquiryData", item?.id],
+    async () => {
+      const resAll = await axios.get(
+        `http://localhost:3001/inquiry/${item?.id}`
+      );
+      return resAll.data;
+    },
+    {
+      staleTime: 1000 * 6,
+    }
+  );
+
+  useEffect(() => {
+    if (inquiryData) {
+      setQuestionData(inquiryData);
+    }
+  }, [inquiryData]);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -283,6 +212,7 @@ export default function DetailQuestion({ user, item }) {
       </div>
 
       <DetailQuestionList
+        setQuestionData={setQuestionData}
         questionData={questionData}
         user={user}
         setQuestionDetailModalOpen={setQuestionDetailModalOpen}

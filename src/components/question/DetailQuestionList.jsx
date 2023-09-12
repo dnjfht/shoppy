@@ -10,8 +10,6 @@ export default function DetailQuestionList({
   setQuestionModalIdBucket,
   item,
 }) {
-  console.log(questionData);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(questionData.length / itemsPerPage);
@@ -102,7 +100,7 @@ export default function DetailQuestionList({
                     {inquiry.questionType}
                   </td>
                   <td className="py-4">
-                    {user !== null
+                    {user
                       ? inquiry?.userId?.slice(0, 4) + "***"
                       : inquiry?.phoneNumber?.slice(0, 7) + "****"}
                   </td>

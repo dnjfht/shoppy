@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  authService,
-  loadCartServer,
-  onUserStateChange,
-} from "../api/firebase";
+import { authService } from "../api/firebase";
 import { isLoggedIn } from "../utils/utils";
 import User from "./User";
 
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
+export default function Navbar({
+  user,
+  setAllCarts,
+  allCarts,
+  nonMemberAllCarts,
+}) {
   const navigate = useNavigate();
 
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -41,6 +44,25 @@ export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
       return;
     }
   };
+
+  // 서버에서 cart data 받아오기
+  const { data: firestoreCartData } = useQuery(
+    ["firestoreCartData", user?.uid],
+    async () => {
+      const res = await axios.get(`http://localhost:3001/cart/${user.uid}`);
+      return res?.data?.cartData;
+    },
+    {
+      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
+      staleTime: 1000 * 6,
+    }
+  );
+
+  useEffect(() => {
+    if (user && firestoreCartData) {
+      setAllCarts(firestoreCartData);
+    }
+  }, [user, firestoreCartData, setAllCarts, allCarts]);
 
   return (
     <div

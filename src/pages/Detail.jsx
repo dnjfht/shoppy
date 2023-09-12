@@ -22,7 +22,7 @@ import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Detail({ user }) {
   const [color, setColor] = useState("");
@@ -240,6 +240,11 @@ export default function Detail({ user }) {
         profileImgSrc: user.photoURL,
         profileDisplayName: user.displayName,
         userId: user.uid,
+        detailUserId:
+          user.uid +
+          String(
+            reviewData.filter((data) => data.userId === user.uid).length + 1
+          ),
         productId: item.id,
         image: item.image,
         id: uuidv4(),
@@ -259,28 +264,38 @@ export default function Detail({ user }) {
       setReviewData((prev) => [...prev, newReviewData]);
 
       // 문의 등록
-      await axios.post(`http://localhost:3001/review/${item.id}/${user.uid}`, {
-        data: {
-          profileImgSrc: user.photoURL,
-          profileDisplayName: user.displayName,
-          userId: user.uid,
-          productId: item.id,
-          image: item.image,
-          id: uuidv4(),
-          createdAt: Date.now(),
-          reviewColor: reviewColor,
-          reviewSize: reviewSize,
-          reviewWeight: reviewWeight,
-          reviewHeight: reviewHeight,
-          reviewBodySize: reviewBodySize,
-          reviewBodyFoot: reviewBodyFoot,
-          ratingValue: ratingValue,
-          reviewColorSatisfaction: reviewColorSatisfaction,
-          reviewSizeSatisfaction: reviewSizeSatisfaction,
-          content: content,
-          count: 0,
-        },
-      });
+      await axios.post(
+        `http://localhost:3001/review/${item.id}/${user.uid}${
+          reviewData.filter((data) => data.userId === user.uid).length + 1
+        }`,
+        {
+          data: {
+            profileImgSrc: user.photoURL,
+            profileDisplayName: user.displayName,
+            userId: user.uid,
+            detailUserId:
+              user.uid +
+              String(
+                reviewData.filter((data) => data.userId === user.uid).length + 1
+              ),
+            productId: item.id,
+            image: item.image,
+            id: uuidv4(),
+            createdAt: Date.now(),
+            reviewColor: reviewColor,
+            reviewSize: reviewSize,
+            reviewWeight: reviewWeight,
+            reviewHeight: reviewHeight,
+            reviewBodySize: reviewBodySize,
+            reviewBodyFoot: reviewBodyFoot,
+            ratingValue: ratingValue,
+            reviewColorSatisfaction: reviewColorSatisfaction,
+            reviewSizeSatisfaction: reviewSizeSatisfaction,
+            content: content,
+            count: 0,
+          },
+        }
+      );
     } else if (user === null) {
       const newReviewData = {
         id: uuidv4(),
@@ -341,11 +356,19 @@ export default function Detail({ user }) {
   };
 
   // 리뷰 삭제
-  const handleDeleteReview = (e, pw, idx) => {
+  async function handleDeleteReview(e, pw, idx, detailUserId) {
     e.preventDefault();
 
     if (user) {
       setReviewData((prev) => prev.filter((review) => review.id !== idx));
+      console.log(detailUserId);
+
+      await axios.post(
+        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
+        {
+          data: {},
+        }
+      );
     } else if (user === null) {
       const password = window.prompt(
         "비밀번호 네 자리를 입력하세요.(비밀번호는 숫자로 이루어져 있습니다.)"
@@ -357,7 +380,7 @@ export default function Detail({ user }) {
         alert("비밀번호가 일치하지 않습니다.");
       }
     }
-  };
+  }
 
   // 리뷰 수정
   const handleEditReview = (e, pw, idx) => {
@@ -427,13 +450,9 @@ export default function Detail({ user }) {
     setMyBodySizeModalOpen(false);
   }
 
-  // 화면 렌더링시 체형 정보 서버에서 가져오기.
-  const {
-    error,
-    isLoading,
-    data: bodyData,
-  } = useQuery(
-    ["firestoreBodyData", user?.uid, myBodyInfo],
+  // 체형 정보 서버에서 가져오기.
+  const { data: bodyData } = useQuery(
+    ["firestoreBodyData", user?.uid],
     async () => {
       const res = await axios.get(`http://localhost:3001/body/${user?.uid}`);
       return res.data;
@@ -443,27 +462,43 @@ export default function Detail({ user }) {
     }
   );
 
+  // myBodyInfo의 내용이 변경될시 받아온 data를 재업데이트 하도록 설정
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (user && bodyData && myBodyInfo) {
+      queryClient.invalidateQueries(["firestoreBodyData", user?.uid]);
+    }
+  }, [myBodyInfo, user, queryClient, bodyData]);
+
   useEffect(() => {
     if (user && bodyData) {
       setMyBodyInfo(bodyData);
     }
   }, [user, bodyData]);
 
-  useEffect(() => {
-    if (user) {
-      async function handleReviewDataReceive() {
-        const resAll = await axios.get(
-          `http://localhost:3001/review/${item.id}`
-        );
-        setReviewData(resAll.data);
-      }
-
-      // 화면 렌더링시 리뷰 데이터 서버에서 가져오기.
-      handleReviewDataReceive();
+  // 리뷰 데이터 서버에서 가져오기.
+  // 이건 user가 존재하건 존재하지 않건 가져올 수 있어야 함.
+  const { data: firestoreReviewData } = useQuery(
+    ["firestoreReviewData", item?.id],
+    async () => {
+      const resAll = await axios.get(
+        `http://localhost:3001/review/${item?.id}`
+      );
+      return resAll.data.filter((review) => review.reviewWeight != null);
+    },
+    {
+      staleTime: 1000 * 6,
     }
-  }, [user, item.id, reviewData]);
+  );
 
-  console.log(myBodyInfo, reviewData);
+  useEffect(() => {
+    if (firestoreReviewData) {
+      setReviewData(firestoreReviewData);
+    }
+  }, [firestoreReviewData]);
+
+  console.log(reviewData);
 
   return (
     <div className="w-full">

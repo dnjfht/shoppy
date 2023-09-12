@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Scroll from "../components/Scroll";
 
 export default function Root({
@@ -22,15 +23,17 @@ export default function Root({
       <ScrollRestoration />
       <div className="w-full" ref={contentRef}>
         <div className="w-full">
-          <Navbar
-            user={user}
-            setUser={setUser}
-            allCarts={allCarts}
-            setAllCarts={setAllCarts}
-            nonMemberAllCarts={nonMemberAllCarts}
-            setNonMemberAllCarts={setNonMemberAllCarts}
-          />
           <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={true} />
+            <Navbar
+              user={user}
+              setUser={setUser}
+              allCarts={allCarts}
+              setAllCarts={setAllCarts}
+              nonMemberAllCarts={nonMemberAllCarts}
+              setNonMemberAllCarts={setNonMemberAllCarts}
+            />
+
             <Outlet />
           </QueryClientProvider>
           <Footer />

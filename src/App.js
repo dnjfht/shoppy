@@ -12,7 +12,9 @@ import Search from "./pages/Search";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import MyPage from "./pages/MyPage/MyPage";
-import { loadCartServer, onUserStateChange } from "./api/firebase";
+import { onUserStateChange } from "./api/firebase";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState();
@@ -25,18 +27,6 @@ function App() {
       setUser(user);
     });
   }, []);
-
-  const getUserCart = async () => {
-    let cart;
-    if (user) {
-      cart = await loadCartServer(user);
-      setAllCarts(cart);
-    }
-  };
-
-  useEffect(() => {
-    getUserCart();
-  }, [user]);
 
   useEffect(() => {
     const carts = localStorage.getItem("carts");
