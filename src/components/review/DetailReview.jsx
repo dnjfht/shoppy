@@ -434,11 +434,7 @@ export default function DetailReview({
                     {reviewEdit.id === review.id && (
                       <form
                         onSubmit={(e) =>
-                          handleEditReviewSuccess(
-                            e,
-                            review.id,
-                            review.detailUserId
-                          )
+                          handleEditReviewSuccess(e, review.detailUserId)
                         }
                       >
                         <input

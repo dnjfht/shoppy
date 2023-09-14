@@ -480,25 +480,44 @@ export default function Detail({ user }) {
     }
   };
 
+  const editReview = async (detailUserId, editReviewData) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
+        editReviewData
+      );
+      console.log(res.config.data["data"]);
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const editReviewMutation = useMutation(
+    (detailUserId, editReviewData) => editReview(detailUserId, editReviewData),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+        console.log(firestoreReviewData);
+      },
+    }
+  );
+
   // 리뷰 수정 완료
-  async function handleEditReviewSuccess(e, idx, detailUserId) {
+  async function handleEditReviewSuccess(e, detailUserId) {
     e.preventDefault();
 
-    if (user) {
-      // 후기 수정
-      await axios.post(
-        `http://localhost:3001/review/${item.id}/${detailUserId}`,
-        {
-          data: {
-            ...firestoreReviewData.find((review) =>
-              review.detailUserId.includes(detailUserId)
-            ),
-            content: changeText,
-          },
-        }
-      );
-    } else if (user === null) {
-    }
+    const editReviewData = {
+      data: {
+        ...firestoreReviewData.find((review) =>
+          review.detailUserId.includes(detailUserId)
+        ),
+        content: changeText,
+      },
+    };
+
+    // 후기 수정
+    editReviewMutation.mutate(detailUserId, editReviewData);
 
     setReviewEdit((prev) => ({ ...prev, id: "", isActive: false }));
   }
