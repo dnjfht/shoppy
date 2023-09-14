@@ -39,9 +39,9 @@ export default function ReviewImgSlider({
           />
           <div className="w-full h-full p-4 box-border rounded-lg absolute bottom-0 left-0 bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center">
             <p className="mb-1 [0.8125rem]">
-              {user
-                ? user.displayName
-                : review.phoneNumber.substring(0, 7) + "****"}
+              {review?.profileDisplayName
+                ? review?.profileDisplayName
+                : review?.phoneNumber?.substring(0, 7) + "****"}
             </p>
             <div className="mb-2">
               <RatingResult2 ratingValue={review.ratingValue} />

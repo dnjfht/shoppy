@@ -22,7 +22,7 @@ import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
 import axios from "axios";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function Detail({ user }) {
   const [color, setColor] = useState("");
@@ -56,10 +56,6 @@ export default function Detail({ user }) {
   const [reviewSizeSatisfaction, setReviewSizeSatisfaction] = useState("");
   const [content, setContent] = useState("");
 
-  // 리뷰 정보들을 모두 객체 안에 담아 배열에 추가해준다.
-  // reviewData에는 user가 있는 데이터와 user가 없는 데이터가 함께 들어가 있다.
-  const [reviewData, setReviewData] = useState([]);
-
   // 내 체형 등록 useState
   const [myHeight, setMyHeight] = useState("");
   const [myWeight, setMyWeight] = useState("");
@@ -81,8 +77,6 @@ export default function Detail({ user }) {
   const {
     state: { item },
   } = useLocation();
-
-  console.log(item);
 
   const handleSelectColor = (e) => {
     setColor(e.target.value);
@@ -168,8 +162,6 @@ export default function Detail({ user }) {
 
   const category = ["상품정보", "사용후기", "교환 및 반품", "상품문의"];
 
-  console.log(item, cart);
-
   const handlePushCarts = async () => {
     if (user) {
       // Instead of updating local cart, update the allCarts in the App component.
@@ -232,93 +224,143 @@ export default function Detail({ user }) {
 
   const remainingBytes = maxBytes - content.length;
 
-  async function handleStoreReviewData(e) {
+  // 리뷰 데이터 서버에서 가져오기.
+  // 이건 user가 존재하건 존재하지 않건 가져올 수 있어야 함.
+  const { data: firestoreReviewData } = useQuery(
+    ["firestoreReviewData", item?.id],
+    async () => {
+      const resAll = await axios.get(
+        `http://localhost:3001/review/${item?.id}`
+      );
+      console.log(resAll);
+      return resAll.data.filter((review) => review.reviewWeight != null);
+    },
+    {
+      staleTime: 1000 * 6,
+    }
+  );
+
+  const createReview = async (reviewData) => {
+    if (user) {
+      try {
+        const res = await axios.post(
+          `http://localhost:3001/review/${item.id}/${user.uid}${
+            firestoreReviewData.filter((data) => data.userId === user.uid)
+              .length + 1
+          }`,
+          reviewData
+        );
+        console.log(res.config.data["data"]);
+        return res.config.data;
+      } catch (error) {
+        throw error;
+      }
+    } else if (user === null) {
+      try {
+        const res = await axios.post(
+          `http://localhost:3001/review/${item.id}/${phoneNumber}${
+            firestoreReviewData.filter(
+              (data) => data.phoneNumber === phoneNumber
+            ).length + 1
+          }`,
+          reviewData
+        );
+        console.log(res.config.data);
+        return res.config.data;
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
+
+  const userCreateReviewMutation = useMutation(
+    (reviewData) => createReview(reviewData),
+    {
+      onSuccess: () => {
+        // 성공적으로 리뷰를 작성한 경우, 데이터를 다시 불러와서 업데이트.
+        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+        console.log(firestoreReviewData);
+      },
+    }
+  );
+
+  const nonUserCreateReviewMutation = useMutation(
+    (reviewData) => createReview(reviewData),
+    {
+      onSuccess: () => {
+        // 성공적으로 리뷰를 작성한 경우, 데이터를 다시 불러와서 업데이트.
+        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+        console.log(firestoreReviewData);
+      },
+    }
+  );
+
+  const handleStoreReviewData = (e) => {
     e.preventDefault();
 
     if (user) {
-      const newReviewData = {
-        profileImgSrc: user.photoURL,
-        profileDisplayName: user.displayName,
-        userId: user.uid,
-        detailUserId:
-          user.uid +
-          String(
-            reviewData.filter((data) => data.userId === user.uid).length + 1
-          ),
-        productId: item.id,
-        image: item.image,
-        id: uuidv4(),
-        createdAt: Date.now(),
-        reviewColor: reviewColor,
-        reviewSize: reviewSize,
-        reviewWeight: reviewWeight,
-        reviewHeight: reviewHeight,
-        reviewBodySize: reviewBodySize,
-        reviewBodyFoot: reviewBodyFoot,
-        ratingValue: ratingValue,
-        reviewColorSatisfaction: reviewColorSatisfaction,
-        reviewSizeSatisfaction: reviewSizeSatisfaction,
-        content: content,
-        count: 0,
+      // 후기 등록
+      const reviewData = {
+        data: {
+          profileImgSrc: user.photoURL,
+          profileDisplayName: user.displayName,
+          userId: user.uid,
+          detailUserId:
+            user.uid +
+            String(
+              firestoreReviewData.filter((data) => data.userId === user.uid)
+                .length + 1
+            ),
+          productId: item.id,
+          image: item.image,
+          id: uuidv4(),
+          createdAt: Date.now(),
+          reviewColor: reviewColor,
+          reviewSize: reviewSize,
+          reviewWeight: reviewWeight,
+          reviewHeight: reviewHeight,
+          reviewBodySize: reviewBodySize,
+          reviewBodyFoot: reviewBodyFoot,
+          ratingValue: ratingValue,
+          reviewColorSatisfaction: reviewColorSatisfaction,
+          reviewSizeSatisfaction: reviewSizeSatisfaction,
+          content: content,
+          count: 0,
+        },
       };
-      setReviewData((prev) => [...prev, newReviewData]);
 
-      // 문의 등록
-      await axios.post(
-        `http://localhost:3001/review/${item.id}/${user.uid}${
-          reviewData.filter((data) => data.userId === user.uid).length + 1
-        }`,
-        {
-          data: {
-            profileImgSrc: user.photoURL,
-            profileDisplayName: user.displayName,
-            userId: user.uid,
-            detailUserId:
-              user.uid +
-              String(
-                reviewData.filter((data) => data.userId === user.uid).length + 1
-              ),
-            productId: item.id,
-            image: item.image,
-            id: uuidv4(),
-            createdAt: Date.now(),
-            reviewColor: reviewColor,
-            reviewSize: reviewSize,
-            reviewWeight: reviewWeight,
-            reviewHeight: reviewHeight,
-            reviewBodySize: reviewBodySize,
-            reviewBodyFoot: reviewBodyFoot,
-            ratingValue: ratingValue,
-            reviewColorSatisfaction: reviewColorSatisfaction,
-            reviewSizeSatisfaction: reviewSizeSatisfaction,
-            content: content,
-            count: 0,
-          },
-        }
-      );
+      userCreateReviewMutation.mutate(reviewData);
     } else if (user === null) {
-      const newReviewData = {
-        id: uuidv4(),
-        productId: item.id,
-        image: item.image,
-        phoneNumber: phoneNumber,
-        password: password,
-        createdAt: Date.now(),
-        reviewColor: reviewColor,
-        reviewSize: reviewSize,
-        reviewHeight: reviewHeight,
-        reviewWeight: reviewWeight,
-        reviewBodySize: reviewBodySize,
-        reviewBodyFoot: reviewBodyFoot,
-        ratingValue: ratingValue,
-        reviewColorSatisfaction: reviewColorSatisfaction,
-        reviewSizeSatisfaction: reviewSizeSatisfaction,
-        content: content,
-        count: 0,
+      const reviewData = {
+        data: {
+          phoneNumber: phoneNumber,
+          password: password,
+          detailUserId:
+            phoneNumber +
+            String(
+              firestoreReviewData.filter(
+                (data) => data.phoneNumber === phoneNumber
+              ).length + 1
+            ),
+          productId: item.id,
+          image: item.image,
+          id: uuidv4(),
+          createdAt: Date.now(),
+          reviewColor: reviewColor,
+          reviewSize: reviewSize,
+          reviewWeight: reviewWeight,
+          reviewHeight: reviewHeight,
+          reviewBodySize: reviewBodySize,
+          reviewBodyFoot: reviewBodyFoot,
+          ratingValue: ratingValue,
+          reviewColorSatisfaction: reviewColorSatisfaction,
+          reviewSizeSatisfaction: reviewSizeSatisfaction,
+          content: content,
+          count: 0,
+        },
       };
-      setReviewData((prev) => [...prev, newReviewData]);
-      setPhoneNumber("");
-      setPassword("");
+
+      nonUserCreateReviewMutation.mutate(reviewData);
     }
     setReviewColor("");
     setReviewSize("");
@@ -331,7 +373,12 @@ export default function Detail({ user }) {
     setReviewSizeSatisfaction("");
     setContent("");
     setModalOpen((prev) => !prev);
-  }
+  };
+
+  useEffect(() => {
+    setPhoneNumber("");
+    setPassword("");
+  }, [firestoreReviewData]);
 
   // 리뷰 슬라이드 이미지 클릭 시 모달 열기
   const openReviewDetailModal = (id) => {
@@ -345,24 +392,26 @@ export default function Detail({ user }) {
     setReviewDetailModalOpen(false);
   };
 
-  const handleClickBenefitBtn = (e, idx) => {
+  async function handleClickBenefitBtn(e, idx) {
     e.preventDefault();
 
-    setReviewData((prev) =>
-      prev.map((item) => {
-        return item.id === idx ? { ...item, count: item.count + 1 } : item;
-      })
-    );
-  };
+    // setReviewData((prev) =>
+    //   prev.map((item) => {
+    //     return item.id === idx
+    //       ? {
+    //           ...item,
+    //           count: item.count === 0 ? item.count + 1 : item.count - 1,
+    //         }
+    //       : item;
+    //   })
+    // );
+  }
 
   // 리뷰 삭제
   async function handleDeleteReview(e, pw, idx, detailUserId) {
     e.preventDefault();
 
     if (user) {
-      setReviewData((prev) => prev.filter((review) => review.id !== idx));
-      console.log(detailUserId);
-
       await axios.post(
         `http://localhost:3001/review/${item?.id}/${detailUserId}`,
         {
@@ -375,7 +424,7 @@ export default function Detail({ user }) {
       );
 
       if (password === pw) {
-        setReviewData((prev) => prev.filter((review) => review.id !== idx));
+        //setReviewData((prev) => prev.filter((review) => review.id !== idx));
       } else {
         alert("비밀번호가 일치하지 않습니다.");
       }
@@ -402,16 +451,27 @@ export default function Detail({ user }) {
   };
 
   // 리뷰 수정 완료
-  const handleEditReviewSuccess = (e, idx) => {
+  async function handleEditReviewSuccess(e, idx, detailUserId) {
     e.preventDefault();
 
-    setReviewData((prev) =>
-      prev.map((review) => {
-        return review.id === idx ? { ...review, content: changeText } : review;
-      })
-    );
+    if (user) {
+      // 후기 수정
+      await axios.post(
+        `http://localhost:3001/review/${item.id}/${detailUserId}`,
+        {
+          data: {
+            ...firestoreReviewData.find((review) =>
+              review.detailUserId.includes(detailUserId)
+            ),
+            content: changeText,
+          },
+        }
+      );
+    } else if (user === null) {
+    }
+
     setReviewEdit((prev) => ({ ...prev, id: "", isActive: false }));
-  };
+  }
 
   // 내 체형 리뷰만 보기 버튼 클릭시 모달 열기
   const openMyBodySizeModal = (id) => {
@@ -477,28 +537,7 @@ export default function Detail({ user }) {
     }
   }, [user, bodyData]);
 
-  // 리뷰 데이터 서버에서 가져오기.
-  // 이건 user가 존재하건 존재하지 않건 가져올 수 있어야 함.
-  const { data: firestoreReviewData } = useQuery(
-    ["firestoreReviewData", item?.id],
-    async () => {
-      const resAll = await axios.get(
-        `http://localhost:3001/review/${item?.id}`
-      );
-      return resAll.data.filter((review) => review.reviewWeight != null);
-    },
-    {
-      staleTime: 1000 * 6,
-    }
-  );
-
-  useEffect(() => {
-    if (firestoreReviewData) {
-      setReviewData(firestoreReviewData);
-    }
-  }, [firestoreReviewData]);
-
-  console.log(reviewData);
+  console.log(firestoreReviewData);
 
   return (
     <div className="w-full">
@@ -861,8 +900,7 @@ export default function Detail({ user }) {
             <DetailReview
               user={user}
               item={item}
-              reviewData={reviewData}
-              setReviewData={setReviewData}
+              firestoreReviewData={firestoreReviewData}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
               openReviewDetailModal={openReviewDetailModal}
@@ -1153,7 +1191,7 @@ export default function Detail({ user }) {
       {reviewDetailModalOpen && (
         <DetailReviewModal onClose={closeReviewDetailModal}>
           {selectedReviewId &&
-            reviewData
+            firestoreReviewData
               .filter((review) => review.id === selectedReviewId)
               .map((review) => {
                 return (
@@ -1206,7 +1244,11 @@ export default function Detail({ user }) {
                           <form
                             className="flex"
                             onSubmit={(e) =>
-                              handleEditReviewSuccess(e, review.id)
+                              handleEditReviewSuccess(
+                                e,
+                                review.id,
+                                review.detailUserId
+                              )
                             }
                           >
                             <input
@@ -1269,7 +1311,8 @@ export default function Detail({ user }) {
                                   handleDeleteReview(
                                     e,
                                     review.password,
-                                    review.id
+                                    review.id,
+                                    review.detailUserId
                                   )
                                 }
                                 className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"

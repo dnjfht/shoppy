@@ -67,6 +67,11 @@ export default function DetailQuestion({ user, item }) {
           id: uuidv4(),
           date: Date.now(),
           userId: user.uid,
+          detailUserId:
+            user.uid +
+            String(
+              questionData.filter((data) => data.userId === user.uid).length + 1
+            ),
           questionType: questionType,
           questionContent: questionContent,
         };
@@ -81,6 +86,12 @@ export default function DetailQuestion({ user, item }) {
               id: uuidv4(),
               date: Date.now(),
               userId: user.uid,
+              detailUserId:
+                user.uid +
+                String(
+                  questionData.filter((data) => data.userId === user.uid)
+                    .length + 1
+                ),
               questionType: questionType,
               questionContent: questionContent,
             },
@@ -131,7 +142,7 @@ export default function DetailQuestion({ user, item }) {
     }
   }
 
-  const handleDeleteQuestion = (e, idx) => {
+  async function handleDeleteQuestion(e, idx, detailUserId) {
     e.preventDefault();
 
     const result = window.confirm("게시물을 삭제하시겠습니까?");
@@ -139,8 +150,17 @@ export default function DetailQuestion({ user, item }) {
     if (result) {
       setQuestionData((prev) => prev.filter((data) => data.id !== idx));
       setQuestionDetailModalOpen(false);
+
+      if (user) {
+        await axios.post(
+          `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
+          {
+            data: {},
+          }
+        );
+      }
     }
-  };
+  }
 
   const handleEditQuestion = (e, idx) => {
     e.preventDefault();
@@ -153,7 +173,7 @@ export default function DetailQuestion({ user, item }) {
     }
   };
 
-  const handleEditQuestionSuccess = (e, idx) => {
+  async function handleEditQuestionSuccess(e, idx, detailUserId) {
     e.preventDefault();
 
     setQuestionData((prev) =>
@@ -163,9 +183,26 @@ export default function DetailQuestion({ user, item }) {
           : data;
       })
     );
+
+    if (user) {
+      // 문의 수정
+      await axios.post(
+        `http://localhost:3001/inquiry/${item.id}/${detailUserId}`,
+        {
+          data: {
+            ...questionData.find((inquiry) =>
+              inquiry.detailUserId.includes(detailUserId)
+            ),
+            questionContent: changeContent,
+          },
+        }
+      );
+    } else if (user === null) {
+    }
+
     setQuestionDetailModalEditIdBucket("");
     setQuestionDetailModalEdit(false);
-  };
+  }
 
   // 서버에서 문의글 데이터 받아오기
   const { data: inquiryData } = useQuery(
@@ -174,7 +211,7 @@ export default function DetailQuestion({ user, item }) {
       const resAll = await axios.get(
         `http://localhost:3001/inquiry/${item?.id}`
       );
-      return resAll.data;
+      return resAll.data.filter((inquiry) => inquiry.questionContent != null);
     },
     {
       staleTime: 1000 * 6,
@@ -186,6 +223,8 @@ export default function DetailQuestion({ user, item }) {
       setQuestionData(inquiryData);
     }
   }, [inquiryData]);
+
+  console.log(questionData);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -357,7 +396,11 @@ export default function DetailQuestion({ user, item }) {
                     questionDetailModalEditIdBucket === data.id ? (
                       <form
                         onSubmit={(e) => {
-                          handleEditQuestionSuccess(e, data.id);
+                          handleEditQuestionSuccess(
+                            e,
+                            data.id,
+                            data.detailUserId
+                          );
                         }}
                       >
                         <div className="w-full mt-5 mb-80 flex justify-between items-center">
@@ -396,7 +439,7 @@ export default function DetailQuestion({ user, item }) {
 
                       <button
                         onClick={(e) => {
-                          handleDeleteQuestion(e, data.id);
+                          handleDeleteQuestion(e, data.id, data.detailUserId);
                         }}
                         className={`${
                           questionDetailModalEditIdBucket !== data.id

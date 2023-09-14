@@ -10,9 +10,9 @@ import { CiEdit } from "react-icons/ci";
 
 export default function DetailReview({
   setModalOpen,
-  reviewData,
   item,
   user,
+  firestoreReviewData,
   openReviewDetailModal,
   handleClickBenefitBtn,
   handleDeleteReview,
@@ -24,7 +24,7 @@ export default function DetailReview({
   openMyBodySizeModal,
   myBodyInfo,
 }) {
-  console.log(reviewData);
+  console.log(firestoreReviewData);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -55,7 +55,9 @@ export default function DetailReview({
   // 별점 평균값 구하기
 
   // 1.상세페이지 제품 관련 리뷰만 필터링하기
-  const accordReview = reviewData.filter((data) => data.productId === item.id);
+  const accordReview = firestoreReviewData.filter(
+    (data) => data.productId === item.id
+  );
   // 2. 필터링 해준 배열 안에서 ratingValue 평균 구하기.
   console.log(accordReview.length);
   const averageRating =
@@ -163,7 +165,7 @@ export default function DetailReview({
     }
 
     setFilteredReviews(filteredList);
-  }, [search, myBodyInfo, reviewOfMyBodyType, reviewData]);
+  }, [search, myBodyInfo, reviewOfMyBodyType, firestoreReviewData]);
 
   return (
     <div className="w-full py-14 overflow-hidden relative">
@@ -376,13 +378,13 @@ export default function DetailReview({
                 >
                   {/* 리뷰 내용 출력 */}
                   <div className="w-2/12">
-                    {isLoggedIn && user && (
+                    {isLoggedIn && !review.phoneNumber && (
                       <div>
                         <img src={review.profileImgSrc} alt="profileImg" />
                         <p>{review.profileDisplayName}</p>
                       </div>
                     )}
-                    {user === null && (
+                    {review.phoneNumber && (
                       <div className="flex items-center">
                         <img
                           src={
@@ -433,7 +435,13 @@ export default function DetailReview({
 
                     {reviewEdit.id === review.id && (
                       <form
-                        onSubmit={(e) => handleEditReviewSuccess(e, review.id)}
+                        onSubmit={(e) =>
+                          handleEditReviewSuccess(
+                            e,
+                            review.id,
+                            review.detailUserId
+                          )
+                        }
                       >
                         <input
                           onChange={(e) => {

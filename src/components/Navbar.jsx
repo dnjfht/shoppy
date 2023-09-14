@@ -11,7 +11,7 @@ import axios from "axios";
 
 export default function Navbar({
   user,
-  setAllCarts,
+  //setAllCarts,
   allCarts,
   nonMemberAllCarts,
 }) {
@@ -44,25 +44,6 @@ export default function Navbar({
       return;
     }
   };
-
-  // 서버에서 cart data 받아오기
-  const { data: firestoreCartData } = useQuery(
-    ["firestoreCartData", user?.uid],
-    async () => {
-      const res = await axios.get(`http://localhost:3001/cart/${user.uid}`);
-      return res?.data?.cartData;
-    },
-    {
-      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
-      staleTime: 1000 * 6,
-    }
-  );
-
-  useEffect(() => {
-    if (user && firestoreCartData) {
-      setAllCarts(firestoreCartData);
-    }
-  }, [user, firestoreCartData, setAllCarts, allCarts]);
 
   return (
     <div

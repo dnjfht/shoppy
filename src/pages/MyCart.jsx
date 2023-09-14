@@ -16,25 +16,6 @@ export default function MyCart({
 }) {
   // user 배열 구조 : [{userId, id, title, color, size, price, count]}]
 
-  // 서버에서 cart data 받아오기
-  const { data: firestoreCartData } = useQuery(
-    ["firestoreCartData", user?.uid],
-    async () => {
-      const res = await axios.get(`http://localhost:3001/cart/${user.uid}`);
-      return res?.data?.cartData;
-    },
-    {
-      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
-      staleTime: 1000 * 6,
-    }
-  );
-
-  useEffect(() => {
-    if (user && firestoreCartData) {
-      setAllCarts(firestoreCartData);
-    }
-  }, [user, firestoreCartData, allCarts, setAllCarts]);
-
   // localstorage에 카트 데이터 저장한 후에 다시 nonMemberCarts에 저장해주기.
   useEffect(() => {
     const carts = localStorage.getItem("carts");
