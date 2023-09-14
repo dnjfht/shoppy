@@ -234,9 +234,6 @@ export default function Detail({ user }) {
       );
       console.log(resAll);
       return resAll.data.filter((review) => review.reviewWeight != null);
-    },
-    {
-      staleTime: 1000 * 6,
     }
   );
 
@@ -251,7 +248,7 @@ export default function Detail({ user }) {
           reviewData
         );
         console.log(res.config.data["data"]);
-        return res.config.data;
+        return res.config.data["data"];
       } catch (error) {
         throw error;
       }
@@ -272,6 +269,17 @@ export default function Detail({ user }) {
       }
     }
   };
+
+  // const userCreateReviewMutation = useMutation(createReview, {
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+
+  //     console.log(firestoreReviewData);
+  //   },
+  //   onError: (error) => {
+  //     // 여기에 오류 처리 로직을 추가합니다. 예를 들어, console.error(error.message);
+  //   },
+  // });
 
   const userCreateReviewMutation = useMutation(
     (reviewData) => createReview(reviewData),
@@ -392,7 +400,7 @@ export default function Detail({ user }) {
     setReviewDetailModalOpen(false);
   };
 
-  async function handleClickBenefitBtn(e, idx) {
+  async function handleClickBenefitBtn(e) {
     e.preventDefault();
 
     // setReviewData((prev) =>
@@ -408,23 +416,45 @@ export default function Detail({ user }) {
   }
 
   // 리뷰 삭제
-  async function handleDeleteReview(e, pw, idx, detailUserId) {
+  const deleteReview = async (detailUserId, reviewData) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
+        reviewData
+      );
+      console.log(res.config.data["data"]);
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteReviewMutation = useMutation(
+    (detailUserId, reviewData) => deleteReview(detailUserId, reviewData),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+        console.log(firestoreReviewData);
+      },
+    }
+  );
+
+  async function handleDeleteReview(e, pw, detailUserId) {
     e.preventDefault();
 
+    const reviewData = {
+      data: {},
+    };
+
     if (user) {
-      await axios.post(
-        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
-        {
-          data: {},
-        }
-      );
+      deleteReviewMutation.mutate(detailUserId, reviewData);
     } else if (user === null) {
       const password = window.prompt(
         "비밀번호 네 자리를 입력하세요.(비밀번호는 숫자로 이루어져 있습니다.)"
       );
 
       if (password === pw) {
-        //setReviewData((prev) => prev.filter((review) => review.id !== idx));
+        deleteReviewMutation.mutate(detailUserId, reviewData);
       } else {
         alert("비밀번호가 일치하지 않습니다.");
       }
@@ -536,8 +566,6 @@ export default function Detail({ user }) {
       setMyBodyInfo(bodyData);
     }
   }, [user, bodyData]);
-
-  console.log(firestoreReviewData);
 
   return (
     <div className="w-full">
@@ -1220,8 +1248,8 @@ export default function Detail({ user }) {
                           </div>
 
                           <p className="text-[0.75rem] text-[#888]">
-                            {user
-                              ? user.displayName
+                            {!review.phoneNumber
+                              ? review.profileDisplayName
                               : review.phoneNumber.slice(0, 7) + "***"}
                           </p>
                         </div>

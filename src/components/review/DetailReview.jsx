@@ -24,7 +24,6 @@ export default function DetailReview({
   openMyBodySizeModal,
   myBodyInfo,
 }) {
-  console.log(firestoreReviewData);
   const openModal = () => {
     setModalOpen(true);
   };
@@ -59,7 +58,6 @@ export default function DetailReview({
     (data) => data.productId === item.id
   );
   // 2. 필터링 해준 배열 안에서 ratingValue 평균 구하기.
-  console.log(accordReview.length);
   const averageRating =
     accordReview?.reduce((sum, item) => sum + item.ratingValue, 0) /
     accordReview.length;
@@ -494,9 +492,8 @@ export default function DetailReview({
                             onClick={(e) =>
                               handleDeleteReview(
                                 e,
-                                review.password,
-                                review.id,
-                                review.detailUserId
+                                review?.password,
+                                review?.detailUserId
                               )
                             }
                             className={`${
