@@ -540,7 +540,7 @@ export default function Detail({ user }) {
     }));
 
     // 체형 정보 서버에 등록.
-    if (user !== null) {
+    if (user) {
       await axios.post(`http://localhost:3001/body/${user.uid}`, {
         data: {
           myHeight,
@@ -549,6 +549,17 @@ export default function Detail({ user }) {
           myFootSize,
         },
       });
+    } else if (user === null) {
+      const previousBodyInfo = JSON.parse(localStorage.getItem("bodyInfo"));
+
+      // 이전 객체에서 새로 바뀐 것들만 적용되도록
+      const mergedBodyInfo = {
+        ...previousBodyInfo,
+        ...{ myHeight, myWeight, mySize, myFootSize },
+      };
+
+      // 합쳐진 객체를 다시 localStorage에 저장
+      localStorage.setItem("bodyInfo", JSON.stringify(mergedBodyInfo));
     }
 
     setMyBodySizeModalOpen(false);
@@ -565,6 +576,13 @@ export default function Detail({ user }) {
       enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
     }
   );
+
+  useEffect(() => {
+    if (user === null) {
+      const bodyInfo = JSON.parse(localStorage.getItem("bodyInfo"));
+      setMyBodyInfo(bodyInfo);
+    }
+  }, [user, setMyBodyInfo]);
 
   // myBodyInfo의 내용이 변경될시 받아온 data를 재업데이트 하도록 설정
   const queryClient = useQueryClient();
@@ -1493,7 +1511,10 @@ export default function Detail({ user }) {
               </div>
 
               <div className="w-full mb-3 flex justify-center">
-                <Button onClick={handleStoreBodySizeInfo} value="등록" />
+                <Button
+                  onClick={(e) => handleStoreBodySizeInfo(e)}
+                  value="등록"
+                />
               </div>
             </div>
           </div>
