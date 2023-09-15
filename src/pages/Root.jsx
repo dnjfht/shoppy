@@ -27,7 +27,7 @@ export default function Root({
             <ReactQueryDevtools initialIsOpen={true} />
             <Navbar
               user={user}
-              //setUser={setUser}
+              setUser={setUser}
               allCarts={allCarts}
               setAllCarts={setAllCarts}
               nonMemberAllCarts={nonMemberAllCarts}

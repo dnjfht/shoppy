@@ -471,7 +471,7 @@ export default function DetailReview({
                     </div>
 
                     <div className="mt-14 flex items-center">
-                      {user && user.uid === review.userId && (
+                      {!review.phoneNumber && user?.uid === review?.userId && (
                         <>
                           {reviewEdit.id !== review.id && (
                             <button
@@ -501,7 +501,7 @@ export default function DetailReview({
                         </>
                       )}
 
-                      {user === null && (
+                      {review.phoneNumber && (
                         <>
                           {reviewEdit.id !== review.id && (
                             <button
@@ -516,7 +516,11 @@ export default function DetailReview({
 
                           <button
                             onClick={(e) =>
-                              handleDeleteReview(e, review.password, review.id)
+                              handleDeleteReview(
+                                e,
+                                review.password,
+                                review.detailUserId
+                              )
                             }
                             className={`${
                               reviewEdit.id !== review.id ? "ml-2" : "ml-none"

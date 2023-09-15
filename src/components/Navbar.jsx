@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService } from "../api/firebase";
+import { authService, loadCartServer } from "../api/firebase";
 import { isLoggedIn } from "../utils/utils";
 import User from "./User";
 
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 export default function Navbar({
   user,
-  //setAllCarts,
+  setAllCarts,
   allCarts,
   nonMemberAllCarts,
 }) {
@@ -44,6 +42,17 @@ export default function Navbar({
       return;
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      const getUserCart = async () => {
+        let cart;
+        cart = await loadCartServer(user);
+        setAllCarts(cart);
+      };
+      getUserCart();
+    }
+  }, [user, setAllCarts]);
 
   return (
     <div

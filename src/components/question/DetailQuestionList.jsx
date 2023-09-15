@@ -4,7 +4,7 @@ import { CiLock } from "react-icons/ci";
 import { PiCaretRightThin, PiCaretLeftThin } from "react-icons/pi";
 
 export default function DetailQuestionList({
-  questionData,
+  firestoreInquiryData,
   user,
   setQuestionDetailModalOpen,
   setQuestionModalIdBucket,
@@ -12,7 +12,7 @@ export default function DetailQuestionList({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(questionData.length / itemsPerPage);
+  const totalPages = Math.ceil(firestoreInquiryData?.length / itemsPerPage);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -34,7 +34,7 @@ export default function DetailQuestionList({
   // 9 페이지라고 치면 90번에서 끝남
   // 80 + 10 = 90;
 
-  const currentQuestionData = questionData?.slice(startIndex, endIndex);
+  const currentQuestionData = firestoreInquiryData?.slice(startIndex, endIndex);
 
   const handleQuestionModalIdBucket = (e, pw, idx, userId) => {
     e.preventDefault();
@@ -100,7 +100,7 @@ export default function DetailQuestionList({
                     {inquiry.questionType}
                   </td>
                   <td className="py-4">
-                    {user
+                    {!inquiry?.phoneNumber
                       ? inquiry?.userId?.slice(0, 4) + "***"
                       : inquiry?.phoneNumber?.slice(0, 7) + "****"}
                   </td>

@@ -237,6 +237,7 @@ export default function Detail({ user }) {
     }
   );
 
+  // 리뷰 생성.
   const createReview = async (reviewData) => {
     if (user) {
       try {
@@ -262,8 +263,8 @@ export default function Detail({ user }) {
           }`,
           reviewData
         );
-        console.log(res.config.data);
-        return res.config.data;
+        console.log(res.config.data["data"]);
+        return res.config.data["data"];
       } catch (error) {
         throw error;
       }
@@ -281,18 +282,7 @@ export default function Detail({ user }) {
   //   },
   // });
 
-  const userCreateReviewMutation = useMutation(
-    (reviewData) => createReview(reviewData),
-    {
-      onSuccess: () => {
-        // 성공적으로 리뷰를 작성한 경우, 데이터를 다시 불러와서 업데이트.
-        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
-        console.log(firestoreReviewData);
-      },
-    }
-  );
-
-  const nonUserCreateReviewMutation = useMutation(
+  const createReviewMutation = useMutation(
     (reviewData) => createReview(reviewData),
     {
       onSuccess: () => {
@@ -337,7 +327,7 @@ export default function Detail({ user }) {
         },
       };
 
-      userCreateReviewMutation.mutate(reviewData);
+      createReviewMutation.mutate(reviewData);
     } else if (user === null) {
       const reviewData = {
         data: {
@@ -368,7 +358,7 @@ export default function Detail({ user }) {
         },
       };
 
-      nonUserCreateReviewMutation.mutate(reviewData);
+      createReviewMutation.mutate(reviewData);
     }
     setReviewColor("");
     setReviewSize("");
@@ -416,8 +406,9 @@ export default function Detail({ user }) {
   }
 
   // 리뷰 삭제
-  const deleteReview = async (detailUserId, reviewData) => {
+  const deleteReview = async ({ detailUserId, reviewData }) => {
     try {
+      console.log(reviewData);
       const res = await axios.post(
         `http://localhost:3001/review/${item?.id}/${detailUserId}`,
         reviewData
@@ -430,7 +421,8 @@ export default function Detail({ user }) {
   };
 
   const deleteReviewMutation = useMutation(
-    (detailUserId, reviewData) => deleteReview(detailUserId, reviewData),
+    ({ detailUserId, reviewData }) =>
+      deleteReview({ detailUserId, reviewData }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
@@ -442,19 +434,21 @@ export default function Detail({ user }) {
   async function handleDeleteReview(e, pw, detailUserId) {
     e.preventDefault();
 
+    setReviewDetailModalOpen(false);
+
     const reviewData = {
       data: {},
     };
 
     if (user) {
-      deleteReviewMutation.mutate(detailUserId, reviewData);
+      deleteReviewMutation.mutate({ detailUserId, reviewData });
     } else if (user === null) {
       const password = window.prompt(
         "비밀번호 네 자리를 입력하세요.(비밀번호는 숫자로 이루어져 있습니다.)"
       );
 
       if (password === pw) {
-        deleteReviewMutation.mutate(detailUserId, reviewData);
+        deleteReviewMutation.mutate({ detailUserId, reviewData });
       } else {
         alert("비밀번호가 일치하지 않습니다.");
       }
@@ -480,7 +474,7 @@ export default function Detail({ user }) {
     }
   };
 
-  const editReview = async (detailUserId, editReviewData) => {
+  const editReview = async ({ detailUserId, editReviewData }) => {
     try {
       const res = await axios.post(
         `http://localhost:3001/review/${item?.id}/${detailUserId}`,
@@ -494,7 +488,8 @@ export default function Detail({ user }) {
   };
 
   const editReviewMutation = useMutation(
-    (detailUserId, editReviewData) => editReview(detailUserId, editReviewData),
+    ({ detailUserId, editReviewData }) =>
+      editReview({ detailUserId, editReviewData }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
@@ -517,7 +512,7 @@ export default function Detail({ user }) {
     };
 
     // 후기 수정
-    editReviewMutation.mutate(detailUserId, editReviewData);
+    editReviewMutation.mutate({ detailUserId, editReviewData });
 
     setReviewEdit((prev) => ({ ...prev, id: "", isActive: false }));
   }
@@ -1228,7 +1223,10 @@ export default function Detail({ user }) {
               </div>
 
               <div className="w-full flex justify-center">
-                <Button onClick={handleStoreReviewData} value="리뷰 쓰기" />
+                <Button
+                  onClick={(e) => handleStoreReviewData(e)}
+                  value="리뷰 쓰기"
+                />
               </div>
             </div>
           </div>
@@ -1291,11 +1289,7 @@ export default function Detail({ user }) {
                           <form
                             className="flex"
                             onSubmit={(e) =>
-                              handleEditReviewSuccess(
-                                e,
-                                review.id,
-                                review.detailUserId
-                              )
+                              handleEditReviewSuccess(e, review.detailUserId)
                             }
                           >
                             <input
@@ -1357,9 +1351,8 @@ export default function Detail({ user }) {
                                 onClick={(e) =>
                                   handleDeleteReview(
                                     e,
-                                    review.password,
-                                    review.id,
-                                    review.detailUserId
+                                    review?.password,
+                                    review?.detailUserId
                                   )
                                 }
                                 className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
@@ -1390,8 +1383,8 @@ export default function Detail({ user }) {
                                 onClick={(e) =>
                                   handleDeleteReview(
                                     e,
-                                    review.password,
-                                    review.id
+                                    review?.password,
+                                    review?.detailUserId
                                   )
                                 }
                                 className={`${

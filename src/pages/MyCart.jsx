@@ -3,9 +3,7 @@ import { attach_won } from "./Main";
 import { GoX } from "react-icons/go";
 import { CiHeart, CiGift } from "react-icons/ci";
 import { BsBox2 } from "react-icons/bs";
-import { setCartServer } from "../api/firebase";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { loadCartServer, setCartServer } from "../api/firebase";
 
 export default function MyCart({
   user,
@@ -186,6 +184,17 @@ export default function MyCart({
     setSelectedItems([]);
     setSelectAll(false);
   };
+
+  useEffect(() => {
+    if (user) {
+      const getUserCart = async () => {
+        let cart;
+        cart = await loadCartServer(user);
+        setAllCarts(cart);
+      };
+      getUserCart();
+    }
+  }, [user, setAllCarts]);
 
   return (
     <div className="w-full">

@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { CiEdit } from "react-icons/ci";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function DetailQuestion({ user, item }) {
   // 문의 작성하는 모달 useState
@@ -20,7 +20,6 @@ export default function DetailQuestion({ user, item }) {
   const [questionModalOpen, setQuestionModalOpen] = useState(false);
   const [questionType, setQuestionType] = useState("");
   const [questionContent, setQuestionContent] = useState("");
-  const [questionData, setQuestionData] = useState([]);
 
   // 문의 상세페이지 모달 관련 useState
   const [questionDetailModalOpen, setQuestionDetailModalOpen] = useState(false);
@@ -57,50 +56,88 @@ export default function DetailQuestion({ user, item }) {
     setPassword(numericValue);
   };
 
+  const queryClient = useQueryClient();
+
+  // 서버에서 문의글 데이터 받아오기
+  const { data: firestoreInquiryData } = useQuery(
+    ["firestoreInquiryData", item?.id],
+    async () => {
+      const resAll = await axios.get(
+        `http://localhost:3001/inquiry/${item?.id}`
+      );
+      return resAll.data.filter((inquiry) => inquiry.questionContent != null);
+    }
+  );
+
+  // 문의 생성.
+  const createInquiry = async (inquiryData) => {
+    if (user) {
+      try {
+        const res = await axios.post(
+          `http://localhost:3001/inquiry/${item.id}/${user.uid}${
+            firestoreInquiryData.filter((data) => data.userId === user.uid)
+              .length + 1
+          }`,
+          inquiryData
+        );
+        console.log(res.config.data["data"]);
+        return res.config.data["data"];
+      } catch (error) {
+        throw error;
+      }
+    } else if (user === null) {
+      try {
+        const res = await axios.post(
+          `http://localhost:3001/inquiry/${item.id}/${phoneNumber}${
+            firestoreInquiryData.filter(
+              (data) => data.phoneNumber === phoneNumber
+            ).length + 1
+          }`,
+          inquiryData
+        );
+        console.log(res.config.data["data"]);
+        return res.config.data["data"];
+      } catch (error) {
+        throw error;
+      }
+    }
+  };
+
+  const createInquiryMutation = useMutation(
+    (inquiryData) => createInquiry(inquiryData),
+    {
+      onSuccess: () => {
+        // 성공적으로 리뷰를 작성한 경우, 데이터를 다시 불러와서 업데이트.
+        queryClient.invalidateQueries(["firestoreInquiryData", item?.id]);
+        console.log(firestoreInquiryData);
+      },
+    }
+  );
+
   async function handleAddQuestionData(e) {
     e.preventDefault();
 
     if (user) {
+      // 리뷰 등록
       if (questionType !== "" && questionContent !== "") {
-        const newQuestionData = {
-          productId: item.id,
-          id: uuidv4(),
-          date: Date.now(),
-          userId: user.uid,
-          detailUserId:
-            user.uid +
-            String(
-              questionData.filter((data) => data.userId === user.uid).length + 1
-            ),
-          questionType: questionType,
-          questionContent: questionContent,
+        const inquiryData = {
+          data: {
+            productId: item.id,
+            id: uuidv4(),
+            date: Date.now(),
+            userId: user.uid,
+            detailUserId:
+              user.uid +
+              String(
+                firestoreInquiryData.filter((data) => data.userId === user.uid)
+                  .length + 1
+              ),
+            questionType: questionType,
+            questionContent: questionContent,
+          },
         };
 
-        await axios.post(
-          `http://localhost:3001/inquiry/${item.id}/${user.uid}${
-            questionData.filter((data) => data.userId === user.uid).length + 1
-          }`,
-          {
-            data: {
-              productId: item.id,
-              id: uuidv4(),
-              date: Date.now(),
-              userId: user.uid,
-              detailUserId:
-                user.uid +
-                String(
-                  questionData.filter((data) => data.userId === user.uid)
-                    .length + 1
-                ),
-              questionType: questionType,
-              questionContent: questionContent,
-            },
-          }
-        );
-
-        setQuestionData((prev) => {
-          return [...prev, newQuestionData];
-        });
+        createInquiryMutation.mutate(inquiryData);
 
         setQuestionType("");
         setQuestionContent("");
@@ -116,22 +153,27 @@ export default function DetailQuestion({ user, item }) {
         questionType !== "" &&
         questionContent !== ""
       ) {
-        const newQuestionData = {
-          productId: item.id,
-          id: uuidv4(),
-          date: Date.now(),
-          phoneNumber: phoneNumber,
-          password: password,
-          questionType: questionType,
-          questionContent: questionContent,
+        const inquiryData = {
+          data: {
+            productId: item.id,
+            id: uuidv4(),
+            date: Date.now(),
+            detailUserId:
+              phoneNumber +
+              String(
+                firestoreInquiryData.filter(
+                  (data) => data.phoneNumber === phoneNumber
+                ).length + 1
+              ),
+            phoneNumber: phoneNumber,
+            password: password,
+            questionType: questionType,
+            questionContent: questionContent,
+          },
         };
 
-        setQuestionData((prev) => {
-          return [...prev, newQuestionData];
-        });
+        createInquiryMutation.mutate(inquiryData);
 
-        setPhoneNumber("");
-        setPassword("");
         setQuestionType("");
         setQuestionContent("");
 
@@ -142,26 +184,57 @@ export default function DetailQuestion({ user, item }) {
     }
   }
 
-  async function handleDeleteQuestion(e, idx, detailUserId) {
+  useEffect(() => {
+    setPhoneNumber("");
+    setPassword("");
+  }, [firestoreInquiryData]);
+
+  // 문의 삭제
+  const deleteInquiry = async ({ detailUserId, inquiryData }) => {
+    try {
+      console.log(inquiryData);
+      const res = await axios.post(
+        `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
+        inquiryData
+      );
+      console.log(res.config.data["data"]);
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const deleteInquiryMutation = useMutation(
+    ({ detailUserId, inquiryData }) =>
+      deleteInquiry({ detailUserId, inquiryData }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["firestoreInquiryData", item?.id]);
+        console.log(firestoreInquiryData);
+      },
+    }
+  );
+
+  async function handleDeleteQuestion(e, detailUserId) {
     e.preventDefault();
 
     const result = window.confirm("게시물을 삭제하시겠습니까?");
 
     if (result) {
-      setQuestionData((prev) => prev.filter((data) => data.id !== idx));
+      // setQuestionData((prev) => prev.filter((data) => data.id !== idx));
       setQuestionDetailModalOpen(false);
 
-      if (user) {
-        await axios.post(
-          `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
-          {
-            data: {},
-          }
-        );
-      }
+      const inquiryData = {
+        data: {},
+      };
+
+      deleteInquiryMutation.mutate({ detailUserId, inquiryData });
+    } else {
+      return;
     }
   }
 
+  // 문의 수정
   const handleEditQuestion = (e, idx) => {
     e.preventDefault();
 
@@ -173,58 +246,50 @@ export default function DetailQuestion({ user, item }) {
     }
   };
 
-  async function handleEditQuestionSuccess(e, idx, detailUserId) {
+  const editInquiry = async ({ detailUserId, inquiryData }) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
+        inquiryData
+      );
+      console.log(res.config.data["data"]);
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const editInquiryMutation = useMutation(
+    ({ detailUserId, inquiryData }) =>
+      editInquiry({ detailUserId, inquiryData }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["firestoreInquiryData", item?.id]);
+        console.log(firestoreInquiryData);
+      },
+    }
+  );
+
+  async function handleEditQuestionSuccess(e, detailUserId) {
     e.preventDefault();
 
-    setQuestionData((prev) =>
-      prev.map((data) => {
-        return data.id === idx
-          ? { ...data, questionContent: changeContent }
-          : data;
-      })
-    );
+    const inquiryData = {
+      data: {
+        ...firestoreInquiryData.find((inquiry) =>
+          inquiry.detailUserId.includes(detailUserId)
+        ),
+        questionContent: changeContent,
+      },
+    };
 
-    if (user) {
-      // 문의 수정
-      await axios.post(
-        `http://localhost:3001/inquiry/${item.id}/${detailUserId}`,
-        {
-          data: {
-            ...questionData.find((inquiry) =>
-              inquiry.detailUserId.includes(detailUserId)
-            ),
-            questionContent: changeContent,
-          },
-        }
-      );
-    } else if (user === null) {
-    }
+    // 문의 수정
+    editInquiryMutation.mutate({ detailUserId, inquiryData });
 
     setQuestionDetailModalEditIdBucket("");
     setQuestionDetailModalEdit(false);
   }
 
-  // 서버에서 문의글 데이터 받아오기
-  const { data: inquiryData } = useQuery(
-    ["firestoreInquiryData", item?.id],
-    async () => {
-      const resAll = await axios.get(
-        `http://localhost:3001/inquiry/${item?.id}`
-      );
-      return resAll.data.filter((inquiry) => inquiry.questionContent != null);
-    },
-    {
-      staleTime: 1000 * 6,
-    }
-  );
-
-  useEffect(() => {
-    if (inquiryData) {
-      setQuestionData(inquiryData);
-    }
-  }, [inquiryData]);
-
-  console.log(questionData);
+  console.log(firestoreInquiryData);
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
@@ -251,8 +316,7 @@ export default function DetailQuestion({ user, item }) {
       </div>
 
       <DetailQuestionList
-        setQuestionData={setQuestionData}
-        questionData={questionData}
+        firestoreInquiryData={firestoreInquiryData}
         user={user}
         setQuestionDetailModalOpen={setQuestionDetailModalOpen}
         questionDetailModalOpen={questionDetailModalOpen}
@@ -371,8 +435,8 @@ export default function DetailQuestion({ user, item }) {
             setQuestionDetailModalOpen(false);
           }}
         >
-          {questionData &&
-            questionData
+          {firestoreInquiryData &&
+            firestoreInquiryData
               ?.filter((data) => data.id === QuestionModalIdBucket)
               ?.map((data) => {
                 return (
@@ -396,11 +460,7 @@ export default function DetailQuestion({ user, item }) {
                     questionDetailModalEditIdBucket === data.id ? (
                       <form
                         onSubmit={(e) => {
-                          handleEditQuestionSuccess(
-                            e,
-                            data.id,
-                            data.detailUserId
-                          );
+                          handleEditQuestionSuccess(e, data.detailUserId);
                         }}
                       >
                         <div className="w-full mt-5 mb-80 flex justify-between items-center">
@@ -439,7 +499,7 @@ export default function DetailQuestion({ user, item }) {
 
                       <button
                         onClick={(e) => {
-                          handleDeleteQuestion(e, data.id, data.detailUserId);
+                          handleDeleteQuestion(e, data.detailUserId);
                         }}
                         className={`${
                           questionDetailModalEditIdBucket !== data.id
