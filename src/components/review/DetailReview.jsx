@@ -375,12 +375,29 @@ export default function DetailReview({
                 >
                   {/* 리뷰 내용 출력 */}
                   <div className="w-2/12">
-                    {isLoggedIn && !review.phoneNumber && (
-                      <div>
-                        <img src={review.profileImgSrc} alt="profileImg" />
-                        <p>{review.profileDisplayName}</p>
-                      </div>
-                    )}
+                    {isLoggedIn &&
+                      !review.phoneNumber &&
+                      review.profileImgSrc && (
+                        <div>
+                          <img src={review.profileImgSrc} alt="profileImg" />
+                          <p>{review.profileDisplayName}</p>
+                        </div>
+                      )}
+
+                    {isLoggedIn &&
+                      !review.phoneNumber &&
+                      !review.profileImgSrc && (
+                        <div>
+                          <img
+                            src={
+                              process.env.PUBLIC_URL + "/image/defaultImage.png"
+                            }
+                            alt="profile_img"
+                          />
+                          <p>{review.profileDisplayName}</p>
+                        </div>
+                      )}
+
                     {review.phoneNumber && (
                       <div className="flex items-center">
                         <img
@@ -470,7 +487,12 @@ export default function DetailReview({
                         onClick={(e) =>
                           handleClickBenefitBtn(e, review.detailUserId)
                         }
-                        className="w-[100px] h-[30px] ml-2 border-[1px] border-solid border-[#ff4273] text-[0.8125rem] text-[#ff4273] flex justify-center items-center"
+                        className={`${
+                          review.count.find((c) => c.userId.includes(user.uid))
+                            ?.count === 1
+                            ? "bg-opacity-100 text-[#ffffff]"
+                            : "bg-opacity-0 text-[#ff4273]"
+                        } w-[100px] h-[30px] ml-2 border-[1px] border-solid border-[#ff4273] bg-[#ff4273] text-[0.8125rem] flex justify-center items-center transition-all duration-700`}
                       >
                         도움이 돼요
                       </button>
