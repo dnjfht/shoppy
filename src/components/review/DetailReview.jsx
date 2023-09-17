@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import RatingResult from "./RatingResult";
 import ReviewImgSlider from "./ReviewImgSlider";
 import { isLoggedIn } from "../../utils/utils";
-import User from "../../components/User";
 import RatingResult2 from "./RatingResult2";
 
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
@@ -458,12 +457,19 @@ export default function DetailReview({
 
                     <div className="mt-6 flex items-center">
                       <p className="text-[0.8125rem] text-[#8D8B8B]">
-                        <span className="text-[0.875rem] text-[#000] font-semibold">{`${review.count}명`}</span>
+                        <span className="text-[0.875rem] text-[#000] font-semibold">{`${review?.count?.reduce(
+                          (sum, benifit) => {
+                            return sum + benifit.count;
+                          },
+                          0
+                        )}명`}</span>
                         에게 도움이 되었습니다.
                       </p>
 
                       <button
-                        onClick={(e) => handleClickBenefitBtn(e, review.id)}
+                        onClick={(e) =>
+                          handleClickBenefitBtn(e, review.detailUserId)
+                        }
                         className="w-[100px] h-[30px] ml-2 border-[1px] border-solid border-[#ff4273] text-[0.8125rem] text-[#ff4273] flex justify-center items-center"
                       >
                         도움이 돼요

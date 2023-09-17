@@ -323,7 +323,7 @@ export default function Detail({ user }) {
           reviewColorSatisfaction: reviewColorSatisfaction,
           reviewSizeSatisfaction: reviewSizeSatisfaction,
           content: content,
-          count: 0,
+          count: [],
         },
       };
 
@@ -354,7 +354,7 @@ export default function Detail({ user }) {
           reviewColorSatisfaction: reviewColorSatisfaction,
           reviewSizeSatisfaction: reviewSizeSatisfaction,
           content: content,
-          count: 0,
+          count: [],
         },
       };
 
@@ -390,19 +390,78 @@ export default function Detail({ user }) {
     setReviewDetailModalOpen(false);
   };
 
-  async function handleClickBenefitBtn(e) {
+  // 리뷰 "도움이 돼요" 버튼 클릭 기능
+  const editCountReview = async ({ detailUserId, reviewData }) => {
+    try {
+      const res = await axios.post(
+        `http://localhost:3001/review/${item.id}/${detailUserId}`,
+        reviewData
+      );
+      console.log(res.config.data["data"]);
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const editReviewCountMutation = useMutation(
+    ({ detailUserId, reviewData }) =>
+      editCountReview({ detailUserId, reviewData }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
+        console.log(firestoreReviewData);
+      },
+    }
+  );
+
+  async function handleClickBenefitBtn(e, detailUserId) {
     e.preventDefault();
 
-    // setReviewData((prev) =>
-    //   prev.map((item) => {
-    //     return item.id === idx
-    //       ? {
-    //           ...item,
-    //           count: item.count === 0 ? item.count + 1 : item.count - 1,
-    //         }
-    //       : item;
-    //   })
-    // );
+    // detailUserId로 된 게시물 찾기
+    const findDetailUserIdReview = firestoreReviewData.find((review) =>
+      review.detailUserId.includes(detailUserId)
+    );
+
+    if (user) {
+      const reviewData = {
+        data: {
+          ...findDetailUserIdReview,
+          count:
+            // detailUserId로 된 게시물(객체) 안 count라는 배열 안 userId에 현재 user.uid가 포함되어 있는 객체가 없을 때.
+            findDetailUserIdReview.count.filter((c) =>
+              c.userId.includes(user.uid)
+            ).length === 0
+              ? // 0이 맞다면 count라는 배열 안, 새롭게 현재 user.uid가 들어간 userId와 count 1을 넣어 객체 생성.
+                [
+                  ...findDetailUserIdReview.count,
+                  { userId: user.uid, count: 1 },
+                ]
+              : // detailUserId로 된 게시물(객체) 안 count라는 배열 안 userId에 현재 user.uid가 포함되어 있는 객체가 있을 때.
+                findDetailUserIdReview.count.map((review) => {
+                  if (review.count === 1 && review.userId.includes(user.uid)) {
+                    return {
+                      ...review,
+                      count: 0,
+                    };
+                  } else if (
+                    review.count === 0 &&
+                    review.userId.includes(user.uid)
+                  ) {
+                    return {
+                      ...review,
+                      count: 1,
+                    };
+                  }
+                  return review;
+                }),
+        },
+      };
+
+      editReviewCountMutation.mutate({ detailUserId, reviewData });
+    } else if (user === null) {
+      alert("비회원은 좋아요를 누를 수 없습니다. 로그인을 해주세요.");
+    }
   }
 
   // 리뷰 삭제

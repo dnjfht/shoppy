@@ -36,7 +36,8 @@ export default function Navbar({
 
         alert("로그아웃 되었습니다.");
 
-        navigate("/", { replace: true });
+        // navigate("/", { replace: true });
+        window.location.href = "/";
       });
     } else {
       return;
