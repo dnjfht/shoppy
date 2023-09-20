@@ -122,6 +122,9 @@ export default function DetailQuestion({ user, item }) {
       if (questionType !== "" && questionContent !== "") {
         const inquiryData = {
           data: {
+            profileImgSrc: user.photoURL,
+            profileDisplayName: user.displayName,
+            image: item.image,
             productId: item.id,
             id: uuidv4(),
             date: Date.now(),
@@ -155,6 +158,7 @@ export default function DetailQuestion({ user, item }) {
       ) {
         const inquiryData = {
           data: {
+            image: item.image,
             productId: item.id,
             id: uuidv4(),
             date: Date.now(),

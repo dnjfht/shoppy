@@ -221,6 +221,7 @@ export const HistoryCategory = styled.div`
 export const RightBox = styled.div`
   /* width: 900px; */
   /* background-color: #f4f5f6; */
+  width: 100%;
   padding: 20px;
   display: flex;
   // overflow-y: scroll;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ChangePassword from "../../components/MyPage/UserAccount/ChangePassword";
 import ChangeNickname from "../../components/MyPage/UserAccount/ChangeNickname";
 import {
@@ -28,7 +28,7 @@ import {
   ResCategoryTab,
 } from "./style";
 import { updatePassword, updateProfile, deleteUser } from "firebase/auth";
-import { firebaseConfig, loadCartServer } from "../../api/firebase";
+import { firebaseConfig } from "../../api/firebase";
 import { RiLogoutBoxLine } from "react-icons/ri";
 // import BookmarkPrdtList from "../../components/Mypage/BookmarkPrdtList";
 import { authService } from "../../api/firebase";
@@ -38,8 +38,194 @@ import { useNavigate } from "react-router-dom";
 import { CiLock } from "react-icons/ci";
 import { GiCutDiamond } from "react-icons/gi";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import RatingResult2 from "../../components/review/RatingResult2";
+import { RiThumbUpFill } from "react-icons/ri";
 
-function MyPage({ setAllCarts, allCarts }) {
+function MyPage() {
+  const [filteredReviews, setFilteredReviews] = useState([]);
+  const [filteredInquiries, setFilteredInquiries] = useState([]);
+
+  // 리뷰 "도움이 돼요" 버튼 클릭 기능
+
+  // async function handleClickBenefitBtn(e, productId, detailUserId) {
+  //   console.log(detailUserId);
+  //   e.preventDefault();
+
+  //   // detailUserId로 된 게시물 찾기
+
+  //   const findDetailUserIdReview = reviewData?.find((review) =>
+  //     review?.detailUserId?.includes(detailUserId)
+  //   );
+
+  //   const findDetailUserIdReview2 = filteredReviews?.find((review) =>
+  //     review?.detailUserId?.includes(detailUserId)
+  //   );
+
+  //   if (user) {
+  //     // 화면에 수정된 게 바로 보이게끔 수정.
+  //     setFilteredReviews((prev) =>
+  //       prev.map((review) => {
+  //         if (
+  //           review?.productId === productId &&
+  //           review?.detailUserId?.includes(detailUserId) &&
+  //           review?.count?.filter((c) => c?.userId?.includes(user?.uid))
+  //             .length === 0
+  //         ) {
+  //           return {
+  //             ...review,
+  //             count: [
+  //               ...findDetailUserIdReview2?.count,
+  //               { userId: user.uid, count: 1 },
+  //             ],
+  //           };
+  //         } else if (
+  //           review?.productId === productId &&
+  //           review?.detailUserId?.includes(detailUserId) &&
+  //           review?.count?.filter((c) => c?.userId?.includes(user?.uid))
+  //             .length !== 0
+  //         ) {
+  //           return {
+  //             ...review,
+  //             count: review?.count?.map((c) => {
+  //               return c?.count === 1 && c?.userId?.includes(user?.uid)
+  //                 ? {
+  //                     ...c,
+  //                     count: 0,
+  //                   }
+  //                 : c?.count === 0 && c?.userId?.includes(user?.uid)
+  //                 ? {
+  //                     ...c,
+  //                     count: 1,
+  //                   }
+  //                 : c;
+  //             }),
+  //           };
+  //         } else {
+  //           return review;
+  //         }
+  //       })
+  //     );
+
+  //     // 서버에 데이터 저장.
+  //     await axios.post(
+  //       `http://localhost:3001/review/${productId}/${detailUserId}`,
+  //       {
+  //         data: {
+  //           ...findDetailUserIdReview,
+  //           count:
+  //             // detailUserId로 된 게시물(객체) 안 count라는 배열 안 userId에 현재 user.uid가 포함되어 있는 객체가 없을 때.
+  //             findDetailUserIdReview.count.filter((c) =>
+  //               c.userId.includes(user.uid)
+  //             ).length === 0
+  //               ? // 0이 맞다면 count라는 배열 안, 새롭게 현재 user.uid가 들어간 userId와 count 1을 넣어 객체 생성.
+  //                 [
+  //                   ...findDetailUserIdReview.count,
+  //                   { userId: user.uid, count: 1 },
+  //                 ]
+  //               : // detailUserId로 된 게시물(객체) 안 count라는 배열 안 userId에 현재 user.uid가 포함되어 있는 객체가 있을 때.
+  //                 findDetailUserIdReview.count.map((review) => {
+  //                   if (
+  //                     review.count === 1 &&
+  //                     review.userId.includes(user.uid)
+  //                   ) {
+  //                     return {
+  //                       ...review,
+  //                       count: 0,
+  //                     };
+  //                   } else if (
+  //                     review.count === 0 &&
+  //                     review.userId.includes(user.uid)
+  //                   ) {
+  //                     return {
+  //                       ...review,
+  //                       count: 1,
+  //                     };
+  //                   }
+  //                   return review;
+  //                 }),
+  //         },
+  //       }
+  //     );
+  //   } else if (user === null) {
+  //     alert("비회원은 좋아요를 누를 수 없습니다. 로그인을 해주세요.");
+  //   }
+  // }
+
+  const { data: items, isLoading } = useQuery(["items"], async () => {
+    const res = await axios.get("/data/Product.json");
+    return res.data.items.products;
+  });
+
+  const productsId = useMemo(() => {
+    return (
+      items?.map((item) => {
+        return item?.id;
+      }) || []
+    );
+  }, [items]);
+  // 모든 product들의 id가 담긴 배열
+
+  productsId[Symbol.iterator] = function () {
+    let index = 0;
+
+    return {
+      next: () => {
+        if (index < this.length) {
+          return { value: this[index++], done: false };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+  };
+
+  // 리뷰 데이터 서버에서 가져오기.
+
+  const [reviewData, setReviewData] = useState([]);
+  const [inquiryData, setInquiryData] = useState([]);
+
+  useEffect(() => {
+    async function receiveReviewData() {
+      const newReviewData = [];
+      for (const id of productsId) {
+        const resAll = await axios.get(`http://localhost:3001/review/${id}`);
+        if (resAll?.data?.length !== 0) {
+          console.log(resAll?.data);
+          newReviewData.push(...resAll?.data);
+        }
+      }
+
+      setReviewData(newReviewData);
+    }
+
+    if (reviewData.length === 0) {
+      receiveReviewData();
+    }
+  }, [isLoading, reviewData, productsId]);
+
+  useEffect(() => {
+    async function receiveInquiryData() {
+      const newInquiryData = [];
+      for (const id of productsId) {
+        const resAll = await axios.get(`http://localhost:3001/inquiry/${id}`);
+        if (resAll?.data?.length !== 0) {
+          console.log(resAll?.data);
+          newInquiryData.push(...resAll?.data);
+        }
+      }
+
+      setInquiryData(newInquiryData);
+    }
+
+    if (inquiryData.length === 0) {
+      receiveInquiryData();
+    }
+  }, [isLoading, inquiryData, productsId]);
+
+  console.log(reviewData, inquiryData);
+
   const navigate = useNavigate();
   // 세션스토리지에서 로그인했을 때 저장된 current user 가져오기
   const userSession = sessionStorage.getItem(
@@ -142,6 +328,42 @@ function MyPage({ setAllCarts, allCarts }) {
     }
   };
 
+  useEffect(() => {
+    let filteredReviewList = reviewData;
+
+    if (tab === 1) {
+      filteredReviewList = filteredReviewList?.filter((review) => {
+        console.log(user.uid);
+        const matchingReview = review?.count?.filter(
+          (c) => c?.userId === user?.uid && c?.count === 1
+        );
+        return matchingReview?.length > 0;
+      });
+    }
+
+    if (tab === 2 && productTypes === 1) {
+      filteredReviewList = filteredReviewList?.filter((review) => {
+        return review?.userId === user?.uid;
+      });
+    }
+
+    setFilteredReviews(filteredReviewList);
+  }, [tab, reviewData, user, productTypes]);
+
+  useEffect(() => {
+    let filteredInquiryList = inquiryData;
+
+    if (tab === 2 && productTypes === 2) {
+      filteredInquiryList = filteredInquiryList?.filter((inquiry) => {
+        return inquiry?.userId === user?.uid;
+      });
+    }
+
+    setFilteredInquiries(filteredInquiryList);
+  }, [tab, inquiryData, user, productTypes]);
+
+  console.log(filteredReviews, filteredInquiries);
+
   return (
     <>
       <MyPageWrapper className="제일 큰 박스">
@@ -220,7 +442,7 @@ function MyPage({ setAllCarts, allCarts }) {
                   }}
                   style={{ fontSize: "18px" }}
                 >
-                  찜한 상품
+                  도움이 된 리뷰
                 </button>
               </CategoryImg>
               <p>〉</p>
@@ -253,7 +475,7 @@ function MyPage({ setAllCarts, allCarts }) {
               <p>계정관리</p>
             </ResUserAccount>
             <ResUserHistory onClick={() => setTab(1)}>
-              <p>찜한 상품</p>
+              <p>도움이 된 리뷰</p>
             </ResUserHistory>
             <ResUserTips onClick={() => setTab(2)}>
               <p>내 리뷰 / 문의</p>
@@ -338,56 +560,101 @@ function MyPage({ setAllCarts, allCarts }) {
           )}
 
           {tab === 1 && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <div style={{ display: "flex", gap: "10px" }}>
-                <ProductTypesBtn
-                  style={
-                    productTypes === 1
-                      ? { backgroundColor: "#6A24FF", color: "white" }
-                      : { backgroundColor: "white", color: "black" }
-                  }
-                  onClick={() => {
-                    setProductTypes(1);
-                  }}
-                >
-                  정기예금
-                </ProductTypesBtn>
-                <ProductTypesBtn
-                  style={
-                    productTypes === 2
-                      ? { backgroundColor: "#6A24FF", color: "white" }
-                      : { backgroundColor: "white", color: "black" }
-                  }
-                  onClick={() => {
-                    setProductTypes(2);
-                  }}
-                >
-                  정기적금
-                </ProductTypesBtn>
-              </div>
+            <div className="w-full pt-32 flex flex-wrap items-start">
+              {filteredReviews &&
+                filteredReviews?.map((review, index) => {
+                  return (
+                    <div
+                      className={`${
+                        index % 5 === 4 ? "mr-0" : "mr-[2.5%]"
+                      } w-[18%] shadow-[0_35px_18px_-15px_rgba(0,0,0,0.3)]`}
+                    >
+                      <img
+                        className="w-full object-cover rounded-t-lg"
+                        src={process.env.PUBLIC_URL + `/../${review?.image}`}
+                        alt="product_img"
+                      />
+                      <div className="w-full bg-[#282828] p-4 box-border rounded-b-lg cursor-pointer">
+                        <div className="w-full mb-4 flex justify-between items-center">
+                          <p className="inline-block py-1 px-3 text-[0.88rem] text-[#ff4273] border-[1px] border-solid border-[#ff4273]">
+                            상품 리뷰
+                          </p>
+                          {/* <button
+                            onClick={(e) =>
+                              handleClickBenefitBtn(
+                                e,
+                                review?.productId,
+                                review?.detailUserId
+                              )
+                            }
+                            className="w-8 h-8 border-[1px] border-solid border-[#fff] rounded-full flex justify-center items-center"
+                          >
+                            <p
+                              className={`${
+                                review?.count?.find((c) =>
+                                  c?.userId?.includes(user?.uid)
+                                )?.count === 1
+                                  ? "text-[#ff4273]"
+                                  : "text-white"
+                              } text-[1rem] font-black`}
+                            >
+                              <RiThumbUpFill />
+                            </p>
+                          </button> */}
+                        </div>
 
-              {/*<BookmarkPrdtList
-                currentUser={currentUser}
-                productTypes={productTypes}
-                />*/}
+                        <div className="w-full pb-4 flex items-end border-b-[1px] border-solid border-[#a8a8a8]">
+                          {review?.profileImgSrc ? (
+                            <img
+                              className="w-10 mr-2 object-cover rounded-full"
+                              src={review?.profileImgSrc}
+                              alt="profile_img"
+                            />
+                          ) : (
+                            <img
+                              className="w-10 mr-2 object-cover rounded-full"
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/image/defaultImage.png"
+                              }
+                              alt="profile_img"
+                            />
+                          )}
+
+                          <p className="text-[0.9rem] text-[#fff]">
+                            {review?.profileDisplayName
+                              ? review?.profileDisplayName
+                              : review?.phoneNumber?.substring(0, 7) + "****"}
+                          </p>
+                        </div>
+                        <div className="w-full pt-4">
+                          <RatingResult2 ratingValue={review?.ratingValue} />
+                          <p className="text-[#fff] text-[0.94rem]">
+                            {review?.content}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           )}
           {tab === 2 && (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-            >
-              <div style={{ display: "flex", gap: "10px" }}>
+            <div className="w-full pt-32 flex flex-wrap items-start">
+              <div className="w-full">
                 <ProductTypesBtn
                   style={
                     productTypes === 1
-                      ? { backgroundColor: "#6A24FF", color: "white" }
-                      : { backgroundColor: "white", color: "black" }
+                      ? {
+                          backgroundColor: "#ff4273",
+                          color: "white",
+                          marginRight: "10px",
+                        }
+                      : {
+                          backgroundColor: "white",
+                          color: "black",
+                          marginRight: "10px",
+                        }
                   }
                   onClick={() => {
                     setProductTypes(1);
@@ -398,7 +665,7 @@ function MyPage({ setAllCarts, allCarts }) {
                 <ProductTypesBtn
                   style={
                     productTypes === 2
-                      ? { backgroundColor: "#6A24FF", color: "white" }
+                      ? { backgroundColor: "#ff4273", color: "white" }
                       : { backgroundColor: "white", color: "black" }
                   }
                   onClick={() => {
@@ -407,12 +674,121 @@ function MyPage({ setAllCarts, allCarts }) {
                 >
                   문의글
                 </ProductTypesBtn>
+
+                {tab === 2 && productTypes === 1 && (
+                  <div className="w-full mt-8 flex flex-wrap items-start">
+                    {filteredReviews &&
+                      filteredReviews?.map((review, index) => {
+                        return (
+                          <div
+                            className={`${
+                              index % 5 === 4 ? "mr-0" : "mr-[2.5%]"
+                            } w-[18%] shadow-[0_35px_18px_-15px_rgba(0,0,0,0.3)]`}
+                          >
+                            <img
+                              className="w-full object-cover rounded-t-lg"
+                              src={
+                                process.env.PUBLIC_URL + `/../${review?.image}`
+                              }
+                              alt="product_img"
+                            />
+                            <div className="w-full bg-[#282828] p-4 box-border rounded-b-lg cursor-pointer">
+                              <div className="w-full mb-4 flex justify-between items-center">
+                                <p className="inline-block py-1 px-3 text-[0.88rem] text-[#ff4273] border-[1px] border-solid border-[#ff4273]">
+                                  상품 리뷰
+                                </p>
+                              </div>
+
+                              <div className="w-full pb-4 flex items-end border-b-[1px] border-solid border-[#a8a8a8]">
+                                {review?.profileImgSrc ? (
+                                  <img
+                                    className="w-10 mr-2 object-cover rounded-full"
+                                    src={review?.profileImgSrc}
+                                    alt="profile_img"
+                                  />
+                                ) : (
+                                  <img
+                                    className="w-10 mr-2 object-cover rounded-full"
+                                    src={
+                                      process.env.PUBLIC_URL +
+                                      "/image/defaultImage.png"
+                                    }
+                                    alt="profile_img"
+                                  />
+                                )}
+
+                                <p className="text-[0.9rem] text-[#fff]">
+                                  {review?.profileDisplayName
+                                    ? review?.profileDisplayName
+                                    : review?.phoneNumber?.substring(0, 7) +
+                                      "****"}
+                                </p>
+                              </div>
+                              <div className="w-full pt-4">
+                                <RatingResult2
+                                  ratingValue={review?.ratingValue}
+                                />
+                                <p className="text-[#fff] text-[0.94rem]">
+                                  {review?.content}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+
+                {tab === 2 && productTypes === 2 && (
+                  <div className="w-full mt-8 flex flex-wrap items-start">
+                    {filteredInquiries &&
+                      filteredInquiries?.map((inquiry, index) => {
+                        return (
+                          <div
+                            className={`${
+                              index % 5 === 4 ? "mr-0" : "mr-[2.5%]"
+                            } w-[18%] shadow-[0_35px_18px_-15px_rgba(0,0,0,0.3)]`}
+                          >
+                            <img
+                              className="w-full object-cover rounded-t-lg"
+                              src={
+                                process.env.PUBLIC_URL + `/../${inquiry?.image}`
+                              }
+                              alt="product_img"
+                            />
+                            <div className="w-full bg-[#282828] p-4 box-border rounded-b-lg cursor-pointer">
+                              <div className="w-full mb-4 flex justify-between items-center">
+                                <p className="inline-block py-1 px-3 text-[0.88rem] text-[#ff4273] border-[1px] border-solid border-[#ff4273]">
+                                  상품 문의
+                                </p>
+                              </div>
+
+                              <div className="w-full pb-4 flex items-end border-b-[1px] border-solid border-[#a8a8a8]">
+                                <img
+                                  className="w-10 mr-2 object-cover rounded-full"
+                                  src={inquiry?.profileImgSrc}
+                                  alt="profile_img"
+                                />
+
+                                <p className="text-[0.9rem] text-[#fff]">
+                                  {inquiry?.profileDisplayName}
+                                </p>
+                              </div>
+                              <div className="w-full pt-4">
+                                <p className="mb-2 text-[#fff] text-[1.06rem]">
+                                  : {inquiry?.questionType}
+                                </p>
+                                <p className="text-[#fff] text-[0.94rem]">
+                                  {inquiry?.questionContent}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
               </div>
-              {/*productTypes === 1 ? (
-                <UserLikeList currentUser={user} />
-              ) : (
-                <UserWriteList currentUser={currentUser} />
-              )*/}
             </div>
           )}
         </RightBox>

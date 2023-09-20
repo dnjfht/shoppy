@@ -488,8 +488,9 @@ export default function DetailReview({
                           handleClickBenefitBtn(e, review.detailUserId)
                         }
                         className={`${
-                          review.count.find((c) => c.userId.includes(user.uid))
-                            ?.count === 1
+                          review?.count?.find((c) =>
+                            c.userId.includes(user?.uid)
+                          )?.count === 1
                             ? "bg-opacity-100 text-[#ffffff]"
                             : "bg-opacity-0 text-[#ff4273]"
                         } w-[100px] h-[30px] ml-2 border-[1px] border-solid border-[#ff4273] bg-[#ff4273] text-[0.8125rem] flex justify-center items-center transition-all duration-700`}
