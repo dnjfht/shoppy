@@ -18,10 +18,14 @@
 yarn && cd backend && yarn && cd ..
 
 # 서버 실행 (터미널1)
-cd backend && yarn start
+* Vercel 계정이 있어야합니다.
+* cd backend && yarn start
 
 # 클라이언트 실행 (터미널2)
 yarn start
+
+# 서버 배포
+* cd backend && yarn deploy
 ```
 
 ---
