@@ -63,7 +63,7 @@ export default function DetailQuestion({ user, item }) {
     ["firestoreInquiryData", item?.id],
     async () => {
       const resAll = await axios.get(
-        `http://localhost:3001/inquiry/${item?.id}`
+        `https://birthday-party-shop-backend-server.vercel.app/inquiry/${item?.id}`
       );
       return resAll.data.filter((inquiry) => inquiry.questionContent != null);
     }
@@ -74,7 +74,9 @@ export default function DetailQuestion({ user, item }) {
     if (user) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/inquiry/${item.id}/${user.uid}${
+          `https://birthday-party-shop-backend-server.vercel.app/inquiry/${
+            item.id
+          }/${user.uid}${
             firestoreInquiryData.filter((data) => data.userId === user.uid)
               .length + 1
           }`,
@@ -88,7 +90,9 @@ export default function DetailQuestion({ user, item }) {
     } else if (user === null) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/inquiry/${item.id}/${phoneNumber}${
+          `https://birthday-party-shop-backend-server.vercel.app/inquiry/${
+            item.id
+          }/${phoneNumber}${
             firestoreInquiryData.filter(
               (data) => data.phoneNumber === phoneNumber
             ).length + 1
@@ -198,7 +202,7 @@ export default function DetailQuestion({ user, item }) {
     try {
       console.log(inquiryData);
       const res = await axios.post(
-        `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
+        `https://birthday-party-shop-backend-server.vercel.app/inquiry/${item?.id}/${detailUserId}`,
         inquiryData
       );
       console.log(res.config.data["data"]);
@@ -253,7 +257,7 @@ export default function DetailQuestion({ user, item }) {
   const editInquiry = async ({ detailUserId, inquiryData }) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/inquiry/${item?.id}/${detailUserId}`,
+        `https://birthday-party-shop-backend-server.vercel.app/inquiry/${item?.id}/${detailUserId}`,
         inquiryData
       );
       console.log(res.config.data["data"]);

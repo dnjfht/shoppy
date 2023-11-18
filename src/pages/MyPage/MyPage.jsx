@@ -190,7 +190,9 @@ function MyPage() {
     async function receiveReviewData() {
       const newReviewData = [];
       for (const id of productsId) {
-        const resAll = await axios.get(`http://localhost:3001/review/${id}`);
+        const resAll = await axios.get(
+          `https://birthday-party-shop-backend-server.vercel.app/review/${id}`
+        );
         if (resAll?.data?.length !== 0) {
           console.log(resAll?.data);
           newReviewData.push(...resAll?.data);
@@ -209,7 +211,9 @@ function MyPage() {
     async function receiveInquiryData() {
       const newInquiryData = [];
       for (const id of productsId) {
-        const resAll = await axios.get(`http://localhost:3001/inquiry/${id}`);
+        const resAll = await axios.get(
+          `https://birthday-party-shop-backend-server.vercel.app/inquiry/${id}`
+        );
         if (resAll?.data?.length !== 0) {
           console.log(resAll?.data);
           newInquiryData.push(...resAll?.data);

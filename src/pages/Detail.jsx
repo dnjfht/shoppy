@@ -230,7 +230,7 @@ export default function Detail({ user }) {
     ["firestoreReviewData", item?.id],
     async () => {
       const resAll = await axios.get(
-        `http://localhost:3001/review/${item?.id}`
+        `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}`
       );
       console.log(resAll);
       return resAll.data.filter((review) => review.reviewWeight != null);
@@ -242,7 +242,9 @@ export default function Detail({ user }) {
     if (user) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/review/${item.id}/${user.uid}${
+          `https://birthday-party-shop-backend-server.vercel.app/review/${
+            item.id
+          }/${user.uid}${
             firestoreReviewData.filter((data) => data.userId === user.uid)
               .length + 1
           }`,
@@ -256,7 +258,9 @@ export default function Detail({ user }) {
     } else if (user === null) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/review/${item.id}/${phoneNumber}${
+          `https://birthday-party-shop-backend-server.vercel.app/review/${
+            item.id
+          }/${phoneNumber}${
             firestoreReviewData.filter(
               (data) => data.phoneNumber === phoneNumber
             ).length + 1
@@ -394,7 +398,7 @@ export default function Detail({ user }) {
   const editCountReview = async ({ detailUserId, reviewData }) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/review/${item.id}/${detailUserId}`,
+        `https://birthday-party-shop-backend-server.vercel.app/review/${item.id}/${detailUserId}`,
         reviewData
       );
       console.log(res.config.data["data"]);
@@ -469,7 +473,7 @@ export default function Detail({ user }) {
     try {
       console.log(reviewData);
       const res = await axios.post(
-        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
+        `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}/${detailUserId}`,
         reviewData
       );
       console.log(res.config.data["data"]);
@@ -536,7 +540,7 @@ export default function Detail({ user }) {
   const editReview = async ({ detailUserId, editReviewData }) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/review/${item?.id}/${detailUserId}`,
+        `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}/${detailUserId}`,
         editReviewData
       );
       console.log(res.config.data["data"]);
@@ -600,14 +604,17 @@ export default function Detail({ user }) {
 
     // 체형 정보 서버에 등록.
     if (user) {
-      await axios.post(`http://localhost:3001/body/${user.uid}`, {
-        data: {
-          myHeight,
-          myWeight,
-          mySize,
-          myFootSize,
-        },
-      });
+      await axios.post(
+        `https://birthday-party-shop-backend-server.vercel.app/body/${user.uid}`,
+        {
+          data: {
+            myHeight,
+            myWeight,
+            mySize,
+            myFootSize,
+          },
+        }
+      );
     } else if (user === null) {
       const previousBodyInfo = JSON.parse(localStorage.getItem("bodyInfo"));
 
@@ -628,7 +635,9 @@ export default function Detail({ user }) {
   const { data: bodyData } = useQuery(
     ["firestoreBodyData", user?.uid],
     async () => {
-      const res = await axios.get(`http://localhost:3001/body/${user?.uid}`);
+      const res = await axios.get(
+        `https://birthday-party-shop-backend-server.vercel.app/body/${user?.uid}`
+      );
       return res.data;
     },
     {

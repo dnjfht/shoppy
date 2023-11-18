@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://birthday-party-shop-backend-server.vercel.app/";
 
 // 리뷰 삭제 관련 함수
 export const deleteReview = async (productId, detailUserId, reviewData) => {
