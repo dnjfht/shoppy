@@ -3,14 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { attach_won, shortString } from "./Main";
 import { v4 as uuidv4 } from "uuid";
 import { loadCartServer, setCartServer } from "../api/firebase";
+import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { GoX } from "react-icons/go";
-import { CiHeart, CiGift, CiDeliveryTruck, CiEdit } from "react-icons/ci";
-import { PiShareNetworkThin } from "react-icons/pi";
-import { RiCoupon3Fill } from "react-icons/ri";
-import { GiCutDiamond } from "react-icons/gi";
-import { HiGift } from "react-icons/hi";
-import { MdFiberNew } from "react-icons/md";
 import DetailInfo from "../components/DetailInfo";
 import DetailQuestion from "../components/question/DetailQuestion";
 import DetailReview from "../components/review/DetailReview";
@@ -21,8 +16,14 @@ import Button from "../components/Button";
 import DetailReviewModal from "../components/review/DetailReviewModal";
 import RatingResult2 from "../components/review/RatingResult2";
 import MyBodySizeModal from "../components/review/MyBodySizeModal";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { GoX } from "react-icons/go";
+import { CiHeart, CiGift, CiDeliveryTruck, CiEdit } from "react-icons/ci";
+import { PiShareNetworkThin } from "react-icons/pi";
+import { RiCoupon3Fill } from "react-icons/ri";
+import { GiCutDiamond } from "react-icons/gi";
+import { HiGift } from "react-icons/hi";
+import { MdFiberNew } from "react-icons/md";
 
 export default function Detail({ user }) {
   const [color, setColor] = useState("");
@@ -673,7 +674,7 @@ export default function Detail({ user }) {
         <div className="w-full pb-32 border-b-[1px] border-bottom border-[#ccc] flex justify-between">
           <div className="w-[47%]">
             <img
-              className="w-full object-cover"
+              className="object-cover w-full"
               src={process.env.PUBLIC_URL + `/../${item.image}`}
               alt="item_img"
             />
@@ -681,8 +682,8 @@ export default function Detail({ user }) {
 
           <div className="w-[47%]">
             <div className="w-full pb-[30px] border-b-[1px] border-solid border-[#ccc]">
-              <div className="w-full flex items-center justify-between">
-                <div className="w-4/5 flex">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex w-4/5">
                   {item?.banner?.map((b) => {
                     return (
                       <p
@@ -723,19 +724,19 @@ export default function Detail({ user }) {
             </div>
 
             <div className="w-full py-[30px] text-[0.875rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
-              <div className="w-full mb-3 flex items-center">
+              <div className="flex items-center w-full mb-3">
                 <p className="w-1/6">판매가</p>
                 <p className="line-through w-5/6 text-[#333] font-normal">
                   {attach_won(item.price)}
                 </p>
               </div>
-              <div className="w-full mb-3 flex items-center">
+              <div className="flex items-center w-full mb-3">
                 <p className="w-1/6">할인판매가</p>
                 <p className="w-5/6 text-[#333] font-normal">
                   {attach_won(item.salePrice)}
                 </p>
               </div>
-              <div className="w-full flex items-center">
+              <div className="flex items-center w-full">
                 <p className="w-1/6">상품간략설명</p>
                 <p className="w-5/6 text-[#333] font-normal leading-16">
                   {item.description}
@@ -744,7 +745,7 @@ export default function Detail({ user }) {
             </div>
 
             <div className="w-full py-[30px] text-[0.875rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
-              <div className="w-full mb-4 flex items-center">
+              <div className="flex items-center w-full mb-4">
                 <p className="w-1/6">색상</p>
                 <select
                   ref={colorInputRef}
@@ -809,7 +810,7 @@ export default function Detail({ user }) {
                           >
                             -
                           </button>
-                          <p className="w-8 h-8 flex justify-center items-center">
+                          <p className="flex items-center justify-center w-8 h-8">
                             {c.count}
                           </p>
                           <button
@@ -823,7 +824,7 @@ export default function Detail({ user }) {
                         </div>
 
                         {/* salePrice 계산 */}
-                        <div className="w-1/5 flex justify-end">
+                        <div className="flex justify-end w-1/5">
                           <p className="text-[0.9375rem] mr-2">
                             {attach_won(c.price * c.count)}
                           </p>
@@ -852,7 +853,7 @@ export default function Detail({ user }) {
               </div>
             </div>
 
-            <div className="flex justify-between items-center font-semibold">
+            <div className="flex items-center justify-between font-semibold">
               <button
                 onClick={handlePushCarts}
                 className="w-[32%] py-5 border-[1px] border-solid border-black"
@@ -870,7 +871,6 @@ export default function Detail({ user }) {
               </button>
             </div>
 
-            {/* kakao event banner */}
             <div className="w-full pt-[30px]">
               <img
                 src={
@@ -966,7 +966,7 @@ export default function Detail({ user }) {
                 </p>
               </li>
 
-              <li className="cursor-pointer w-1/6 py-1 flex flex-col items-center">
+              <li className="flex flex-col items-center w-1/6 py-1 cursor-pointer">
                 <div className="mb-4 text-[3rem] text-[#f57778]">
                   <MdFiberNew />
                 </div>
@@ -985,12 +985,12 @@ export default function Detail({ user }) {
         {/* detail banner */}
         <div className="w-full py-32">
           <img
-            className="w-full object-cover cursor-pointer"
+            className="object-cover w-full cursor-pointer"
             src={process.env.PUBLIC_URL + "/../image/banner/detailBanner1.png"}
             alt="detail_banner"
           />
           <img
-            className="w-full object-cover mt-6 cursor-pointer"
+            className="object-cover w-full mt-6 cursor-pointer"
             src={process.env.PUBLIC_URL + "/../image/banner/detailBanner2.png"}
             alt="detail_banner"
           />
@@ -998,7 +998,7 @@ export default function Detail({ user }) {
 
         {/* detail page tab */}
         <div className="w-full">
-          <div className="w-full flex">
+          <div className="flex w-full">
             {category &&
               category?.map((c) => {
                 return (
@@ -1050,7 +1050,7 @@ export default function Detail({ user }) {
 
       {modalOpen && (
         <Modal user={user} onClose={closeModal}>
-          <div className="w-full flex justify-between">
+          <div className="flex justify-between w-full">
             <div className="w-[28%] p-5 box-border border-r-[1px] border-solid border-[#e8e8e8]">
               <img
                 className="w-full h-[10.875rem] object-fill rounded-lg"
@@ -1063,7 +1063,7 @@ export default function Detail({ user }) {
             </div>
             <div className="w-[72%] p-5 box-border">
               <div>
-                <div className="w-full flex flex-wrap">
+                <div className="flex flex-wrap w-full">
                   {!user && (
                     <>
                       <div className="w-1/2 p-3 border-y-[1px] border-l-[1px] border-solid border-[#c1c1c1] rounded-l-lg flex items-center">
@@ -1202,7 +1202,7 @@ export default function Detail({ user }) {
                 </div>
               </div>
 
-              <div className="w-full mt-6 text-center flex flex-col items-center">
+              <div className="flex flex-col items-center w-full mt-6 text-center">
                 <h1 className="mb-2">상품은 만족하셨나요?</h1>
                 <div className="flex items-center">
                   <BasicRating
@@ -1213,10 +1213,10 @@ export default function Detail({ user }) {
                 </div>
               </div>
 
-              <div className="w-full mt-3 text-center flex flex-col items-center">
+              <div className="flex flex-col items-center w-full mt-3 text-center">
                 <h1 className="mb-4">색상은 어떠셨나요?</h1>
 
-                <div className="w-full flex justify-between items-center">
+                <div className="flex items-center justify-between w-full">
                   <input
                     className={`${
                       reviewColorSatisfaction === "연해요"
@@ -1250,10 +1250,10 @@ export default function Detail({ user }) {
                 </div>
               </div>
 
-              <div className="w-full mt-6 text-center flex flex-col items-center">
+              <div className="flex flex-col items-center w-full mt-6 text-center">
                 <h1 className="mb-4">사이즈는 잘 맞으셨나요?</h1>
 
-                <div className="w-full flex justify-between items-center">
+                <div className="flex items-center justify-between w-full">
                   <input
                     className={`${
                       reviewSizeSatisfaction === "작아요"
@@ -1287,10 +1287,10 @@ export default function Detail({ user }) {
                 </div>
               </div>
 
-              <div className="w-full mt-6 text-center flex flex-col items-center">
+              <div className="flex flex-col items-center w-full mt-6 text-center">
                 <h1 className="mb-4">핏이나 만족감은 어떠세요?</h1>
 
-                <div className="w-full relative">
+                <div className="relative w-full">
                   <textarea
                     className="w-full p-4 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg resize-none outline-none placeholder:text-[0.8rem] font-light"
                     value={content}
@@ -1308,7 +1308,7 @@ export default function Detail({ user }) {
                 </div>
               </div>
 
-              <div className="w-full flex justify-center">
+              <div className="flex justify-center w-full">
                 <Button
                   onClick={(e) => handleStoreReviewData(e)}
                   value="리뷰 쓰기"
@@ -1326,16 +1326,16 @@ export default function Detail({ user }) {
               .filter((review) => review.id === selectedReviewId)
               .map((review) => {
                 return (
-                  <div className="w-full px-4 pb-4 flex">
+                  <div className="flex w-full px-4 pb-4">
                     <div className="w-1/2">
                       <img
-                        className="w-full object-cover rounded-lg"
+                        className="object-cover w-full rounded-lg"
                         src={process.env.PUBLIC_URL + `/../${review.image}`}
                         alt="detail_review_img"
                       />
                     </div>
 
-                    <div className="w-1/2 px-5 box-border">
+                    <div className="box-border w-1/2 px-5">
                       <div className="w-full pb-4 pl-5 box-border flex items-center border-b-[1px] shadow-lg">
                         <img
                           className="w-[65px] h-[65px] object-cover rounded-lg"
@@ -1397,7 +1397,7 @@ export default function Detail({ user }) {
                           </form>
                         )}
 
-                        <div className="mt-10 flex justify-between items-center">
+                        <div className="flex items-center justify-between mt-10">
                           <p className="text-[0.8125rem] text-[#8D8B8B]">
                             <span className="text-[0.875rem] text-[#000] font-semibold">{`${review?.count?.reduce(
                               (sum, benifit) => {
@@ -1424,7 +1424,7 @@ export default function Detail({ user }) {
                           </button>
                         </div>
 
-                        <div className="mt-14 flex items-center">
+                        <div className="flex items-center mt-14">
                           {user && user.uid === review.userId && (
                             <>
                               {reviewEdit.id !== review.id && (
@@ -1507,14 +1507,14 @@ export default function Detail({ user }) {
 
       {myBodySizeModalOpen && (
         <MyBodySizeModal onClose={closeMyBodySizeModal}>
-          <div className="w-full px-4 box-border">
+          <div className="box-border w-full px-4">
             <div className="text-center mt-[15px] mb-[25px] pb-[25px] border-b-[2px] border-solid border-[#282828]">
               <h1 className="text-[1.25rem] font-semibold">
                 나의 체형 정보 입력
               </h1>
             </div>
 
-            <div className="py-3 px-2 box-border">
+            <div className="box-border px-2 py-3">
               <div className="w-full mb-3 py-4 px-5 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg flex items-center">
                 <label
                   className="w-[30%] border-r-[1px] border-solid border-[#282828] text-[0.875rem]"
@@ -1591,7 +1591,7 @@ export default function Detail({ user }) {
                 />
               </div>
 
-              <div className="w-full mb-3 flex justify-center">
+              <div className="flex justify-center w-full mb-3">
                 <Button
                   onClick={(e) => handleStoreBodySizeInfo(e)}
                   value="등록"

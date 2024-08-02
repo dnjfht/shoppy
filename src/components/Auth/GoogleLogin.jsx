@@ -43,29 +43,3 @@ export const GoogleLogin = () => {
     </SocialLoginItem>
   );
 };
-
-{
-  /* <SocialLoginItem
-            onClick={() => {
-              alert("아직은 안돼요~");
-            }}
-          >
-            <SocialLoginLogo>
-              <SocialLoginLogoImg
-                src={require("../../assets/social-login-kakaotalk.png")}
-              />
-            </SocialLoginLogo>
-          </SocialLoginItem>
-          <SocialLoginItem
-            onClick={() => {
-              alert("아직은 안돼요~");
-            }}
-          >
-            <SocialLoginLogo>
-              <SocialLoginLogoImg
-                src={require("../../assets/social-login-naver.png")}
-              />
-            </SocialLoginLogo>
-          </SocialLoginItem> */
-}
-//  <NaverLogin />;
