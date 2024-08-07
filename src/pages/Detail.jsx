@@ -6,16 +6,16 @@ import { loadCartServer, setCartServer } from "../api/firebase";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import DetailInfo from "../components/DetailInfo";
-import DetailQuestion from "../components/question/DetailQuestion";
-import DetailReview from "../components/review/DetailReview";
-import DetailCS from "../components/DetailCS";
-import Modal from "../components/review/Modal";
-import BasicRating from "../components/review/BasicRating";
-import Button from "../components/Button";
-import DetailReviewModal from "../components/review/DetailReviewModal";
-import RatingResult2 from "../components/review/RatingResult2";
-import MyBodySizeModal from "../components/review/MyBodySizeModal";
+import DetailInfo from "../components/Detail/DetailInfo";
+import DetailQuestion from "../components/Detail/question/DetailQuestion";
+import DetailReview from "../components/Detail/review/DetailReview";
+import DetailCS from "../components/Detail/detailCS/DetailCS";
+import Modal from "../components/Detail/review/Modal";
+import BasicRating from "../components/Detail/review/BasicRating";
+import Button from "../components/button/Button";
+import DetailReviewModal from "../components/Detail/review/DetailReviewModal";
+import RatingResult2 from "../components/Detail/review/RatingResult2";
+import MyBodySizeModal from "../components/Detail/review/MyBodySizeModal";
 
 import { GoX } from "react-icons/go";
 import { CiHeart, CiGift, CiDeliveryTruck, CiEdit } from "react-icons/ci";

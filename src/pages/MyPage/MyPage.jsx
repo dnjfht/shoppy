@@ -6,7 +6,7 @@ import { updatePassword, updateProfile, deleteUser } from "firebase/auth";
 import { firebaseConfig } from "../../api/firebase";
 import { authService } from "../../api/firebase";
 
-import RatingResult2 from "../../components/review/RatingResult2";
+import RatingResult2 from "../../components/Detail/review/RatingResult2";
 import ChangePassword from "../../components/MyPage/UserAccount/ChangePassword";
 import ChangeNickname from "../../components/MyPage/UserAccount/ChangeNickname";
 

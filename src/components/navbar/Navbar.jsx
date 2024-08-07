@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService, loadCartServer } from "../api/firebase";
-import { isLoggedIn } from "../utils/utils";
-import User from "./User";
+import { authService, loadCartServer } from "../../api/firebase";
+import { isLoggedIn } from "../../utils/utils";
+import User from "../navbar/User";
 
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
@@ -63,7 +63,7 @@ export default function Navbar({
           : "bg-[rgba(255,255,255,0)]"
       } w-full h-[130px] fixed left-0 top-0 z-[99999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
     >
-      <div className="w-10/12 h-full mx-auto flex items-center justify-between">
+      <div className="flex items-center justify-between w-10/12 h-full mx-auto">
         <ul className="flex items-center text-[2.5rem] font-[InkLipquid]">
           <li
             onClick={() => navigate("/")}
@@ -122,7 +122,7 @@ export default function Navbar({
             onClick={() => {
               navigate("/search");
             }}
-            className="flex justify-center items-center"
+            className="flex items-center justify-center"
           >
             <FiSearch />
           </li>
@@ -139,7 +139,7 @@ export default function Navbar({
             </p>
           </li>
           {isLoggedIn() && (
-            <li className="flex justify-center items-center">
+            <li className="flex items-center justify-center">
               {isLoggedIn && user && <User user={user} />}
             </li>
           )}
@@ -149,7 +149,7 @@ export default function Navbar({
               onClick={() => {
                 navigate("/login");
               }}
-              className="flex justify-center items-center"
+              className="flex items-center justify-center"
             >
               <button>Login</button>
             </li>
@@ -158,7 +158,7 @@ export default function Navbar({
           {isLoggedIn() && (
             <li
               onClick={onLogoutClick}
-              className="flex justify-center items-center"
+              className="flex items-center justify-center"
             >
               <button>Logout</button>
             </li>

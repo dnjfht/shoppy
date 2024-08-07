@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import DetailQuestionInputModal from "./DetailQuestionInputModal";
-import Button from "../../components/Button";
-import DetailQuestionList, { formatDate } from "./DetailQuestionList";
-import DetailQuestionModal from "./DatailQuestionModal";
-import { v4 as uuidv4 } from "uuid";
-
-import { CiEdit } from "react-icons/ci";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
+
+import DetailQuestionInputModal from "./DetailQuestionInputModal";
+import Button from "../../button/Button";
+import DetailQuestionList, { formatDate } from "./DetailQuestionList";
+import DetailQuestionModal from "./DatailQuestionModal";
+
+import { CiEdit } from "react-icons/ci";
 
 export default function DetailQuestion({ user, item }) {
   // 문의 작성하는 모달 useState
@@ -301,7 +302,7 @@ export default function DetailQuestion({ user, item }) {
 
   return (
     <div className="w-full py-14 text-[0.875rem] overflow-hidden relative">
-      <div className="w-full flex justify-between items-center">
+      <div className="flex items-center justify-between w-full">
         <div>
           <p>궁금한점을 해결해드립니다.</p>
           <p>
@@ -339,9 +340,9 @@ export default function DetailQuestion({ user, item }) {
             setQuestionModalOpen(false);
           }}
         >
-          <div className="w-full p-4 box-border">
+          <div className="box-border w-full p-4">
             {!user && (
-              <div className="w-full mb-4 flex justify-between items-center">
+              <div className="flex items-center justify-between w-full mb-4">
                 <div className="w-[48%] flex justify-between items-center">
                   <label className="w-[30%]" htmlFor="phoneNumber">
                     전화번호
@@ -376,7 +377,7 @@ export default function DetailQuestion({ user, item }) {
                 </div>
               </div>
             )}
-            <div className="w-full flex items-center">
+            <div className="flex items-center w-full">
               <p className="w-2/12">질문분류</p>
 
               <select
@@ -418,7 +419,7 @@ export default function DetailQuestion({ user, item }) {
               </select>
             </div>
 
-            <div className="w-full mt-4 flex items-center">
+            <div className="flex items-center w-full mt-4">
               <p className="w-2/12">질문내용</p>
 
               <textarea
@@ -448,7 +449,7 @@ export default function DetailQuestion({ user, item }) {
               ?.filter((data) => data.id === QuestionModalIdBucket)
               ?.map((data) => {
                 return (
-                  <div className="p-5 box-border">
+                  <div className="box-border p-5">
                     <div className="pb-5 border-b-[1px] border-solid border-[#ccc]">
                       <div className="flex items-end">
                         <p className="text-[1rem] text-[#282828]">{`Q. ${data.questionType}`}</p>
@@ -471,7 +472,7 @@ export default function DetailQuestion({ user, item }) {
                           handleEditQuestionSuccess(e, data.detailUserId);
                         }}
                       >
-                        <div className="w-full mt-5 mb-80 flex justify-between items-center">
+                        <div className="flex items-center justify-between w-full mt-5 mb-80">
                           <input
                             value={changeContent}
                             onChange={(e) => {

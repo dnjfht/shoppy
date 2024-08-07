@@ -1,10 +1,10 @@
 import React from "react";
-import MainSlider from "../components/MainSlider";
+import MainSlider from "../components/slider/MainSlider";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
-import Button from "../components/Button";
+import ProductCard from "../components/product/ProductCard";
+import Button from "../components/button/Button";
 
 export default function Main() {
   const {
@@ -52,7 +52,7 @@ export default function Main() {
           </div>
 
           {/* Best Items 영역 */}
-          <div className="w-full text-center mt-40">
+          <div className="w-full mt-40 text-center">
             <h1 className="text-[1.875rem] font-semibold mb-10">BEST ITEMS</h1>
             <ul className="flex flex-wrap [&>*:last-child]:mr-0">
               {items &&
@@ -84,7 +84,7 @@ export default function Main() {
           </div>
 
           {/* Items 영역 */}
-          <div className="w-full text-center mt-40">
+          <div className="w-full mt-40 text-center">
             <h1 className="text-[1.875rem] font-semibold mb-10">ITEMS</h1>
             <ul className="flex flex-wrap [&>*:last-child]:mr-0">
               {items &&

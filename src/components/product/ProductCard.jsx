@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { attach_won, shortString } from "../../pages/Main";
+
 import { LiaLongArrowAltRightSolid } from "react-icons/lia";
-import { attach_won, shortString } from "../pages/Main";
 
 export default function ProductCard({ item, index }) {
   const navigate = useNavigate();
@@ -10,9 +11,9 @@ export default function ProductCard({ item, index }) {
     <li
       className={`w-[24%] mb-6 ${
         index % 4 === 3 || index === 3 ? "mr-0" : "mr-[1.3%]"
-      } cursor-pointer relative text-center`}
+      } cursor-pointer relative text-center list-none`}
     >
-      <div className="w-full group relative">
+      <div className="relative w-full group">
         <ul className="px-4 py-3 rounded-full bg-black flex flex-wrap justify-between items-center absolute top-2 left-2 [&>*:last-child]:mr-0 [&>*:last-child]:pr-0 [&>*:last-child]:border-none">
           {item.type?.map((t, index) => {
             return (
@@ -27,7 +28,7 @@ export default function ProductCard({ item, index }) {
         </ul>
 
         <img
-          className="w-full object-fit rounded-lg"
+          className="w-full rounded-lg object-fit"
           src={process.env.PUBLIC_URL + `/../${item.image}`}
           alt="img"
         />
@@ -48,7 +49,7 @@ export default function ProductCard({ item, index }) {
         <p className="mt-2 text-[0.875rem] text-[#484848]">
           {shortString(item.description, 28)}
         </p>
-        <div className="mt-4 flex justify-center items-center">
+        <div className="flex items-center justify-center mt-4">
           <p className="mr-2 text-[0.875rem] text-gray-400 line-through">
             {attach_won(item.price)}
           </p>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React from "react";
-import BestProduct from "../components/BestProduct";
+import BestProduct from "../components/product/BestProduct";
 
 export default function NewProducts() {
   const {

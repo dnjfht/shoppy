@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import RatingResult from "./RatingResult";
 import ReviewImgSlider from "./ReviewImgSlider";
-import { isLoggedIn } from "../../utils/utils";
+import { isLoggedIn } from "../../../utils/utils";
 import RatingResult2 from "./RatingResult2";
 
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
@@ -165,7 +165,7 @@ export default function DetailReview({
   }, [search, myBodyInfo, reviewOfMyBodyType, firestoreReviewData]);
 
   return (
-    <div className="w-full py-14 overflow-hidden relative">
+    <div className="relative w-full overflow-hidden py-14">
       <div>
         <img
           src={process.env.PUBLIC_URL + "/image/banner/review_event.png"}
@@ -182,7 +182,7 @@ export default function DetailReview({
       {/* 리뷰 관련 영역 */}
       <div>
         {/* 제품 평균 리뷰*/}
-        <ul className="w-full mt-6 flex justify-between">
+        <ul className="flex justify-between w-full mt-6">
           <li className="w-1/3 py-6 text-[0.9375rem] text-center text-[#1e1d1d] font-semibold border-r-[1px] border-solid border-[#f3f3f3]">
             <p>구매고객 총 평점</p>
             <div className="mt-8">
@@ -195,9 +195,9 @@ export default function DetailReview({
 
           <li className="w-1/3 px-6 py-6 box-border text-[0.9375rem] text-center text-[#1e1d1d] font-semibold border-r-[1px] border-solid border-[#f3f3f3] flex flex-col justify-between items-center">
             <p>평점 비율</p>
-            <div className="w-full flex-col items-center">
+            <div className="flex-col items-center w-full">
               {/* 색상 */}
-              <div className="w-full mb-5 flex justify-between items-center font-normal">
+              <div className="flex items-center justify-between w-full mb-5 font-normal">
                 <div className="w-1/5 py-2 text-[#343434] border-[1px] border-solid border-[#c4c4c4] rounded-full">
                   <p>색상</p>
                 </div>
@@ -216,7 +216,7 @@ export default function DetailReview({
               </div>
 
               {/* 사이즈 */}
-              <div className="w-full flex justify-between items-center font-normal">
+              <div className="flex items-center justify-between w-full font-normal">
                 <div className="w-1/5 py-2 text-[#343434] font-normal border-[1px] border-solid border-[#c4c4c4] rounded-full">
                   <p>사이즈</p>
                 </div>
@@ -239,7 +239,7 @@ export default function DetailReview({
           <li className="w-1/3 px-6 py-6 box-border text-[0.9375rem] text-center text-[#1e1d1d] font-semibold flex flex-col justify-between items-center">
             <p>리뷰필터</p>
             <div className="w-full flex flex-col items-center text-[0.75rem] font-normal">
-              <div className="w-full flex justify-between items-center">
+              <div className="flex items-center justify-between w-full">
                 <select
                   ref={colorInputRef}
                   onChange={(e) => handleSelectColor(e)}
@@ -323,7 +323,7 @@ export default function DetailReview({
           </li>
         </ul>
 
-        <div className="mt-7 mb-8">
+        <div className="mb-8 mt-7">
           <ReviewImgSlider
             filteredReviews={filteredReviews}
             user={user}
@@ -346,7 +346,7 @@ export default function DetailReview({
               </button>
               <button
                 onClick={openMyBodySizeModal}
-                className="ml-3 flex items-center"
+                className="flex items-center ml-3"
               >
                 <p className="text-[0.9375rem] text-[#333]">
                   내 체형 리뷰만 보기
@@ -416,7 +416,7 @@ export default function DetailReview({
                   </div>
 
                   <div className="w-9/12">
-                    <div className="mb-2 flex items-center">
+                    <div className="flex items-center mb-2">
                       <RatingResult2 ratingValue={review.ratingValue} />
                       <p className="mt-[-6px] ml-2 font-semibold">
                         {review.ratingValue}
@@ -472,7 +472,7 @@ export default function DetailReview({
                       </form>
                     )}
 
-                    <div className="mt-6 flex items-center">
+                    <div className="flex items-center mt-6">
                       <p className="text-[0.8125rem] text-[#8D8B8B]">
                         <span className="text-[0.875rem] text-[#000] font-semibold">{`${review?.count?.reduce(
                           (sum, benifit) => {
@@ -499,7 +499,7 @@ export default function DetailReview({
                       </button>
                     </div>
 
-                    <div className="mt-14 flex items-center">
+                    <div className="flex items-center mt-14">
                       {!review.phoneNumber && user?.uid === review?.userId && (
                         <>
                           {reviewEdit.id !== review.id && (

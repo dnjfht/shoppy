@@ -1,7 +1,7 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
-import NewProduct from "../components/NewProduct";
+import NewProduct from "../components/product/NewProduct";
 
 export default function NewProducts() {
   const {

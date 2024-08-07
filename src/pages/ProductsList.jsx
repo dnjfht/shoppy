@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import ProductCard from "../components/product/ProductCard";
 
 export default function ProductsList() {
   const params = useParams().listName;

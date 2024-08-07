@@ -1,12 +1,12 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import NextArrow from "./NextArrow";
 import PrevArrow from "./PrevArrow";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 export default function MainSlider({ autoplay = true }) {
   const settings = {
