@@ -29,10 +29,10 @@ export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
   const category = ["All", "Woman", "Man", "Shoes"];
 
   const allCartsNum =
-    isLoggedIn() && allCarts.length
-      ? allCarts.length
-      : !isLoggedIn() && nonMemberAllCarts.length
-      ? nonMemberAllCarts.length
+    isLoggedIn() && allCarts?.length
+      ? allCarts?.length
+      : !isLoggedIn() && nonMemberAllCarts?.length
+      ? nonMemberAllCarts?.length
       : 0;
 
   return (
