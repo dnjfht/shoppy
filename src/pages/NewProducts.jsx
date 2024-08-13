@@ -1,4 +1,5 @@
-import React from "react";
+// New Items page
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import NewProduct from "../components/product/NewProduct";
@@ -13,15 +14,14 @@ export default function NewProducts() {
       .get("/data/Product.json") //
       .then((res) => res.data.items);
   });
-  console.log(items);
 
   return (
-    <div className="w-full text-[1.875rem]">
-      <div className="w-[1400px] pt-32 mx-auto">
+    <div className="w-full">
+      <div className="w-full max-w-[90%] pt-32 mx-auto">
         {isLoading && "Loading..."}
         {error && "Occured error...!"}
 
-        {items && <NewProduct items={items} />}
+        <NewProduct items={items} />
       </div>
     </div>
   );

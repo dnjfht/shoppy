@@ -31,9 +31,9 @@ export default function ProductsList() {
   });
 
   return (
-    <div className="w-full text-[1.875rem]">
-      <div className="w-[1400px] mx-auto pt-32 py-10 text-center">
-        <h1 className="my-10 font-semibold">{categoryTitle}</h1>
+    <div className="w-full">
+      <div className="w-full max-w-[90%] mx-auto pt-32 py-10 text-center">
+        <h1 className="my-10 font-semibold text-[1.875rem]">{categoryTitle}</h1>
 
         {isLoading && "Loading..."}
         {error && "Occured error...!"}
