@@ -190,7 +190,7 @@ export default function MyCart({
           <div className={`${inCarts ? "block" : "hidden"} w-[70%]`}>
             <div className="w-full mb-4 flex items-center text-[#282828]">
               <p>일반상품</p>
-              <p className="ml-1">{`(${datas.length})`}</p>
+              <p className="ml-1">{`(${datas?.length})`}</p>
             </div>
 
             <table className="w-full border-t-[1px] border-solid border-[#282828] text-[0.875rem] text-[#333]">
