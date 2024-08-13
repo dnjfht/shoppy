@@ -34,44 +34,42 @@ export default function Main() {
       {isLoading && "Loading..."}
       {error && "Occured error...!"}
 
-      <div
-        className={`${
-          items ? "block" : "hidden"
-        } w-full max-w-[90%] mx-auto py-20 flex flex-col`}
-      >
-        <CategoryItems
-          title="NEW ITEMS"
-          items={newItems}
-          onClick={() => {
-            navigate("/products/new");
-          }}
-        />
-        <CategoryItems
-          title="BEST ITEMS"
-          items={bestItems}
-          onClick={() => {
-            navigate("/products/best");
-          }}
-          styles="mt-40"
-        />
+      {items && (
+        <div className="w-full max-w-[90%] mx-auto py-20 flex flex-col">
+          <CategoryItems
+            title="NEW ITEMS"
+            items={newItems}
+            onClick={() => {
+              navigate("/products/new");
+            }}
+          />
+          <CategoryItems
+            title="BEST ITEMS"
+            items={bestItems}
+            onClick={() => {
+              navigate("/products/best");
+            }}
+            styles="mt-40"
+          />
 
-        <div className="mt-40">
-          <img
-            className="rounded-lg cursor-pointer"
-            src={process.env.PUBLIC_URL + "./image/banner/eventBanner.png"}
-            alt="event_banner"
+          <div className="mt-40">
+            <img
+              className="rounded-lg cursor-pointer"
+              src={process.env.PUBLIC_URL + "./image/banner/eventBanner.png"}
+              alt="event_banner"
+            />
+          </div>
+
+          <CategoryItems
+            title="ITEMS"
+            items={allItems}
+            onClick={() => {
+              navigate("/products/All");
+            }}
+            styles="mt-40"
           />
         </div>
-
-        <CategoryItems
-          title="ITEMS"
-          items={allItems}
-          onClick={() => {
-            navigate("/products/All");
-          }}
-          styles="mt-40"
-        />
-      </div>
+      )}
     </div>
   );
 }
