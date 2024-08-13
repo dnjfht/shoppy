@@ -166,9 +166,11 @@ export default function MyCart({
   };
 
   const inCarts =
-    (user && allCarts.length === 0) || (!user && nonMemberAllCarts.length === 0)
+    (user && allCarts?.length === 0) ||
+    (!user && nonMemberAllCarts?.length === 0)
       ? false
-      : (user && allCarts.length > 0) || (!user && nonMemberAllCarts.length > 0)
+      : (user && allCarts?.length > 0) ||
+        (!user && nonMemberAllCarts?.length > 0)
       ? true
       : null;
   const comment = !inCarts ? <p>장바구니가 비어 있습니다.</p> : null;
