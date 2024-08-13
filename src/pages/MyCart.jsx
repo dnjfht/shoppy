@@ -44,12 +44,12 @@ export default function MyCart({
   // x 버튼을 눌렀을 때 각 카트가 삭제되는 것
   const deleteCart = async (idx) => {
     if (user) {
-      const deletedCarts = allCarts.filter((c) => c.id !== idx);
+      const deletedCarts = allCarts?.filter((c) => c.id !== idx);
       await setCartServer(user, deletedCarts);
 
-      setAllCarts((prevCart) => prevCart.filter((c) => c.id !== idx));
+      setAllCarts((prevCart) => prevCart?.filter((c) => c.id !== idx));
     } else if (user === null) {
-      const deletedCarts = nonMemberAllCarts.filter((c) => c.id !== idx);
+      const deletedCarts = nonMemberAllCarts?.filter((c) => c.id !== idx);
       localStorage.setItem("carts", JSON.stringify(deletedCarts));
       setNonMemberAllCarts(deletedCarts);
     }
@@ -72,18 +72,18 @@ export default function MyCart({
   // 장바구니 아이템 갯수 줄이는 함수
   const handleMinusCount = async (idx) => {
     if (user) {
-      const minusCount = allCarts.map((c) => {
+      const minusCount = allCarts?.map((c) => {
         return c.id === idx && c.count > 0 ? { ...c, count: c.count - 1 } : c;
       });
       await setCartServer(user, minusCount);
 
       setAllCarts((prevCart) =>
-        prevCart.map((c) => {
+        prevCart?.map((c) => {
           return c.id === idx && c.count > 0 ? { ...c, count: c.count - 1 } : c;
         })
       );
     } else if (user === null) {
-      const updatedCart = nonMemberAllCarts.map((c) => {
+      const updatedCart = nonMemberAllCarts?.map((c) => {
         return c.id === idx && c.count > 0 ? { ...c, count: c.count - 1 } : c;
       });
 
@@ -95,18 +95,18 @@ export default function MyCart({
   // 장바구니 아이템 갯수 늘리는 함수
   const handlePlusCount = async (idx) => {
     if (user) {
-      const plusCount = allCarts.map((c) => {
+      const plusCount = allCarts?.map((c) => {
         return c.id === idx ? { ...c, count: c.count + 1 } : c;
       });
       await setCartServer(user, plusCount);
 
       setAllCarts((prevCart) =>
-        prevCart.map((c) => {
+        prevCart?.map((c) => {
           return c.id === idx ? { ...c, count: c.count + 1 } : c;
         })
       );
     } else if (user === null) {
-      const updatedCart = nonMemberAllCarts.map((c) => {
+      const updatedCart = nonMemberAllCarts?.map((c) => {
         return c.id === idx ? { ...c, count: c.count + 1 } : c;
       });
 
@@ -119,7 +119,7 @@ export default function MyCart({
   const handleSelectAll = () => {
     setSelectAll((prev) => !prev);
     if (!selectAll) {
-      setSelectedItems(products.map((product) => product.id));
+      setSelectedItems(products?.map((product) => product.id));
     } else {
       setSelectedItems([]);
     }
@@ -130,19 +130,19 @@ export default function MyCart({
     if (e.target.checked) {
       setSelectedItems([...selectedItems, id]);
     } else {
-      setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
+      setSelectedItems(selectedItems?.filter((itemId) => itemId !== id));
     }
   };
 
   // 선택된 데이터 삭제하는 함수
   const handleDelete = async () => {
     // allCarts에서 선택된 상품들을 제거하여 새로운 배열을 생성합니다.
-    const updatedCarts = allCarts.filter(
-      (cart) => !selectedItems.includes(cart.id)
+    const updatedCarts = allCarts?.filter(
+      (cart) => !selectedItems?.includes(cart.id)
     );
 
-    const nonMemberUpdatedCarts = nonMemberAllCarts.filter(
-      (cart) => !selectedItems.includes(cart.id)
+    const nonMemberUpdatedCarts = nonMemberAllCarts?.filter(
+      (cart) => !selectedItems?.includes(cart.id)
     );
 
     if (user) {
@@ -150,7 +150,7 @@ export default function MyCart({
         await setCartServer(user, updatedCarts);
 
         setAllCarts(updatedCarts);
-        setProducts(updatedCarts.map((cart) => ({ ...cart })));
+        setProducts(updatedCarts?.map((cart) => ({ ...cart })));
       } catch (error) {
         console.error(error);
       }
@@ -215,8 +215,8 @@ export default function MyCart({
 
               <tbody>
                 {datas
-                  .filter((cart) => (user ? cart.userId === user.uid : true))
-                  .map((cart) => {
+                  ?.filter((cart) => (user ? cart.userId === user.uid : true))
+                  ?.map((cart) => {
                     return (
                       <tr
                         className="w-full border-b-[1px] border-solid border-[#e5e5e5]"
