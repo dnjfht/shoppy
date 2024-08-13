@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { attach_won, shortString } from "./Main";
+import { attach_won, salePercent, shortString } from "../constants/constants";
 import { v4 as uuidv4 } from "uuid";
-import { loadCartServer, setCartServer } from "../api/firebase";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -14,8 +13,11 @@ import Modal from "../components/Detail/review/Modal";
 import BasicRating from "../components/Detail/review/BasicRating";
 import Button from "../components/button/Button";
 import DetailReviewModal from "../components/Detail/review/DetailReviewModal";
-import RatingResult2 from "../components/Detail/review/RatingResult2";
 import MyBodySizeModal from "../components/Detail/review/MyBodySizeModal";
+import { loadCartServer, setCartServer } from "../api/cart";
+import { recieveReviewData, setReviewServer } from "../api/review";
+import { recieveBodyData, setMyBodyServer } from "../api/body";
+import { isLoggedIn } from "../utils/utils";
 
 import { GoX } from "react-icons/go";
 import { CiHeart, CiGift, CiDeliveryTruck, CiEdit } from "react-icons/ci";
@@ -25,7 +27,13 @@ import { GiCutDiamond } from "react-icons/gi";
 import { HiGift } from "react-icons/hi";
 import { MdFiberNew } from "react-icons/md";
 
-export default function Detail({ user }) {
+export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
+  const navigate = useNavigate();
+
+  const {
+    state: { item },
+  } = useLocation();
+
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const [cart, setCart] = useState([]);
@@ -42,7 +50,6 @@ export default function Detail({ user }) {
   const [myBodySizeModalOpen, setMyBodySizeModalOpen] = useState(false);
 
   // review 관련 상태 관리
-
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   // 초기 별점 값으로 0.0을 가집니다.
@@ -72,12 +79,6 @@ export default function Detail({ user }) {
   // review 수정 useState
   const [reviewEdit, setReviewEdit] = useState({ isActive: false });
   const [changeText, setChangeText] = useState("");
-
-  const navigate = useNavigate();
-
-  const {
-    state: { item },
-  } = useLocation();
 
   const handleSelectColor = (e) => {
     setColor(e.target.value);
@@ -135,10 +136,6 @@ export default function Detail({ user }) {
     }
   };
 
-  const deleteCart = (idx) => {
-    setCart((prevCart) => prevCart.filter((c) => c.id !== idx));
-  };
-
   const handleMinusCount = (idx) => {
     setCart((prevCart) =>
       prevCart.map((c) => {
@@ -161,34 +158,26 @@ export default function Detail({ user }) {
     0
   );
 
-  const category = ["상품정보", "사용후기", "교환 및 반품", "상품문의"];
+  const deleteCart = (idx) => {
+    setCart((prevCart) => prevCart.filter((c) => c.id !== idx));
+  };
 
   const handlePushCarts = async () => {
     if (user) {
-      // Instead of updating local cart, update the allCarts in the App component.
-      // setAllCarts((prevAllCarts) => [...prevAllCarts, ...cart]);
-
       const prevCart = (await loadCartServer(user)) ?? [];
       await setCartServer(user, [...prevCart, ...cart]);
-
-      setCart([]); // Clear the local cart after adding items to allCarts
-    } else if (user === null) {
+      setAllCarts([...prevCart, ...cart]);
+      setCart([]);
+    } else if (!isLoggedIn()) {
       setCart([]);
 
       const previousCart = JSON.parse(localStorage.getItem("carts")) || [];
-
-      // 이전 배열과 새로운 배열 합치기
-      const mergedCart = [...previousCart, ...cart];
-
-      // 합쳐진 배열을 다시 localStorage에 저장
-      localStorage.setItem("carts", JSON.stringify(mergedCart));
+      localStorage.setItem("carts", JSON.stringify([...previousCart, ...cart]));
+      setNonMemberAllCarts([...previousCart, ...cart]);
     }
-    navigate("/carts");
   };
 
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const category = ["상품정보", "사용후기", "교환 및 반품", "상품문의"];
 
   const handleSelectColor2 = (e) => {
     setReviewColor(e.target.value);
@@ -229,63 +218,24 @@ export default function Detail({ user }) {
   // 이건 user가 존재하건 존재하지 않건 가져올 수 있어야 함.
   const { data: firestoreReviewData } = useQuery(
     ["firestoreReviewData", item?.id],
-    async () => {
-      const resAll = await axios.get(
-        `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}`
-      );
-      console.log(resAll);
-      return resAll.data.filter((review) => review.reviewWeight != null);
-    }
+    () => recieveReviewData(item?.id)
   );
 
-  // 리뷰 생성.
+  // 리뷰 등록하기.
   const createReview = async (reviewData) => {
-    if (user) {
-      try {
-        const res = await axios.post(
-          `https://birthday-party-shop-backend-server.vercel.app/review/${
-            item.id
-          }/${user.uid}${
-            firestoreReviewData.filter((data) => data.userId === user.uid)
-              .length + 1
-          }`,
-          reviewData
-        );
-        console.log(res.config.data["data"]);
-        return res.config.data["data"];
-      } catch (error) {
-        throw error;
-      }
-    } else if (user === null) {
-      try {
-        const res = await axios.post(
-          `https://birthday-party-shop-backend-server.vercel.app/review/${
-            item.id
-          }/${phoneNumber}${
-            firestoreReviewData.filter(
-              (data) => data.phoneNumber === phoneNumber
-            ).length + 1
-          }`,
-          reviewData
-        );
-        console.log(res.config.data["data"]);
-        return res.config.data["data"];
-      } catch (error) {
-        throw error;
-      }
+    try {
+      const res = await setReviewServer(
+        user,
+        phoneNumber,
+        item,
+        firestoreReviewData,
+        reviewData
+      );
+      return res.config.data["data"];
+    } catch (error) {
+      throw error;
     }
   };
-
-  // const userCreateReviewMutation = useMutation(createReview, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
-
-  //     console.log(firestoreReviewData);
-  //   },
-  //   onError: (error) => {
-  //     // 여기에 오류 처리 로직을 추가합니다. 예를 들어, console.error(error.message);
-  //   },
-  // });
 
   const createReviewMutation = useMutation(
     (reviewData) => createReview(reviewData),
@@ -302,7 +252,6 @@ export default function Detail({ user }) {
     e.preventDefault();
 
     if (user) {
-      // 후기 등록
       const reviewData = {
         data: {
           profileImgSrc: user.photoURL,
@@ -383,18 +332,6 @@ export default function Detail({ user }) {
     setPassword("");
   }, [firestoreReviewData]);
 
-  // 리뷰 슬라이드 이미지 클릭 시 모달 열기
-  const openReviewDetailModal = (id) => {
-    setSelectedReviewId(id);
-    setReviewDetailModalOpen(true);
-  };
-
-  // 리뷰 슬라이드 이미지 클릭 시 모달 닫기
-  const closeReviewDetailModal = () => {
-    setSelectedReviewId(null);
-    setReviewDetailModalOpen(false);
-  };
-
   // 리뷰 "도움이 돼요" 버튼 클릭 기능
   const editCountReview = async ({ detailUserId, reviewData }) => {
     try {
@@ -469,15 +406,12 @@ export default function Detail({ user }) {
     }
   }
 
-  // 리뷰 삭제
   const deleteReview = async ({ detailUserId, reviewData }) => {
     try {
-      console.log(reviewData);
       const res = await axios.post(
         `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}/${detailUserId}`,
         reviewData
       );
-      console.log(res.config.data["data"]);
       return res.config.data["data"];
     } catch (error) {
       throw error;
@@ -490,7 +424,6 @@ export default function Detail({ user }) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
-        console.log(firestoreReviewData);
       },
     }
   );
@@ -525,7 +458,7 @@ export default function Detail({ user }) {
 
     if (user) {
       setReviewEdit((prev) => ({ ...prev, id: idx, isActive: true }));
-    } else if (user === null) {
+    } else {
       const password = window.prompt(
         "비밀번호 네 자리를 입력하세요.(비밀번호는 숫자로 이루어져 있습니다.)"
       );
@@ -544,7 +477,6 @@ export default function Detail({ user }) {
         `https://birthday-party-shop-backend-server.vercel.app/review/${item?.id}/${detailUserId}`,
         editReviewData
       );
-      console.log(res.config.data["data"]);
       return res.config.data["data"];
     } catch (error) {
       throw error;
@@ -557,7 +489,6 @@ export default function Detail({ user }) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["firestoreReviewData", item?.id]);
-        console.log(firestoreReviewData);
       },
     }
   );
@@ -575,76 +506,71 @@ export default function Detail({ user }) {
       },
     };
 
-    // 후기 수정
+    // 리뷰 수정
     editReviewMutation.mutate({ detailUserId, editReviewData });
 
     setReviewEdit((prev) => ({ ...prev, id: "", isActive: false }));
   }
 
-  // 내 체형 리뷰만 보기 버튼 클릭시 모달 열기
-  const openMyBodySizeModal = (id) => {
-    setMyBodySizeModalOpen(true);
-  };
+  // 체형 정보 가져오기.
+  const { data: bodyData } = useQuery(
+    ["firestoreBodyData", user?.uid],
+    async () => {
+      const res = await recieveBodyData(user?.uid);
+      return res.data;
+    },
+    {
+      enabled: !!user?.uid,
+    }
+  );
 
-  // 내 체형 리뷰만 보기 버튼 클릭시 모달 닫기
-  const closeMyBodySizeModal = () => {
-    setMyBodySizeModalOpen(false);
-  };
-
-  // 내 체형 등록하기
+  // 내 체형 등록하기.
   async function handleStoreBodySizeInfo(e) {
     e.preventDefault();
 
     setMyBodyInfo((prev) => ({
-      ...prev,
-      myHeight,
-      myWeight,
-      mySize,
-      myFootSize,
+      myHeight: myHeight !== "" ? myHeight : prev.myHeight,
+      myWeight: myWeight !== "" ? myWeight : prev.myWeight,
+      mySize: mySize !== "" ? mySize : prev.mySize,
+      myFootSize: myFootSize !== "" ? myFootSize : prev.myFootSize,
     }));
 
-    // 체형 정보 서버에 등록.
     if (user) {
-      await axios.post(
-        `https://birthday-party-shop-backend-server.vercel.app/body/${user.uid}`,
-        {
-          data: {
-            myHeight,
-            myWeight,
-            mySize,
-            myFootSize,
-          },
-        }
-      );
+      if (bodyData === null) {
+        await setMyBodyServer(
+          myHeight,
+          myWeight,
+          mySize,
+          myFootSize,
+          user?.uid
+        );
+      } else {
+        const updatedBodyInfo = {
+          myHeight: myHeight || bodyData.myHeight,
+          myWeight: myWeight || bodyData.myWeight,
+          mySize: mySize || bodyData.mySize,
+          myFootSize: myFootSize || bodyData.myFootSize,
+        };
+
+        await setMyBodyServer(
+          updatedBodyInfo.myHeight,
+          updatedBodyInfo.myWeight,
+          updatedBodyInfo.mySize,
+          updatedBodyInfo.myFootSize,
+          user?.uid
+        );
+      }
     } else if (user === null) {
       const previousBodyInfo = JSON.parse(localStorage.getItem("bodyInfo"));
 
-      // 이전 객체에서 새로 바뀐 것들만 적용되도록
       const mergedBodyInfo = {
         ...previousBodyInfo,
         ...{ myHeight, myWeight, mySize, myFootSize },
       };
-
-      // 합쳐진 객체를 다시 localStorage에 저장
       localStorage.setItem("bodyInfo", JSON.stringify(mergedBodyInfo));
     }
-
     setMyBodySizeModalOpen(false);
   }
-
-  // 체형 정보 서버에서 가져오기.
-  const { data: bodyData } = useQuery(
-    ["firestoreBodyData", user?.uid],
-    async () => {
-      const res = await axios.get(
-        `https://birthday-party-shop-backend-server.vercel.app/body/${user?.uid}`
-      );
-      return res.data;
-    },
-    {
-      enabled: !!user?.uid, // userUid가 존재할 때만 데이터를 가져오도록 설정
-    }
-  );
 
   useEffect(() => {
     if (user === null) {
@@ -653,7 +579,6 @@ export default function Detail({ user }) {
     }
   }, [user, setMyBodyInfo]);
 
-  // myBodyInfo의 내용이 변경될시 받아온 data를 재업데이트 하도록 설정
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -855,7 +780,10 @@ export default function Detail({ user }) {
 
             <div className="flex items-center justify-between font-semibold">
               <button
-                onClick={handlePushCarts}
+                onClick={() => {
+                  handlePushCarts();
+                  navigate("/carts");
+                }}
                 className="w-[32%] py-5 border-[1px] border-solid border-black"
               >
                 장바구니
@@ -999,28 +927,27 @@ export default function Detail({ user }) {
         {/* detail page tab */}
         <div className="w-full">
           <div className="flex w-full">
-            {category &&
-              category?.map((c) => {
-                return (
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setCat(c);
-                    }}
+            {category?.map((c) => {
+              return (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCat(c);
+                  }}
+                  className={`${
+                    c === cat ? "bg-opacity-100" : "bg-opacity-0"
+                  } w-1/4 py-5 border-[1px] bg-[#282828] border-solid border-[#ccc] border-b-[#333] rounded-t-lg transition-all duration-700`}
+                >
+                  <p
                     className={`${
-                      c === cat ? "bg-opacity-100" : "bg-opacity-0"
-                    } w-1/4 py-5 border-[1px] bg-[#282828] border-solid border-[#ccc] border-b-[#333] rounded-t-lg transition-all duration-700`}
+                      c === cat ? "text-white" : "text-[#333]"
+                    } text-[0.9375rem] font-semibold`}
                   >
-                    <p
-                      className={`${
-                        c === cat ? "text-white" : "text-[#333]"
-                      } text-[0.9375rem] font-semibold`}
-                    >
-                      {c}
-                    </p>
-                  </button>
-                );
-              })}
+                    {c}
+                  </p>
+                </button>
+              );
+            })}
           </div>
 
           {cat === "상품정보" && <DetailInfo detailImg={item.detailImg} />}
@@ -1031,7 +958,10 @@ export default function Detail({ user }) {
               firestoreReviewData={firestoreReviewData}
               modalOpen={modalOpen}
               setModalOpen={setModalOpen}
-              openReviewDetailModal={openReviewDetailModal}
+              openReviewDetailModal={(id) => {
+                setSelectedReviewId(id);
+                setReviewDetailModalOpen(true);
+              }}
               handleClickBenefitBtn={handleClickBenefitBtn}
               handleDeleteReview={handleDeleteReview}
               handleEditReview={handleEditReview}
@@ -1039,7 +969,7 @@ export default function Detail({ user }) {
               reviewEdit={reviewEdit}
               setChangeText={setChangeText}
               changeText={changeText}
-              openMyBodySizeModal={openMyBodySizeModal}
+              openMyBodySizeModal={() => setMyBodySizeModalOpen(true)}
               myBodyInfo={myBodyInfo}
             />
           )}
@@ -1049,7 +979,7 @@ export default function Detail({ user }) {
       </div>
 
       {modalOpen && (
-        <Modal user={user} onClose={closeModal}>
+        <Modal user={user} onClose={() => setModalOpen(false)}>
           <div className="flex justify-between w-full">
             <div className="w-[28%] p-5 box-border border-r-[1px] border-solid border-[#e8e8e8]">
               <img
@@ -1312,6 +1242,8 @@ export default function Detail({ user }) {
                 <Button
                   onClick={(e) => handleStoreReviewData(e)}
                   value="리뷰 쓰기"
+                  styleType="hover"
+                  styles="w-full mt-6 text-[0.875rem]"
                 />
               </div>
             </div>
@@ -1319,293 +1251,42 @@ export default function Detail({ user }) {
         </Modal>
       )}
 
-      {reviewDetailModalOpen && (
-        <DetailReviewModal onClose={closeReviewDetailModal}>
-          {selectedReviewId &&
-            firestoreReviewData
-              .filter((review) => review.id === selectedReviewId)
-              .map((review) => {
-                return (
-                  <div className="flex w-full px-4 pb-4">
-                    <div className="w-1/2">
-                      <img
-                        className="object-cover w-full rounded-lg"
-                        src={process.env.PUBLIC_URL + `/../${review.image}`}
-                        alt="detail_review_img"
-                      />
-                    </div>
+      <DetailReviewModal
+        user={user}
+        onClose={() => {
+          setSelectedReviewId(null);
+          setReviewDetailModalOpen(false);
+        }}
+        reviewDetailModalOpen={reviewDetailModalOpen}
+        datas={
+          selectedReviewId &&
+          firestoreReviewData?.filter(
+            (review) => review.id === selectedReviewId
+          )
+        }
+        reviewEdit={reviewEdit}
+        handleEditReviewSuccess={handleEditReviewSuccess}
+        changeText={changeText}
+        setChangeText={setChangeText}
+        handleClickBenefitBtn={handleClickBenefitBtn}
+        handleEditReview={handleEditReview}
+        handleDeleteReview={handleDeleteReview}
+      />
 
-                    <div className="box-border w-1/2 px-5">
-                      <div className="w-full pb-4 pl-5 box-border flex items-center border-b-[1px] shadow-lg">
-                        <img
-                          className="w-[65px] h-[65px] object-cover rounded-lg"
-                          src={process.env.PUBLIC_URL + `/../${review.image}`}
-                          alt="detail_review_img"
-                        />
-                        <div className="ml-4">
-                          <div className="flex items-center">
-                            <RatingResult2 ratingValue={review.ratingValue} />
-                            <p className="ml-1 mt-[-5px]">
-                              {review.ratingValue}
-                            </p>
-                          </div>
-
-                          <p className="text-[0.75rem] text-[#888]">
-                            {!review.phoneNumber
-                              ? review.profileDisplayName
-                              : review.phoneNumber.slice(0, 7) + "***"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="w-full py-5 text-[0.8125rem]">
-                        <div className="w-full p-3 box-border text-[#898989] border-[1px] border-dotted border-[#dcdcdc] rounded-lg">
-                          <p className="mb-2">{`선택한 옵션 : ${review.reviewColor} / ${review.reviewSize}`}</p>
-                          <p className="mb-2">{`키 : ${review.reviewHeight}cm | 몸무게 : ${review.reviewWeight}kg | 평소 사이즈 : ${review.reviewBodySize}size | 발사이즈 : ${review.reviewBodyFoot}mm`}</p>
-                          <p className="text-[#ff827e]">{`색상 : ${review.reviewColorSatisfaction} | 사이즈 : ${review.reviewSizeSatisfaction}`}</p>
-                        </div>
-
-                        {reviewEdit.id !== review.id && (
-                          <p className="mt-3 text-[0.75rem] text-[#222]">
-                            {review.content}
-                          </p>
-                        )}
-
-                        {reviewEdit.id === review.id && (
-                          <form
-                            className="flex"
-                            onSubmit={(e) =>
-                              handleEditReviewSuccess(e, review.detailUserId)
-                            }
-                          >
-                            <input
-                              defaultValue={changeText}
-                              onChange={(e) => {
-                                e.preventDefault();
-                                setChangeText(e.target.value);
-                              }}
-                              className="w-3/4 mt-5 p-2 box-border border-[1px] border-solid border-[#afafaf] rounded-lg outline-none text-[0.875rem] placeholder:text-[0.875rem]"
-                              type="text"
-                              placeholder="수정할 내용을 입력하세요."
-                            />
-                            <button
-                              type="submit"
-                              className="w-[120px] ml-2 mt-5  bg-[#282828] text-white rounded-lg"
-                            >
-                              수정 완료
-                            </button>
-                          </form>
-                        )}
-
-                        <div className="flex items-center justify-between mt-10">
-                          <p className="text-[0.8125rem] text-[#8D8B8B]">
-                            <span className="text-[0.875rem] text-[#000] font-semibold">{`${review?.count?.reduce(
-                              (sum, benifit) => {
-                                return sum + benifit.count;
-                              },
-                              0
-                            )}명`}</span>
-                            에게 도움이 되었습니다.
-                          </p>
-
-                          <button
-                            onClick={(e) =>
-                              handleClickBenefitBtn(e, review.detailUserId)
-                            }
-                            className={`${
-                              review?.count?.find((c) =>
-                                c?.userId?.includes(user?.uid)
-                              )?.count === 1
-                                ? "bg-opacity-100 text-[#ffffff]"
-                                : "bg-opacity-0 text-[#ff4273]"
-                            } w-[100px] h-[30px] ml-2 border-[1px] border-solid border-[#ff4273] bg-[#ff4273] text-[0.8125rem] flex justify-center items-center transition-all duration-700`}
-                          >
-                            도움이 돼요
-                          </button>
-                        </div>
-
-                        <div className="flex items-center mt-14">
-                          {user && user.uid === review.userId && (
-                            <>
-                              {reviewEdit.id !== review.id && (
-                                <button
-                                  onClick={(e) =>
-                                    handleEditReview(
-                                      e,
-                                      review.password,
-                                      review.id
-                                    )
-                                  }
-                                  className={`${
-                                    reviewEdit.id == review.id
-                                      ? "mr-none"
-                                      : "mr-2"
-                                  } w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                                >
-                                  수정하기
-                                </button>
-                              )}
-
-                              <button
-                                onClick={(e) =>
-                                  handleDeleteReview(
-                                    e,
-                                    review?.password,
-                                    review?.detailUserId
-                                  )
-                                }
-                                className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                              >
-                                삭제하기
-                              </button>
-                            </>
-                          )}
-
-                          {user === null && (
-                            <>
-                              {reviewEdit.id !== review.id && (
-                                <button
-                                  onClick={(e) =>
-                                    handleEditReview(
-                                      e,
-                                      review.password,
-                                      review.id
-                                    )
-                                  }
-                                  className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                                >
-                                  수정하기
-                                </button>
-                              )}
-
-                              <button
-                                onClick={(e) =>
-                                  handleDeleteReview(
-                                    e,
-                                    review?.password,
-                                    review?.detailUserId
-                                  )
-                                }
-                                className={`${
-                                  reviewEdit.id === review.id
-                                    ? "ml-none"
-                                    : "ml-2"
-                                } w-[120px] h-[40px]  bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                              >
-                                삭제하기
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-        </DetailReviewModal>
-      )}
-
-      {myBodySizeModalOpen && (
-        <MyBodySizeModal onClose={closeMyBodySizeModal}>
-          <div className="box-border w-full px-4">
-            <div className="text-center mt-[15px] mb-[25px] pb-[25px] border-b-[2px] border-solid border-[#282828]">
-              <h1 className="text-[1.25rem] font-semibold">
-                나의 체형 정보 입력
-              </h1>
-            </div>
-
-            <div className="box-border px-2 py-3">
-              <div className="w-full mb-3 py-4 px-5 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg flex items-center">
-                <label
-                  className="w-[30%] border-r-[1px] border-solid border-[#282828] text-[0.875rem]"
-                  htmlFor="myHeight"
-                >
-                  키
-                </label>
-                <input
-                  className="w-[70%] outline-none text-center"
-                  onChange={(e) => {
-                    setMyHeight(e.target.value);
-                  }}
-                  value={myHeight}
-                  id="myHeight"
-                  type="text"
-                  placeholder={`${myBodyInfo ? myBodyInfo.myHeight : "0"}`}
-                />
-              </div>
-
-              <div className="w-full mb-3 py-4 px-5 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg flex items-center">
-                <label
-                  className="w-[30%] border-r-[1px] border-solid border-[#282828] text-[0.875rem]"
-                  htmlFor="myWeight"
-                >
-                  몸무게
-                </label>
-                <input
-                  className="w-[70%] outline-none text-center"
-                  onChange={(e) => {
-                    setMyWeight(e.target.value);
-                  }}
-                  value={myWeight}
-                  id="myWeight"
-                  type="text"
-                  placeholder={`${myBodyInfo ? myBodyInfo.myWeight : "0"}`}
-                />
-              </div>
-
-              <div className="w-full mb-3 py-4 px-5 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg flex items-center">
-                <label
-                  className="w-[30%] border-r-[1px] border-solid border-[#282828] text-[0.875rem]"
-                  htmlFor="mySize"
-                >
-                  사이즈
-                </label>
-                <input
-                  className="w-[70%] outline-none text-center"
-                  onChange={(e) => {
-                    setMySize(e.target.value);
-                  }}
-                  value={mySize}
-                  id="mySize"
-                  type="text"
-                  placeholder={`${myBodyInfo ? myBodyInfo.mySize : "0"}`}
-                />
-              </div>
-
-              <div className="w-full py-4 px-5 box-border border-[1px] border-solid border-[#c1c1c1] rounded-lg flex items-center">
-                <label
-                  className="w-[30%] border-r-[1px] border-solid border-[#282828] text-[0.875rem]"
-                  htmlFor="myFoot"
-                >
-                  발사이즈
-                </label>
-                <input
-                  className="w-[70%] outline-none text-center"
-                  onChange={(e) => {
-                    setMyFootSize(e.target.value);
-                  }}
-                  value={myFootSize}
-                  id="myFoot"
-                  type="text"
-                  placeholder={`${myBodyInfo ? myBodyInfo.myFootSize : "0"}`}
-                />
-              </div>
-
-              <div className="flex justify-center w-full mb-3">
-                <Button
-                  onClick={(e) => handleStoreBodySizeInfo(e)}
-                  value="등록"
-                />
-              </div>
-            </div>
-          </div>
-        </MyBodySizeModal>
-      )}
+      <MyBodySizeModal
+        setMyBodySizeModalOpen={setMyBodySizeModalOpen}
+        myBodySizeModalOpen={myBodySizeModalOpen}
+        setMyHeight={setMyHeight}
+        myHeight={myHeight}
+        setMyWeight={setMyWeight}
+        myWeight={myWeight}
+        setMySize={setMySize}
+        mySize={mySize}
+        setMyFootSize={setMyFootSize}
+        myFootSize={myFootSize}
+        myBodyInfo={myBodyInfo}
+        handleStoreBodySizeInfo={handleStoreBodySizeInfo}
+      />
     </div>
   );
 }
-
-export const salePercent = (price, salePrice) => {
-  const percent = parseInt(price / (price - salePrice));
-  return percent + "%";
-};

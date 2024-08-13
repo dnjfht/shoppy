@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import axios from "axios";
 
 export const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,45 +11,8 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const authService = getAuth(app);
 
-// const userInfo = JSON.parse(
-//   sessionStorage.getItem(
-//     "firebase:authUser:AIzaSyBuSJcIvQdMItFfKi8IchzBpWfqY9YUDFE:[DEFAULT]"
-//   )
-// );
-
-// uid 값에 접근하기
-// const uid = userInfo.uid;
-
-// uid를 출력하거나 다른 작업에 활용할 수 있습니다.
-// console.log(uid);
-
 export function onUserStateChange(callback) {
   onAuthStateChanged(authService, (user) => {
     callback(user);
   });
-}
-
-// 데이터를 추가할때 사용
-export async function loadCartServer(user) {
-  const response = await axios.get(
-    `https://birthday-party-shop-backend-server.vercel.app/cart/${user.uid}`
-  );
-  return response?.data?.cartData;
-}
-
-// 데이터를 수정할 때 사용
-export async function setCartServer(user, cartData) {
-  await axios.post(
-    `https://birthday-party-shop-backend-server.vercel.app/cart/${user.uid}`,
-    {
-      data: {
-        cartData,
-      },
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import RatingResult2 from "./RatingResult2";
 
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
@@ -37,7 +37,7 @@ export default function ReviewImgSlider({
             alt={`Review ${review.id}`}
             className="w-full h-[168px] object-cover rounded-lg"
           />
-          <div className="w-full h-full p-4 box-border rounded-lg absolute bottom-0 left-0 bg-black bg-opacity-50 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 flex flex-col items-center justify-center">
+          <div className="box-border absolute bottom-0 left-0 flex flex-col items-center justify-center w-full h-full p-4 text-white transition-opacity duration-300 bg-black bg-opacity-50 rounded-lg opacity-0 group-hover:opacity-100">
             <p className="mb-1 [0.8125rem]">
               {review?.profileDisplayName
                 ? review?.profileDisplayName
@@ -56,7 +56,7 @@ export default function ReviewImgSlider({
 
   return (
     <div className="flex flex-col justify-center">
-      <div className="mb-1 flex items-center justify-end">
+      <div className="flex items-center justify-end mb-1">
         <button
           onClick={handlePrevSlide}
           className={`btn ${

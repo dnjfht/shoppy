@@ -164,7 +164,6 @@ export const SignUpTitleTextWrapper = styled.div`
 
   margin: 30px 0;
   text-align: center;
-  justify-content: center;
 
   @media (max-width: 560px) {
     width: 510px;

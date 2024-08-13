@@ -4,7 +4,7 @@ import {
   setPersistence,
   updateProfile,
 } from "firebase/auth";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import { authService } from "../api/firebase";

@@ -10,7 +10,6 @@ export default function Root({
   user,
   setUser,
   allCarts,
-  setAllCarts,
   nonMemberAllCarts,
   setNonMemberAllCarts,
 }) {
@@ -21,7 +20,7 @@ export default function Root({
   return (
     <>
       <ScrollRestoration />
-      <div className="w-full" ref={contentRef}>
+      <div className="w-full max-w-full" ref={contentRef}>
         <div className="w-full">
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={true} />
@@ -29,7 +28,6 @@ export default function Root({
               user={user}
               setUser={setUser}
               allCarts={allCarts}
-              setAllCarts={setAllCarts}
               nonMemberAllCarts={nonMemberAllCarts}
               setNonMemberAllCarts={setNonMemberAllCarts}
             />

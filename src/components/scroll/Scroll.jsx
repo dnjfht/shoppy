@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Button from "../button/Button";
 
 export default function Scroll({ contentRef }) {
   const [scrollY, setScrollY] = useState(0);
@@ -50,23 +51,23 @@ export default function Scroll({ contentRef }) {
   }, []);
 
   return (
-    <div className="flex flex-col text-[0.8rem] fixed bottom-5 right-5">
-      <button
+    <div className="flex flex-col sm:text-[0.8rem] 3sm:text-[0.675rem] fixed bottom-5 right-5">
+      <Button
+        value="UP"
         onClick={handleTop}
-        className={`${
+        styleType="blackBg"
+        styles={`${
           showButton ? "opacity-100" : "opacity-0"
-        } "w-16 h-16 bg-slate-900 rounded-full drop-shadow-[0_5px_2px_rgba(0,0,0,0.25)] text-white justify-center items-center animate-bounce transition-all duration-700`}
-      >
-        <p>UP</p>
-      </button>
-      <button
+        } mt-2 sm:w-16 sm:h-16 3sm:w-12 3sm:h-12 rounded-full drop-shadow-[0_5px_2px_rgba(0,0,0,0.25)] text-white justify-center items-center animate-bounce transition-all duration-700`}
+      />
+      <Button
+        value="DOWN"
         onClick={handleBottom}
-        className={`${
+        styleType="blackBg"
+        styles={`${
           showButton ? "opacity-100" : "opacity-0"
-        } w-16 h-16 mt-2 bg-slate-900 rounded-full drop-shadow-[0_5px_2px_rgba(0,0,0,0.25)] text-white flex justify-center items-center animate-bounce transition-all duration-700`}
-      >
-        <p>DOWN</p>
-      </button>
+        } mt-2 sm:w-16 sm:h-16 3sm:w-12 3sm:h-12 rounded-full drop-shadow-[0_5px_2px_rgba(0,0,0,0.25)] text-white justify-center items-center animate-bounce transition-all duration-700`}
+      />
     </div>
   );
 }

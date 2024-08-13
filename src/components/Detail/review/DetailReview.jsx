@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RatingResult from "./RatingResult";
 import ReviewImgSlider from "./ReviewImgSlider";
 import { isLoggedIn } from "../../../utils/utils";
 import RatingResult2 from "./RatingResult2";
+import Button from "../../button/Button";
 
 import { BsToggleOff, BsToggleOn } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
@@ -23,10 +24,6 @@ export default function DetailReview({
   openMyBodySizeModal,
   myBodyInfo,
 }) {
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
   const [color, setColor] = useState("선택없음");
   const [size, setSize] = useState("선택없음");
   const [filter, setFilter] = useState("최신순");
@@ -53,16 +50,16 @@ export default function DetailReview({
   // 별점 평균값 구하기
 
   // 1.상세페이지 제품 관련 리뷰만 필터링하기
-  const accordReview = firestoreReviewData.filter(
+  const accordReview = firestoreReviewData?.filter(
     (data) => data.productId === item.id
   );
   // 2. 필터링 해준 배열 안에서 ratingValue 평균 구하기.
   const averageRating =
     accordReview?.reduce((sum, item) => sum + item.ratingValue, 0) /
-    accordReview.length;
+    accordReview?.length;
   // 3. 결과로 나온 값의 소숫점을 모두 잘라내기.
   const averageRatingResult =
-    accordReview.length === 0
+    accordReview?.length === 0
       ? 0
       : Math.floor((averageRating * 1000) / 1000).toFixed(0);
 
@@ -358,7 +355,7 @@ export default function DetailReview({
             </div>
             <button
               className="pb-1 border-b-[1px] border-solid border-[#ff4273] text-[#ff4273] text-[0.875rem] italic"
-              onClick={openModal}
+              onClick={() => setModalOpen(true)}
             >
               리뷰쓰기
             </button>
@@ -503,17 +500,18 @@ export default function DetailReview({
                       {!review.phoneNumber && user?.uid === review?.userId && (
                         <>
                           {reviewEdit.id !== review.id && (
-                            <button
+                            <Button
+                              value="수정하기"
                               onClick={(e) =>
                                 handleEditReview(e, review.password, review.id)
                               }
-                              className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                            >
-                              수정하기
-                            </button>
+                              styleType="hover"
+                              styles="w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]"
+                            />
                           )}
 
-                          <button
+                          <Button
+                            value="삭제하기"
                             onClick={(e) =>
                               handleDeleteReview(
                                 e,
@@ -521,42 +519,41 @@ export default function DetailReview({
                                 review?.detailUserId
                               )
                             }
-                            className={`${
+                            styleType="hover"
+                            styles={`${
                               reviewEdit.id === review.id ? "ml-none" : "ml-2"
-                            } w-[120px] h-[40px]  bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                          >
-                            삭제하기
-                          </button>
+                            } w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]`}
+                          />
                         </>
                       )}
 
-                      {review.phoneNumber && (
+                      {review.phoneNumber && user?.uid === review?.userId && (
                         <>
                           {reviewEdit.id !== review.id && (
-                            <button
+                            <Button
+                              value="수정하기"
                               onClick={(e) =>
                                 handleEditReview(e, review.password, review.id)
                               }
-                              className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                            >
-                              수정하기
-                            </button>
+                              styleType="hover"
+                              styles="w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]"
+                            />
                           )}
 
-                          <button
+                          <Button
+                            value="삭제하기"
                             onClick={(e) =>
                               handleDeleteReview(
                                 e,
-                                review.password,
-                                review.detailUserId
+                                review?.password,
+                                review?.detailUserId
                               )
                             }
-                            className={`${
-                              reviewEdit.id !== review.id ? "ml-2" : "ml-none"
-                            } w-[120px] h-[40px]  bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                          >
-                            삭제하기
-                          </button>
+                            styleType="hover"
+                            styles={`${
+                              reviewEdit.id === review.id ? "ml-none" : "ml-2"
+                            } w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]`}
+                          />
                         </>
                       )}
                     </div>

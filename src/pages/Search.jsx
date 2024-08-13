@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import ProductCard from "../components/product/ProductCard";
+import Products from "../components/product/Products";
 
 import { GoX } from "react-icons/go";
 
@@ -21,19 +21,10 @@ export default function Search() {
   const [maxPrice, setMaxPrice] = useState(0);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const handleDeleteText = (e) => {
-    e.preventDefault();
-
-    setSearchInput("");
-  };
-
   const searchProducts = () => {
-    if (
-      searchInput.trim().length === 0 ||
-      Number.isNaN(minPrice) ||
-      Number.isNaN(maxPrice)
-    ) {
+    if (searchInput.trim().length === 0 || isNaN(minPrice) || isNaN(maxPrice)) {
       alert("빈 칸이 존재하면 검색이 불가능합니다.");
+      return;
     } else if (searchInput.trim().length !== 0) {
       const filteredProducts = items.filter((item) => {
         const titleMatch = item.title.toLowerCase().includes(searchInput);
@@ -46,7 +37,6 @@ export default function Search() {
     }
   };
 
-  console.log(searchInput, minPrice, maxPrice);
   return (
     <div className="relative w-full">
       <div className="w-full h-[780px] bg-[rgba(0,0,0,0.5)] absolute top-0 left-0" />
@@ -74,7 +64,7 @@ export default function Search() {
 
             <button
               type="button"
-              onClick={handleDeleteText}
+              onClick={() => setSearchInput("")}
               className={`${
                 searchInput.length !== 0 ? "opacity-100" : "opacity-0"
               } w-10 h-10 bg-black rounded-full absolute top-5 right-5 flex items-center justify-center text-[1.4rem] transition-all duration-700`}
@@ -136,11 +126,7 @@ export default function Search() {
             정확한 검색어 인지 확인하시고 다시 검색해 주세요.
           </p>
         ) : (
-          <ul className="flex flex-wrap w-full mt-5">
-            {filteredProducts.map((item, index) => {
-              return <ProductCard key={item.id} item={item} index={index} />;
-            })}
-          </ul>
+          <Products items={filteredProducts} styles="mt-5" />
         )}
       </div>
     </div>

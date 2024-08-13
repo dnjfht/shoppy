@@ -1,9 +1,13 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { onUserStateChange } from "./api/firebase";
+import { isLoggedIn } from "./utils/utils";
+import { loadCartServer } from "./api/cart";
+
 import Main from "./pages/Main";
 import Root from "./pages/Root";
 import Detail from "./pages/Detail";
 import MyCart from "./pages/MyCart";
-import { useEffect, useState } from "react";
 import NotFoundPage from "./pages/NotFoundPage";
 import NewProducts from "./pages/NewProducts";
 import BestProducts from "./pages/BestProducts";
@@ -12,26 +16,36 @@ import Search from "./pages/Search";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import MyPage from "./pages/MyPage/MyPage";
-import { onUserStateChange } from "./api/firebase";
 
 function App() {
   const [user, setUser] = useState();
-  const [allCarts, setAllCarts] = useState([]);
-  const [nonMemberAllCarts, setNonMemberAllCarts] = useState([]);
+  const [allCarts, setAllCarts] = useState([]); // user가 있을 때 장바구니에 담긴 물건의 갯수
+  const [nonMemberAllCarts, setNonMemberAllCarts] = useState([]); // user가 없을 때 장바구니에 담긴 물건의 갯수
 
   useEffect(() => {
     onUserStateChange((user) => {
-      console.log(user);
       setUser(user);
     });
   }, []);
 
   useEffect(() => {
-    const carts = localStorage.getItem("carts");
-    const nonMemberCarts = JSON.parse(carts);
-    console.log(nonMemberCarts);
-    setNonMemberAllCarts(nonMemberCarts);
+    if (isLoggedIn()) {
+      setNonMemberAllCarts([]);
+    } else {
+      const nonMemberCarts = JSON.parse(localStorage.getItem("carts"));
+      setNonMemberAllCarts(nonMemberCarts);
+    }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      const getUserCart = async () => {
+        const cart = await loadCartServer(user);
+        setAllCarts(cart);
+      };
+      getUserCart();
+    }
+  }, [user]);
 
   const router = createBrowserRouter([
     {
@@ -41,7 +55,6 @@ function App() {
           user={user}
           setUser={setUser}
           allCarts={allCarts}
-          setAllCarts={setAllCarts}
           nonMemberAllCarts={nonMemberAllCarts}
           setNonMemberAllCarts={setNonMemberAllCarts}
         />
@@ -67,7 +80,6 @@ function App() {
             <Detail
               user={user}
               setAllCarts={setAllCarts}
-              nonMemberAllCarts={nonMemberAllCarts}
               setNonMemberAllCarts={setNonMemberAllCarts}
             />
           ),

@@ -1,4 +1,3 @@
-import React from "react";
 import { BsChevronRight } from "react-icons/bs";
 
 export default function NextArrow({ onClick }) {
@@ -6,7 +5,7 @@ export default function NextArrow({ onClick }) {
     <>
       <div
         onClick={onClick}
-        className="text-[rgba(255,255,255,0.6) text-[4.4rem] absolute top-[42%] right-[14%] z-[9999999] cursor-pointer"
+        className="text-[rgba(255,255,255,0.6) sm:text-[4.4rem] 3sm:text-[3rem] absolute top-[42%] sm:right-[14%] 3sm:right-[4%] z-[9999999] cursor-pointer"
       >
         <BsChevronRight />
       </div>

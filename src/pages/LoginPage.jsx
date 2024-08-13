@@ -53,48 +53,8 @@ const LoginPage = () => {
     }
   };
 
-  // 이메일, 비밀번호 유효성 검사
-  // const checkValidation = () => {
-  //   const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-  //   const passwordRegex =
-  //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
-  //   const checkEmailValidation = email.match(emailRegex);
-  //   const checkPasswordValidation = password.match(passwordRegex);
-
-  //   if (!email || !checkEmailValidation) {
-  //     if (!email) {
-  //       alert("이메일을 입력해주세요.");
-  //       emailRef?.current?.focus();
-  //       return false;
-  //     } else {
-  //       alert("이메일 형식을 올바르게 입력해주세요.");
-  //       emailRef?.current?.focus();
-  //       return false;
-  //     }
-  //   }
-
-  //   if (!password || !checkPasswordValidation) {
-  //     if (!password) {
-  //       alert("비밀번호를 입력해주세요.");
-  //       passwordRef?.current?.focus();
-  //       return false;
-  //     } else {
-  //       alert(
-  //         "비밀번호는 대소문자, 특수문자를 포함하여 8자리 이상 입력해주세요."
-  //       );
-  //       passwordRef?.current?.focus();
-  //       setPassword("");
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // };
-
   // 로그인
   const submitLogin = () => {
-    // 이메일, 비밀번호 유효성 검사 확인
-    // if (!checkValidation()) return;
-
     // setPersistence => 세션스토리지에 유저 정보 저장
     setPersistence(authService, browserSessionPersistence)
       .then(() => signInWithEmailAndPassword(authService, email, password))
@@ -139,7 +99,6 @@ const LoginPage = () => {
       changePassword={changePassword}
       passwordRef={passwordRef}
       passwordValid={passwordValid} // login 실시간 유효성 검사
-      // socialBtn={socialBtn}
       submitLogin={submitLogin}
     />
   );

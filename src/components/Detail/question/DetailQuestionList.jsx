@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { CiLock } from "react-icons/ci";
 import { PiCaretRightThin, PiCaretLeftThin } from "react-icons/pi";
@@ -93,7 +93,7 @@ export default function DetailQuestionList({
                   }
                 >
                   <td className="py-4">{startIndex + index + 1}</td>
-                  <td className="py-4 flex justify-center items-center cursor-pointer">
+                  <td className="flex items-center justify-center py-4 cursor-pointer">
                     <p className="mr-2">
                       <CiLock />
                     </p>
@@ -109,9 +109,9 @@ export default function DetailQuestionList({
               ))}
         </tbody>
       </table>
-      <div className="w-full flex justify-center items-center absolute bottom-0">
+      <div className="absolute bottom-0 flex items-center justify-center w-full">
         {totalPages > 1 && (
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <button
               className="mr-4"
               onClick={() => handlePageChange(currentPage - 1)}

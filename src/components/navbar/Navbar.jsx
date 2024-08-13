@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authService, loadCartServer } from "../../api/firebase";
 import { isLoggedIn } from "../../utils/utils";
+import { authService } from "../../api/firebase";
+
 import User from "../navbar/User";
+import Button from "../button/Button";
+import Util from "./Util";
 
 import { FiSearch } from "react-icons/fi";
 import { IoIosCart } from "react-icons/io";
 
-export default function Navbar({
-  user,
-  setAllCarts,
-  allCarts,
-  nonMemberAllCarts,
-}) {
+export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
   const navigate = useNavigate();
 
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -20,6 +18,7 @@ export default function Navbar({
   function onScroll() {
     setScrollHeight(window.scrollY);
   }
+
   useEffect(() => {
     window.addEventListener("scroll", onScroll);
     return () => {
@@ -29,31 +28,12 @@ export default function Navbar({
 
   const category = ["All", "Woman", "Man", "Shoes"];
 
-  const onLogoutClick = () => {
-    if (window.confirm("로그아웃 하시겠습니까?")) {
-      return authService.signOut().then(() => {
-        sessionStorage.clear(); // ?
-
-        alert("로그아웃 되었습니다.");
-
-        // navigate("/", { replace: true });
-        window.location.href = "/";
-      });
-    } else {
-      return;
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      const getUserCart = async () => {
-        let cart;
-        cart = await loadCartServer(user);
-        setAllCarts(cart);
-      };
-      getUserCart();
-    }
-  }, [user, setAllCarts]);
+  const allCartsNum =
+    isLoggedIn() && allCarts.length
+      ? allCarts.length
+      : !isLoggedIn() && nonMemberAllCarts.length
+      ? nonMemberAllCarts.length
+      : 0;
 
   return (
     <div
@@ -61,108 +41,96 @@ export default function Navbar({
         scrollHeight >= 140
           ? "bg-[rgba(255,255,255,100)] shadow-lg"
           : "bg-[rgba(255,255,255,0)]"
-      } w-full h-[130px] fixed left-0 top-0 z-[99999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
+      } w-full lg:h-[130px] 3sm:h-auto lg:py-0 sm:py-4 py-4 fixed left-0 top-0 z-[99999999] transition-all duration-700 hover:bg-[rgba(255,255,255,100)] hover:shadow-lg cursor-pointer`}
     >
-      <div className="flex items-center justify-between w-10/12 h-full mx-auto">
-        <ul className="flex items-center text-[2.5rem] font-[InkLipquid]">
-          <li
-            onClick={() => navigate("/")}
-            className="flex items-center cursor-pointer"
-          >
-            <img
-              className="xl:w-[5rem] md:w-[3.6rem] object-cover"
-              src={process.env.PUBLIC_URL + "/image/logo.png"}
-              alt="logo"
-            />
-            <p className="xl:text-[2.5rem] md:text-[1.6rem] ml-3">
-              Birthday Party
-            </p>
-          </li>
-        </ul>
+      <div className="flex items-center justify-between w-full sm:max-w-[90%] 3sm:max-w-[96%] h-full mx-auto flex-wrap">
+        <Button
+          onClick={() => navigate("/")}
+          styles="flex items-center text-[2.5rem] font-[InkLipquid] order-1"
+        >
+          <img
+            className="lg:w-[5rem] md:w-[4rem] sm:w-[3rem] 3sm:w-[2.4rem] object-cover"
+            src={process.env.PUBLIC_URL + "/image/logo.png"}
+            alt="logo"
+          />
+          <p className="lg:text-[2.5rem] md:text-[1.8rem] sm:text-[1.6rem] text-[1.6rem] ml-3 sm:block 3sm:hidden">
+            Birthday Party
+          </p>
+        </Button>
 
-        <ul className="w-2/5 flex items-center justify-between text-[1.2rem]">
-          <li
+        <ul className="lg:w-2/5 3sm:w-full lg:mt-0 sm:mt-4 mt-4 flex items-center justify-between lg:text-[1.2rem] sm:text-[1.1rem] 3sm:text-[0.8rem] lg:order-2 sm:order-3 order-3">
+          <Util
+            text="New"
             onClick={() => {
               navigate("/products/new");
             }}
-            className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700"
-          >
-            New
-          </li>
-          <li
+          />
+          <Util
+            text="Best"
             onClick={() => {
               navigate("/products/best");
             }}
-            className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700"
-          >
-            Best
-          </li>
+          />
 
-          {category?.map((c, index) => {
-            return (
-              <li
-                onClick={() => {
-                  navigate(`/products/${c}`);
-                }}
-                key={index}
-                className="relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[0.1rem] after:bg-[#282828] hover:after:w-full transition-all duration-700"
-              >
-                {c}
-              </li>
-            );
-          })}
+          {category.map((c, index) => (
+            <Util
+              key={index}
+              text={c}
+              onClick={() => {
+                navigate(`/products/${c}`);
+              }}
+            />
+          ))}
         </ul>
 
-        <ul
-          className={`${
-            user ? "w-[24%]" : "w-[12%]"
-          } flex justify-between items-center text-[1.2rem] text-center`}
-        >
-          <li
+        <ul className="flex justify-between items-center xl:text-[1.2rem] lg:text-[1.1rem] sm:text-[1rem] 3sm:text-[0.8rem] text-center xl:gap-x-6 sm:gap-x-4 gap-x-4 lg:order-3 sm:order-2 order-2">
+          <Util
+            icon={<FiSearch />}
+            styles="flex items-center justify-center"
             onClick={() => {
               navigate("/search");
             }}
-            className="flex items-center justify-center"
-          >
-            <FiSearch />
-          </li>
-          <li
+          />
+          <Util
+            icon={<IoIosCart />}
+            styles="flex justify-center items-center xl:text-[1.6rem] lg:text-[1.4rem] sm:text-[1.2rem] 3sm:text-[1.1rem] relative"
             onClick={() => {
               navigate("/carts");
             }}
-            className="flex justify-center items-center text-[1.6rem] relative"
           >
-            <IoIosCart />
-            <p className="w-5 h-5 bg-[#ff4273] text-white rounded-full text-[0.9rem] flex justify-center items-center absolute top-[-5px] right-[-8px]">
-              {user !== null && (allCarts?.length ?? 0)}
-              {user === null && (nonMemberAllCarts?.length ?? 0)}
+            <p className="sm:w-5 sm:h-5 3sm:w-4 3sm:h-4 bg-[#ff4273] text-white rounded-full text-[0.9rem] flex justify-center items-center absolute top-[-5px] right-[-8px]">
+              {allCartsNum}
             </p>
-          </li>
-          {isLoggedIn() && (
-            <li className="flex items-center justify-center">
-              {isLoggedIn && user && <User user={user} />}
-            </li>
-          )}
+          </Util>
+          <Util
+            styles={`${isLoggedIn() ? "block" : "hidden"}
+           flex items-center justify-center`}
+            onClick={() => {
+              navigate("/carts");
+            }}
+          >
+            <User user={user} />
+          </Util>
+          <Util
+            text={user ? "Logout" : "Login"}
+            styles="flex items-center justify-center"
+            onClick={() => {
+              if (isLoggedIn()) {
+                if (window.confirm("로그아웃 하시겠습니까?")) {
+                  return authService.signOut().then(() => {
+                    sessionStorage.clear();
 
-          {!isLoggedIn() && (
-            <li
-              onClick={() => {
+                    alert("로그아웃 되었습니다.");
+                    window.location.href = "/";
+                  });
+                } else {
+                  return;
+                }
+              } else {
                 navigate("/login");
-              }}
-              className="flex items-center justify-center"
-            >
-              <button>Login</button>
-            </li>
-          )}
-
-          {isLoggedIn() && (
-            <li
-              onClick={onLogoutClick}
-              className="flex items-center justify-center"
-            >
-              <button>Logout</button>
-            </li>
-          )}
+              }
+            }}
+          />
         </ul>
       </div>
     </div>

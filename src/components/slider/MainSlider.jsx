@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import NextArrow from "./NextArrow";
@@ -36,33 +35,25 @@ export default function MainSlider({ autoplay = true }) {
     dotsClass: "dots_custom",
   };
 
-  const {
-    isLoading,
-    error,
-    data: bannerImg,
-  } = useQuery(["items"], async () => {
+  const { data } = useQuery(["items"], async () => {
     return axios //
       .get("/data/Product.json") //
       .then((res) => res.data.items);
   });
 
   return (
-    <>
-      {isLoading && "Loading..."}
-      {error && "Occured error...!"}
-      <Slider {...settings}>
-        {bannerImg &&
-          bannerImg?.banner?.map((img) => {
-            return (
-              <div key={img.id}>
-                <img
-                  src={process.env.PUBLIC_URL + `${img.image}`}
-                  alt="bannerImg"
-                />
-              </div>
-            );
-          })}
-      </Slider>
-    </>
+    <Slider {...settings}>
+      {data?.banner?.map((img) => {
+        return (
+          <div key={img.id}>
+            <img
+              src={process.env.PUBLIC_URL + `${img.image}`}
+              alt="bannerImg"
+              className="lg:h-auto sm:h-[600px] h-[600px] object-cover"
+            />
+          </div>
+        );
+      })}
+    </Slider>
   );
 }

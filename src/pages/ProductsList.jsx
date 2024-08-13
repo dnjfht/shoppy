@@ -1,80 +1,44 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import ProductCard from "../components/product/ProductCard";
+import Products from "../components/product/Products";
 
 export default function ProductsList() {
   const params = useParams().listName;
-  console.log(params);
+  const categoryTitle =
+    params === "All"
+      ? "All"
+      : params === "Woman"
+      ? "Woman"
+      : params === "Man"
+      ? "Man"
+      : "Shoes";
 
-  const {
-    isLoading,
-    error,
-    data: items,
-  } = useQuery(["items"], async () => {
+  const { isLoading, error, data } = useQuery(["items"], async () => {
     return axios //
       .get("/data/Product.json") //
       .then((res) => res.data.items);
   });
 
+  const items = data?.products.filter((item) => {
+    return params === "Woman"
+      ? item.type.includes("Woman")
+      : params === "Man"
+      ? item.type.includes("Man")
+      : params === "Shoes"
+      ? item.type.includes("Shoes")
+      : true;
+  });
+
   return (
     <div className="w-full text-[1.875rem]">
       <div className="w-[1400px] mx-auto pt-32 py-10 text-center">
-        <h1 className="my-10 font-semibold">
-          {params === "All"
-            ? "All"
-            : params === "Woman"
-            ? "Woman"
-            : params === "Man"
-            ? "Man"
-            : "Shoes"}
-        </h1>
+        <h1 className="my-10 font-semibold">{categoryTitle}</h1>
 
         {isLoading && "Loading..."}
         {error && "Occured error...!"}
 
-        <ul className="flex flex-wrap">
-          {/* type "All" filter */}
-          {items &&
-            params === "All" &&
-            items?.products?.map((item, index) => {
-              return <ProductCard key={item.id} item={item} index={index} />;
-            })}
-
-          {/* type "Woman" filter */}
-          {items &&
-            params === "Woman" &&
-            items?.products
-              ?.filter((item) => {
-                return item.type.includes("Woman");
-              })
-              ?.map((item, index) => {
-                return <ProductCard key={item.id} item={item} index={index} />;
-              })}
-
-          {/* type "Man" filter */}
-          {items &&
-            params === "Man" &&
-            items?.products
-              ?.filter((item) => {
-                return item.type.includes("Man");
-              })
-              ?.map((item, index) => {
-                return <ProductCard key={item.id} item={item} index={index} />;
-              })}
-
-          {/* type "Shoes" filter */}
-          {items &&
-            params === "Shoes" &&
-            items?.products
-              ?.filter((item) => {
-                return item.type.includes("Shoes");
-              })
-              ?.map((item, index) => {
-                return <ProductCard key={item.id} item={item} index={index} />;
-              })}
-        </ul>
+        <Products items={items} />
       </div>
     </div>
   );

@@ -432,7 +432,12 @@ export default function DetailQuestion({ user, item }) {
               />
             </div>
 
-            <Button onClick={(e) => handleAddQuestionData(e)} value="등록" />
+            <Button
+              onClick={(e) => handleAddQuestionData(e)}
+              value="등록"
+              styleType="hover"
+              styles="w-full mt-6 text-[0.875rem]"
+            />
           </div>
         </DetailQuestionInputModal>
       )}

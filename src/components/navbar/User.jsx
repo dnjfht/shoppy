@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function User({ user }) {
@@ -9,24 +8,19 @@ export default function User({ user }) {
       onClick={() => {
         navigate("/mypage");
       }}
-      className="w-full flex justify-center items-center"
+      className={`${
+        user ? "block" : "hidden"
+      } flex justify-center items-center`}
     >
       <img
-        className={`${
-          user.photoURL ? "block" : "hidden"
-        } xl:w-10 lg:w-14 w-18 object-cover rounded-full`}
-        src={user.photoURL}
-        alt={user.displayName}
+        className="object-cover rounded-full sm:w-10 3sm:w-8 aspect-square"
+        src={
+          user?.photoURL ?? process.env.PUBLIC_URL + "/image/defaultImage.png"
+        }
+        alt="profile_img"
       />
-      <img
-        className={`${
-          !user.photoURL ? "block" : "hidden"
-        } xl:w-10 lg:w-14 w-18 object-cover rounded-full`}
-        src={process.env.PUBLIC_URL + "/image/defaultImage.png"}
-        alt={user.displayName}
-      />
-      <span className="2xl:block ml-2 text-[0.9375rem] hidden">
-        {user.displayName}
+      <span className="xl:block sm:hidden hidden ml-2 text-[0.9375rem]">
+        {user?.displayName}
       </span>
     </div>
   );

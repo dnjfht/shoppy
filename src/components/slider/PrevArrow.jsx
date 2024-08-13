@@ -6,7 +6,7 @@ export default function PrevArrow({ onClick }) {
     <>
       <div
         onClick={onClick}
-        className="text-[rgba(255,255,255,0.6) text-[4.4rem] absolute top-[42%] left-[14%] z-[9999999] cursor-pointer"
+        className="text-[rgba(255,255,255,0.6) sm:text-[4.4rem] 3sm:text-[3rem] absolute top-[42%] sm:left-[14%] 3sm:left-[4%] z-[9999999] cursor-pointer"
       >
         <BsChevronLeft />
       </div>

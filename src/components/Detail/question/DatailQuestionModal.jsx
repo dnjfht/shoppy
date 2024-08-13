@@ -1,4 +1,3 @@
-import React from "react";
 import { GoX } from "react-icons/go";
 
 export default function DetailQuestionModal({ onClose, children }) {
