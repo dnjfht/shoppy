@@ -11,8 +11,8 @@ export default function CategoryItems({ title, items, onClick, styles }) {
       <Button
         value="더보기"
         onClick={onClick}
-        styleType="hover"
-        styles="sm:w-44 3sm:w-32 mt-6 sm:text-[0.875rem] 3sm:text-[0.75rem]"
+        styleType="blackHover"
+        styles="sm:w-44 3sm:w-32 mt-6 py-3 sm:text-[0.875rem] 3sm:text-[0.75rem]"
       />
     </div>
   );

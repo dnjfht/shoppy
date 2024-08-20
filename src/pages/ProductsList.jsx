@@ -20,7 +20,7 @@ export default function ProductsList() {
       .then((res) => res.data.items);
   });
 
-  const items = data?.products.filter((item) => {
+  const items = data?.products?.filter((item) => {
     return params === "Woman"
       ? item.type.includes("Woman")
       : params === "Man"

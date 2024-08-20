@@ -7,13 +7,6 @@ export const attach_won = (prc) => {
   return attachWon;
 };
 
-export const shortString = (str, num) => {
-  if (str?.length > num) {
-    return `${str?.slice(0, num - 1)} ...`;
-  }
-  return str;
-};
-
 export const salePercent = (price, salePrice) => {
   const percent = parseInt(price / (price - salePrice));
   return percent + "%";

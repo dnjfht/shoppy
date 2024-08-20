@@ -8,7 +8,7 @@ export default function NewProduct({ items }) {
       <h1 className="mb-10 font-semibold text-[1.875rem]">New Items</h1>
 
       <Products
-        items={items?.products.filter((item) => item.banner.includes("new"))}
+        items={items?.products?.filter((item) => item.banner.includes("new"))}
       />
     </div>
   );

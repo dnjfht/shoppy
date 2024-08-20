@@ -61,19 +61,19 @@ export default function DetailReview({
   const averageRatingResult =
     accordReview?.length === 0
       ? 0
-      : Math.floor((averageRating * 1000) / 1000).toFixed(0);
+      : Math.floor((averageRating * 1000) / 1000)?.toFixed(0);
 
   // 평점 비율 구하기(색상)
 
   // 2. 필터링 해준 배열 안에서 색상이 "똑같아요"인 것만 필터링 걸기
-  const filterColorSame = accordReview.filter((review) =>
-    review.reviewColorSatisfaction.includes("똑같아요")
+  const filterColorSame = accordReview?.filter((review) =>
+    review.reviewColorSatisfaction?.includes("똑같아요")
   );
   // 3. 색상 평점 퍼센트 구하기 + 소숫점 없애기
   const colorSamePrecent =
-    accordReview.length === 0
+    accordReview?.length === 0
       ? 0
-      : Math.floor((filterColorSame.length / accordReview.length) * 100);
+      : Math.floor((filterColorSame?.length / accordReview?.length) * 100);
   const progressBarStyle = {
     width: `${colorSamePrecent}%`,
   };
@@ -81,14 +81,14 @@ export default function DetailReview({
   // 평점 비율 구하기(사이즈)
 
   // 2. 필터링 해준 배열 안에서 사이즈가 "잘맞아요"인 것만 필터링 걸기
-  const filterSizeSame = accordReview.filter((review) =>
-    review.reviewSizeSatisfaction.includes("잘맞아요")
+  const filterSizeSame = accordReview?.filter((review) =>
+    review.reviewSizeSatisfaction?.includes("잘맞아요")
   );
   // 3. 사이즈 평점 퍼센트 구하기 + 소숫점 없애기
   const sizeSamePrecent =
-    accordReview.length === 0
+    accordReview?.length === 0
       ? 0
-      : Math.floor((filterSizeSame.length / accordReview.length) * 100);
+      : Math.floor((filterSizeSame?.length / accordReview?.length) * 100);
   const progressBarStyle2 = {
     width: `${sizeSamePrecent}%`,
   };
@@ -104,34 +104,36 @@ export default function DetailReview({
     let filteredList = accordReview;
 
     if (search.color !== "선택없음") {
-      filteredList = filteredList.filter(
+      filteredList = filteredList?.filter(
         (review) => review.reviewColor === search.color
       );
     }
 
     if (search.size !== "선택없음") {
-      filteredList = filteredList.filter(
+      filteredList = filteredList?.filter(
         (review) => review.reviewSize === search.size
       );
     }
 
     // 평점 순으로 정렬
-    if (search.filter === "평점순") {
-      filteredList = filteredList.sort((a, b) => b.ratingValue - a.ratingValue);
+    if (search?.filter === "평점순") {
+      filteredList = filteredList?.sort(
+        (a, b) => b.ratingValue - a.ratingValue
+      );
     }
 
     // 추천순으로 정렬
-    if (search.filter === "추천순") {
-      filteredList = filteredList.sort((a, b) => b.count - a.count);
+    if (search?.filter === "추천순") {
+      filteredList = filteredList?.sort((a, b) => b.count - a.count);
     }
 
     // 최신순으로 정렬
-    if (search.filter === "최신순") {
-      filteredList = filteredList.sort((a, b) => b.createdAt - a.createdAt);
+    if (search?.filter === "최신순") {
+      filteredList = filteredList?.sort((a, b) => b.createdAt - a.createdAt);
     }
 
     if (reviewOfMyBodyType === true && myBodyInfo) {
-      filteredList = filteredList.filter((review) => {
+      filteredList = filteredList?.filter((review) => {
         const heightDifference = Math.abs(
           Number(myBodyInfo.myHeight) - Number(review.reviewHeight)
         );
@@ -362,7 +364,7 @@ export default function DetailReview({
           </div>
 
           <ul className="w-full py-6">
-            {filteredReviews.length < 1 && <p>등록된 리뷰가 없습니다...!</p>}
+            {filteredReviews?.length < 1 && <p>등록된 리뷰가 없습니다...!</p>}
 
             {filteredReviews &&
               filteredReviews?.map((review) => (
@@ -505,8 +507,8 @@ export default function DetailReview({
                               onClick={(e) =>
                                 handleEditReview(e, review.password, review.id)
                               }
-                              styleType="hover"
-                              styles="w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]"
+                              styleType="blackHover"
+                              styles="w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]"
                             />
                           )}
 
@@ -519,10 +521,10 @@ export default function DetailReview({
                                 review?.detailUserId
                               )
                             }
-                            styleType="hover"
+                            styleType="blackHover"
                             styles={`${
                               reviewEdit.id === review.id ? "ml-none" : "ml-2"
-                            } w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]`}
+                            } w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]`}
                           />
                         </>
                       )}
@@ -535,8 +537,8 @@ export default function DetailReview({
                               onClick={(e) =>
                                 handleEditReview(e, review.password, review.id)
                               }
-                              styleType="hover"
-                              styles="w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]"
+                              styleType="blackHover"
+                              styles="w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]"
                             />
                           )}
 
@@ -549,10 +551,10 @@ export default function DetailReview({
                                 review?.detailUserId
                               )
                             }
-                            styleType="hover"
+                            styleType="blackHover"
                             styles={`${
                               reviewEdit.id === review.id ? "ml-none" : "ml-2"
-                            } w-[120px] h-[40px] flex justify-center items-center text-[0.875rem]`}
+                            } w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]`}
                           />
                         </>
                       )}

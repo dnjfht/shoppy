@@ -178,16 +178,20 @@ export default function MyCart({
 
   return (
     <div className="w-full">
-      <div className="w-[1400px] mx-auto mt-32 pt-10">
+      <div className="mx-auto mt-32 pt-10 w-full xl:max-w-[70%] 3sm:w-[90%]">
         <h1 className="font-semibold text-[1.875rem] mb-16 text-center">
           Cart
         </h1>
 
-        <div className="w-full py-14 border-t-[1px] border-solid border-[#333] flex justify-between items-start">
+        <div className="w-full py-14 border-t-[1px] border-solid border-[#333] xl:flex justify-between items-start">
           {comment}
 
           {/* left */}
-          <div className={`${inCarts ? "block" : "hidden"} w-[70%]`}>
+          <div
+            className={`${
+              inCarts ? "block" : "hidden"
+            } xl:w-[70%] order-1 3sm:w-full`}
+          >
             <div className="w-full mb-4 flex items-center text-[#282828]">
               <p>일반상품</p>
               <p className="ml-1">{`(${datas?.length})`}</p>
@@ -306,7 +310,7 @@ export default function MyCart({
           </div>
 
           {/* right */}
-          <div className="w-[26%]">
+          <div className="xl:w-[26%] order-2 3sm:w-full xl:mt-0 3sm:mt-20">
             <div className="w-full border-[1px] border-solid border-[#e5e5e5]">
               <FreeShippingCount
                 totalPrice={totalPrice}

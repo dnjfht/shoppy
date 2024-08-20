@@ -82,8 +82,8 @@ export default function MyBodySizeModal({
               <Button
                 onClick={(e) => handleStoreBodySizeInfo(e)}
                 value="등록"
-                styleType="hover"
-                styles="w-full mt-6 text-[0.875rem]"
+                styleType="blackHover"
+                styles="w-full mt-6 py-3 text-[0.875rem]"
               />
             </div>
           </div>

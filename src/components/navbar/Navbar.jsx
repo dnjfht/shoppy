@@ -106,7 +106,7 @@ export default function Navbar({ user, allCarts, nonMemberAllCarts }) {
             styles={`${isLoggedIn() ? "block" : "hidden"}
            flex items-center justify-center`}
             onClick={() => {
-              navigate("/carts");
+              navigate("/mypage");
             }}
           >
             <User user={user} />

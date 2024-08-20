@@ -1,3 +1,4 @@
+import Button from "../../button/Button";
 import RatingResult2 from "./RatingResult2";
 
 import { GoX } from "react-icons/go";
@@ -126,23 +127,22 @@ export default function DetailReviewModal({
                     </button>
                   </div>
 
-                  <div className="flex items-center mt-14">
+                  <div className="flex items-center w-full mt-14">
                     {user && user.uid === review.userId && (
                       <>
                         {reviewEdit.id !== review.id && (
-                          <button
+                          <Button
+                            value="수정하기"
                             onClick={(e) =>
                               handleEditReview(e, review.password, review.id)
                             }
-                            className={`${
-                              reviewEdit.id == review.id ? "mr-none" : "mr-2"
-                            } w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                          >
-                            수정하기
-                          </button>
+                            styleType="blackHover"
+                            styles="w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]"
+                          />
                         )}
 
-                        <button
+                        <Button
+                          value="삭제하기"
                           onClick={(e) =>
                             handleDeleteReview(
                               e,
@@ -150,26 +150,29 @@ export default function DetailReviewModal({
                               review?.detailUserId
                             )
                           }
-                          className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                        >
-                          삭제하기
-                        </button>
+                          styleType="blackHover"
+                          styles="w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]"
+                        />
                       </>
                     )}
-
-                    <div className={`${user === null ? "block" : "hidden"}`}>
+                    <div
+                      className={`${
+                        user === null ? "block" : "hidden"
+                      } w-full flex items-center`}
+                    >
                       {reviewEdit.id !== review.id && (
-                        <button
+                        <Button
+                          value="수정하기"
                           onClick={(e) =>
                             handleEditReview(e, review.password, review.id)
                           }
-                          className="w-[120px] h-[40px] bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center"
-                        >
-                          수정하기
-                        </button>
+                          styleType="blackHover"
+                          styles="w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]"
+                        />
                       )}
 
-                      <button
+                      <Button
+                        value="삭제하기"
                         onClick={(e) =>
                           handleDeleteReview(
                             e,
@@ -177,12 +180,11 @@ export default function DetailReviewModal({
                             review?.detailUserId
                           )
                         }
-                        className={`${
+                        styleType="blackHover"
+                        styles={`${
                           reviewEdit.id === review.id ? "ml-none" : "ml-2"
-                        } w-[120px] h-[40px]  bg-[#000000] text-white border-[1px] border-solid border-[#000000] text-[0.8125rem] rounded-lg hover:text-[#000000] hover:bg-opacity-0 transition-all duration-700 flex justify-center items-center`}
-                      >
-                        삭제하기
-                      </button>
+                        } w-[120px] h-[40px] py-3 flex justify-center items-center text-[0.875rem]`}
+                      />
                     </div>
                   </div>
                 </div>

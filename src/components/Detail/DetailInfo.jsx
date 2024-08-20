@@ -31,7 +31,7 @@ export default function DetailInfo({ detailImg }) {
       <Button
         value={`${fold ? "상세정보 접기" : "상세정보 펼쳐보기"}`}
         onClick={() => setFold((prev) => !prev)}
-        styleType="hover"
+        styleType="blackHover"
         styles="w-[22.5rem] h-[80px] absolute left-[50%] ml-[-11.25rem] bottom-[50px] mx-auto flex justify-center items-center z-[999999] text-[1.2rem] font-light"
       >
         <p className="ml-2 text-[1.8rem]">

@@ -72,7 +72,7 @@ function App() {
         { path: "/signup", element: <SignUpPage /> },
         {
           path: "/mypage",
-          element: <MyPage setAllCarts={setAllCarts} allCarts={allCarts} />,
+          element: <MyPage />,
         },
         {
           path: "/products/detail/:productId",

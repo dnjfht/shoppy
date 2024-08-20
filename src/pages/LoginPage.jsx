@@ -3,14 +3,14 @@ import {
   setPersistence,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import { authService } from "../api/firebase";
 import { isLoggedIn } from "../utils/utils";
 
 const LoginPage = () => {
-  // 유저 정보 가져오기 로그인 되어있으면 로그인 페이지 막기
+  // 유저 정보 가져오기. 로그인 되어있으면 로그인 페이지 막기
 
   const navigate = useNavigate();
 
@@ -22,9 +22,6 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const emailRef = useRef(null);
-  const passwordRef = useRef(null);
-
   // 실시간 유효성 검사
   // 이메일, 패스워드 유효성 값 초기화
   const [emailValid, setEmailValid] = useState(false);
@@ -73,14 +70,12 @@ const LoginPage = () => {
         if (err.message.includes("user-not-found")) {
           alert("가입 정보가 없습니다. 회원가입을 먼저 진행해 주세요.");
           navigate("/signup", { state });
-          emailRef?.current?.focus();
           setEmail("");
           setPassword("");
         }
 
         if (err.message.includes("wrong-password")) {
           alert("잘못된 비밀번호 입니다.");
-          passwordRef?.current?.focus();
           setPassword("");
         }
       });
@@ -88,16 +83,13 @@ const LoginPage = () => {
 
   return (
     <AuthForm
-      title="초년생을 위한 예적금 비교, 팁퍼"
-      text="아직 회원이 아니신가요? "
-      linkText="회원가입하기"
       email={email}
+      setEmail={setEmail}
       changeEmail={changeEmail}
-      emailRef={emailRef}
       emailValid={emailValid} // login 실시간 유효성 검사
       password={password}
+      setPassword={setPassword}
       changePassword={changePassword}
-      passwordRef={passwordRef}
       passwordValid={passwordValid} // login 실시간 유효성 검사
       submitLogin={submitLogin}
     />

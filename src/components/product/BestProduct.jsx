@@ -8,7 +8,7 @@ export default function BestProduct({ items }) {
       <h1 className="mb-10 font-semibold text-[1.875rem]">Best Items</h1>
 
       <Products
-        items={items?.products.filter((item) => item.banner.includes("best"))}
+        items={items?.products?.filter((item) => item.banner.includes("best"))}
       />
     </div>
   );

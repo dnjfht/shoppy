@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { attach_won, salePercent, shortString } from "../constants/constants";
+import { attach_won, salePercent } from "../constants/constants";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -987,8 +987,8 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                 src={process.env.PUBLIC_URL + `/../${item.image}`}
                 alt="item_img"
               />
-              <p className="mt-4 text-[#030303] text-[0.9375rem] font-semibold">
-                {shortString(item.title, 10)}
+              <p className="mt-4 text-[#030303] text-[0.9375rem] font-semibold line-clamp-1">
+                {item.title}
               </p>
             </div>
             <div className="w-[72%] p-5 box-border">
@@ -1242,8 +1242,8 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                 <Button
                   onClick={(e) => handleStoreReviewData(e)}
                   value="리뷰 쓰기"
-                  styleType="hover"
-                  styles="w-full mt-6 text-[0.875rem]"
+                  styleType="blackHover"
+                  styles="w-full mt-6 py-3 text-[0.875rem]"
                 />
               </div>
             </div>
