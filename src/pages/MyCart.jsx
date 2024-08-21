@@ -228,7 +228,7 @@ export default function MyCart({
                   <th className="md:w-[15%] 3sm:w-[20%]">판매가</th>
                   <th className="md:w-[15%] 3sm:w-[18%]">수량</th>
                   <th className="w-[10%]">배송비</th>
-                  <th className="md:w-[10%] sm:w-[15%]">선택</th>
+                  <th className="md:w-[10%] 3sm:w-[15%]">선택</th>
                 </tr>
               </thead>
 
@@ -250,7 +250,7 @@ export default function MyCart({
                         </td>
                         <td>
                           <img
-                            className="md:w-[40%] 3sm:w-[60%] mx-auto object-cover my-5"
+                            className="md:w-[34%] 3sm:w-[50%] mx-auto object-cover my-5"
                             src={process.env.PUBLIC_URL + `/../${cart.image}`}
                             alt="product_img"
                           />
@@ -265,21 +265,21 @@ export default function MyCart({
                           <p>{attach_won(cart.price * cart.count)}</p>
                         </td>
                         <td>
-                          <div className="flex items-center justify-between w-full mx-auto font-normal sm:flex-row 3sm:flex-col">
+                          <div className="flex items-center justify-between w-full mx-auto font-normal 2sm:flex-row 3sm:flex-col">
                             <Button
                               value="-"
                               onClick={() => handleMinusCount(cart.id)}
                               styleType="grayBorder"
-                              styles="sm:w-[33.333%] 3sm:w-[50%] aspect-square border-r-[1px] flex justify-center items-center"
+                              styles="2sm:w-[33.333%] 3sm:w-[50%] aspect-square border-r-[1px] flex justify-center items-center"
                             />
-                            <p className="sm:w-[33.333%] 3sm:w-[50%] aspect-square flex justify-center items-center sm:border-t-[1px] sm:border-b-[1px] 3sm:border-l-[1px] 3sm:border-r-[1px] border-solid border-[#cacaca]">
+                            <p className="2sm:w-[33.333%] 3sm:w-[50%] aspect-square flex justify-center items-center 2sm:border-t-[1px] 2sm:border-b-[1px] 3sm:border-l-[1px] 3sm:border-r-[1px] border-solid border-[#cacaca]">
                               {cart.count}
                             </p>
                             <Button
                               value="+"
                               onClick={() => handlePlusCount(cart.id)}
                               styleType="grayBorder"
-                              styles="sm:w-[33.333%] 3sm:w-[50%] aspect-square border-l-[1px] flex justify-center items-center"
+                              styles="2sm:w-[33.333%] 3sm:w-[50%] aspect-square border-l-[1px] flex justify-center items-center"
                             />
                           </div>
                         </td>
@@ -291,7 +291,7 @@ export default function MyCart({
                           <Button
                             icon={<GoX />}
                             onClick={() => deleteCart(cart.id)}
-                            styles="md:ml-2 sm:ml-1 3sm:ml-0"
+                            styles="md:ml-2 2sm:ml-1 3sm:ml-0"
                           />
                         </td>
                       </tr>
@@ -321,7 +321,7 @@ export default function MyCart({
           </div>
 
           {/* right */}
-          <div className="xl:w-[26%] order-2 3sm:w-full xl:mt-0 3sm:mt-20">
+          <div className="xl:w-[26%] order-2 3sm:w-full xl:mt-0 3sm:mt-14">
             <div className="w-full border-[1px] border-solid border-[#e5e5e5]">
               <FreeShippingCount
                 totalPrice={totalPrice}
@@ -331,23 +331,25 @@ export default function MyCart({
               <CartTotalPrice totalPrice={totalPrice} totalCount={totalCount} />
             </div>
 
-            <div className="flex flex-col items-center w-full mt-5">
+            <div className="xl:block 3sm:grid grid-cols-3 gap-x-2 w-full mt-5 md:text-[1rem] 3sm:text-[0.875rem]">
               <Button
                 value="전체상품주문"
                 styleType="blackBg"
-                styles="w-full py-5 mb-3 box-border text-white"
+                styles="xl:w-full md:py-5 3sm:py-3 xl:mb-3 box-border text-white"
               />
               <Button
                 value="선택상품주문"
                 styleType="blackBorder"
-                styles="w-full py-5 mb-3 box-border border-[1px] text-black"
+                styles="xl:w-full md:py-5 3sm:py-3 xl:mb-3 box-border border-[1px] text-black"
               />
               <Button
                 icon={<CiGift />}
                 styleType="blackBorder"
-                styles="w-full py-5 box-border border-[1px] flex justify-center items-center text-[1.6rem] text-[#ff5151]"
+                styles="xl:w-full md:py-5 3sm:py-3 xl:mb-3 box-border border-[1px] flex justify-center items-center md:text-[1.6rem] 3sm:text-[1.2rem] text-[#ff5151]"
               >
-                <p className="ml-1 text-[1rem] text-black">선물하기</p>
+                <p className="ml-1 md:text-[1rem] 3sm:text-[0.875rem] text-black">
+                  선물하기
+                </p>
               </Button>
             </div>
           </div>
