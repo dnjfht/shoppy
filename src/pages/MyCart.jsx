@@ -21,9 +21,24 @@ export default function MyCart({
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
 
+  console.log(
+    "selectAll",
+    String(selectAll),
+    "selectedItems",
+    selectedItems,
+    "products",
+    products,
+    "allCarts",
+    allCarts
+  );
+
   useEffect(() => {
-    setProducts(allCarts?.map((cart) => ({ ...cart })));
-  }, [allCarts]);
+    if (user) {
+      setProducts(allCarts?.map((cart) => ({ ...cart })));
+    } else {
+      setProducts(nonMemberAllCarts?.map((cart) => ({ ...cart })));
+    }
+  }, [user, allCarts, nonMemberAllCarts]);
 
   // 총 가격 / 총 갯수 계산 함수
   const totalCount = (user ? allCarts : nonMemberAllCarts)?.reduce(
@@ -119,6 +134,7 @@ export default function MyCart({
   const handleSelectAll = () => {
     setSelectAll((prev) => !prev);
     if (!selectAll) {
+      console.log("sdgedgg");
       setSelectedItems(products?.map((product) => product.id));
     } else {
       setSelectedItems([]);
@@ -178,12 +194,12 @@ export default function MyCart({
 
   return (
     <div className="w-full">
-      <div className="mx-auto mt-32 pt-10 w-full xl:max-w-[70%] 3sm:w-[90%]">
-        <h1 className="font-semibold text-[1.875rem] mb-16 text-center">
+      <div className="mx-auto mt-32 md:pt-10 3sm:pt-4 w-full xl:max-w-[70%] 3sm:w-[90%]">
+        <h1 className="font-semibold text-[1.875rem] lg:mb-16 sm:mb-10 3sm:mb-6 text-center">
           Cart
         </h1>
 
-        <div className="w-full py-14 border-t-[1px] border-solid border-[#333] xl:flex justify-between items-start">
+        <div className="w-full md:py-14 3sm:py-10 border-t-[1px] border-solid border-[#333] xl:flex justify-between items-start">
           {comment}
 
           {/* left */}
@@ -192,28 +208,27 @@ export default function MyCart({
               inCarts ? "block" : "hidden"
             } xl:w-[70%] order-1 3sm:w-full`}
           >
-            <div className="w-full mb-4 flex items-center text-[#282828]">
+            <div className="w-full md:mb-4 3sm:mb-2 flex items-center md:text-[1rem] 3sm:text-[0.875rem] text-[#282828]">
               <p>일반상품</p>
               <p className="ml-1">{`(${datas?.length})`}</p>
             </div>
 
-            <table className="w-full border-t-[1px] border-solid border-[#282828] text-[0.875rem] text-[#333]">
+            <table className="w-full border-t-[1px] border-solid border-[#282828] md:text-[0.875rem] 3sm:text-[0.76rem] text-[#333]">
               <thead>
                 <tr className="w-full h-[40px] py-[20px] border-b-[1px] border-solid border-[#e5e5e5]">
-                  <th className="w-[10%] py-[20px]">
+                  <th className="md:w-[10%] 3sm:w-[2%] py-[20px]">
                     <CheckboxInput
                       checked={selectAll}
                       onChange={handleSelectAll}
-                      styles="w-5 h-5"
+                      styles="md:w-5 3sm:w-4 md:h-5 3sm:h-4"
                     />
                   </th>
                   <th className="w-[20%]">이미지</th>
-                  <th className="w-[20%]">상품정보</th>
-                  <th className="w-[10%]">판매가</th>
-                  <th className="w-[10%]">수량</th>
-                  <th className="w-[10%]">적립금</th>
+                  <th className="md:w-[20%] 3sm:w-[15%]">상품정보</th>
+                  <th className="md:w-[15%] 3sm:w-[20%]">판매가</th>
+                  <th className="md:w-[15%] 3sm:w-[18%]">수량</th>
                   <th className="w-[10%]">배송비</th>
-                  <th className="w-[10%]">선택</th>
+                  <th className="md:w-[10%] sm:w-[15%]">선택</th>
                 </tr>
               </thead>
 
@@ -223,88 +238,84 @@ export default function MyCart({
                   ?.map((cart) => {
                     return (
                       <tr
-                        className="w-full border-b-[1px] border-solid border-[#e5e5e5]"
+                        className="w-full border-b-[1px] border-solid border-[#e5e5e5] text-center"
                         key={cart.id}
                       >
-                        <td className="w-[10%] text-center">
+                        <td>
                           <CheckboxInput
                             checked={selectedItems.includes(cart.id)}
                             onChange={(e) => handleCheckboxChange(e, cart.id)}
-                            styles="w-5 h-5"
+                            styles="md:w-5 3sm:w-4 md:h-5 3sm:h-4"
                           />
                         </td>
-                        <td className="w-[20%]">
+                        <td>
                           <img
-                            className="w-[40%] mx-auto object-cover my-5"
+                            className="md:w-[40%] 3sm:w-[60%] mx-auto object-cover my-5"
                             src={process.env.PUBLIC_URL + `/../${cart.image}`}
                             alt="product_img"
                           />
                         </td>
-                        <td className="w-[20%] text-left text-[0.875rem]">
-                          <p className=" text-[#333] font-semibold">
+                        <td className="text-left">
+                          <p className="text-[#333] font-semibold line-clamp-1">
                             {cart.title}
                           </p>
-                          <p className="text-[#999]">{`[옵션: ${cart.color}/${cart.size}]`}</p>
+                          <p className="text-[#999] line-clamp-1">{`[옵션: ${cart.color}/${cart.size}]`}</p>
                         </td>
-                        <td className="w-[10%] text-center text-[0.875rem] text-[#333] font-semibold">
-                          {attach_won(cart.price * cart.count)}
+                        <td className="text-[#333] font-semibold">
+                          <p>{attach_won(cart.price * cart.count)}</p>
                         </td>
-
-                        <td className="w-[10%]">
-                          <div className="w-full mx-auto flex items border-[1px] border-solid border-[#cacaca] font-normal">
+                        <td>
+                          <div className="flex items-center justify-between w-full mx-auto font-normal sm:flex-row 3sm:flex-col">
                             <Button
                               value="-"
                               onClick={() => handleMinusCount(cart.id)}
                               styleType="grayBorder"
-                              styles="w-8 h-8 border-r-[1px] text-[0.875rem] flex justify-center items-center"
+                              styles="sm:w-[33.333%] 3sm:w-[50%] aspect-square border-r-[1px] flex justify-center items-center"
                             />
-                            <p className="w-8 h-8 flex justify-center items-center text-[0.875rem]">
+                            <p className="sm:w-[33.333%] 3sm:w-[50%] aspect-square flex justify-center items-center sm:border-t-[1px] sm:border-b-[1px] 3sm:border-l-[1px] 3sm:border-r-[1px] border-solid border-[#cacaca]">
                               {cart.count}
                             </p>
                             <Button
                               value="+"
                               onClick={() => handlePlusCount(cart.id)}
                               styleType="grayBorder"
-                              styles="w-8 h-8 border-l-[1px] text-[0.875rem] flex justify-center items-center"
+                              styles="sm:w-[33.333%] 3sm:w-[50%] aspect-square border-l-[1px] flex justify-center items-center"
                             />
                           </div>
                         </td>
-                        <td className="w-[10%] text-center text-[1rem]">-</td>
-                        <td className="w-[10%] whitespace-pre-wrap text-center text-[0.875rem] text-[#333]">
+                        <td className="whitespace-pre-wrap text-[#5d5b5b]">
                           <p>{totalPrice < 50000 ? 2500 : 0}원</p>
                         </td>
-                        <td className="w-[10%] text-center text-[1.6rem] text-[#333]">
+                        <td className="md:text-[1.6rem] 3sm:text-[1.2rem] text-[#333]">
                           <Button icon={<CiHeart />} />
                           <Button
                             icon={<GoX />}
                             onClick={() => deleteCart(cart.id)}
-                            styles="ml-2"
+                            styles="md:ml-2 sm:ml-1 3sm:ml-0"
                           />
                         </td>
                       </tr>
                     );
                   })}
               </tbody>
-
-              <tfoot>
-                <tr className="w-full box-border border-b-[1px] border-solid border-[#e5e5e5] text-right">
-                  <td className="p-3 text-[0.75rem] text-[#333]">[기본배송]</td>
-                </tr>
-              </tfoot>
             </table>
 
-            <div className="flex items-center justify-between w-full mt-7">
+            <div className="w-full p-3 box-border border-b-[1px] border-solid border-[#e5e5e5] md:text-[0.8125rem] 3sm:text-[0.75rem] text-[#333] text-right">
+              [기본배송]
+            </div>
+
+            <div className="flex items-center justify-between w-full md:mt-7 3sm:mt-4">
               <Button
                 value="삭제하기"
                 onClick={handleDelete}
                 styleType="grayBorder"
-                styles="h-[35px] px-3 border-[1px] flex justify-center items-center text-[0.875rem] text-[#333]"
+                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center sm:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
               />
               <Button
                 value="장바구니 비우기"
                 onClick={handleAllDelete}
                 styleType="grayBorder"
-                styles="h-[35px] px-3 border-[1px] flex justify-center items-center text-[0.875rem] text-[#333]"
+                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center sm:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
               />
             </div>
           </div>
