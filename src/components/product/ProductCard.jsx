@@ -42,7 +42,7 @@ export default function ProductCard({ item }) {
       <div className="py-6 sm:text-center 3sm:text-left">
         <p className="font-semibold">{item.title}</p>
 
-        <p className="mt-2 sm:text-[0.875rem] 3sm:text-[0.75rem] text-[#484848] line-clamp-2">
+        <p className="mt-2 md:text-[0.875rem] 3sm:text-[0.75rem] text-[#484848] line-clamp-2">
           {item.description}
         </p>
         <div className="flex items-center mt-4 sm:justify-center 3sm:justify-start">

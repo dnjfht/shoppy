@@ -595,9 +595,10 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
 
   return (
     <div className="w-full">
-      <div className="w-[1400px] mx-auto pt-52 pb-20 flex flex-col justify-between">
-        <div className="w-full pb-32 border-b-[1px] border-bottom border-[#ccc] flex justify-between">
-          <div className="w-[47%]">
+      <div className="w-full max-w-[90%] mx-auto lg:pt-52 md:pt-44 sm:pt-40 3sm:pt-32 md:pb-20 sm:pb-14 3sm:pb-8 flex flex-col justify-between">
+        {/* Top 구간 */}
+        <div className="w-full md:pb-32 sm:pb-24 3sm:pb-10 border-b-[1px] border-bottom border-[#ccc] lg:flex justify-between">
+          <div className="lg:w-[47%] 3sm:w-full">
             <img
               className="object-cover w-full"
               src={process.env.PUBLIC_URL + `/../${item.image}`}
@@ -605,8 +606,8 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
             />
           </div>
 
-          <div className="w-[47%]">
-            <div className="w-full pb-[30px] border-b-[1px] border-solid border-[#ccc]">
+          <div className="lg:w-[47%] 3sm:w-full lg:mt-0 3sm:mt-6">
+            <div className="w-full md:pb-8 sm:pb-6 3sm:pb-4 border-b-[1px] border-solid border-[#ccc]">
               <div className="flex items-center justify-between w-full">
                 <div className="flex w-4/5">
                   {item?.banner?.map((b) => {
@@ -616,7 +617,7 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                           b === "new"
                             ? "border-[deeppink] text-[deeppink]"
                             : "border-[#30d0b3] text-[#30d0b3]"
-                        } w-20 p-1 mr-2 border-[1px] border-solid text-[0.8rem] flex justify-center items-center`}
+                        } md:w-20 3sm:w-14 md:py-1 3sm:py-[2px] mr-2 border-[1px] border-solid md:text-[0.8rem] 3sm:text-[0.75rem] flex justify-center items-center`}
                       >
                         {b}
                       </p>
@@ -624,7 +625,7 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                   })}
                 </div>
 
-                <div className="w-1/5 text-[1.8rem] flex justify-end">
+                <div className="w-1/5 md:text-[1.8rem] sm:text-[1.5rem] 3sm:text-[1.3rem] flex justify-end">
                   <button>
                     <CiHeart />
                   </button>
@@ -635,33 +636,33 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                 </div>
               </div>
 
-              <h1 className="text-[1.5rem] text-[#282828] font-semibold mt-2">
+              <h1 className="md:text-[1.5rem] 3sm:text-[1.2rem] text-[#282828] font-semibold mt-2">
                 {item.title}
               </h1>
 
-              <div className="mt-1 text-[#f98888] text-[1.5rem] font-semibold flex items-baseline">
+              <div className="mt-1 text-[#f98888] md:text-[1.5rem] sm:text-[1.2rem] 3sm:text-[1.1rem] font-semibold flex items-baseline">
                 <h1>{salePercent(item.price, item.salePrice)}</h1>
                 <h1 className="ml-2">{attach_won(item.salePrice)}</h1>
-                <h1 className="ml-1 text-[1.125rem] text-[#aaa] font-normal line-through">
+                <h1 className="ml-1 md:text-[1.125rem] sm:text-[1rem] 3sm:text-[0.9rem] text-[#aaa] font-normal line-through">
                   {attach_won(item.price)}
                 </h1>
               </div>
             </div>
 
-            <div className="w-full py-[30px] text-[0.875rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
-              <div className="flex items-center w-full mb-3">
+            <div className="w-full md:py-8 sm:py-6 3sm:py-4 md:text-[0.875rem] 3sm:text-[0.75rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
+              <div className="flex items-center w-full mb-3 gap-x-2">
                 <p className="w-1/6">판매가</p>
                 <p className="line-through w-5/6 text-[#333] font-normal">
                   {attach_won(item.price)}
                 </p>
               </div>
-              <div className="flex items-center w-full mb-3">
+              <div className="flex items-center w-full mb-3 gap-x-2">
                 <p className="w-1/6">할인판매가</p>
                 <p className="w-5/6 text-[#333] font-normal">
                   {attach_won(item.salePrice)}
                 </p>
               </div>
-              <div className="flex items-center w-full">
+              <div className="flex items-center w-full gap-x-2">
                 <p className="w-1/6">상품간략설명</p>
                 <p className="w-5/6 text-[#333] font-normal leading-16">
                   {item.description}
@@ -669,7 +670,7 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
               </div>
             </div>
 
-            <div className="w-full py-[30px] text-[0.875rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
+            <div className="w-full md:py-8 sm:py-6 3sm:py-4 md:text-[0.875rem] 3sm:text-[0.75rem] text-[#999] font-semibold pb-[30px] border-b-[1px] border-solid border-[#ccc]">
               <div className="flex items-center w-full mb-4">
                 <p className="w-1/6">색상</p>
                 <select
@@ -691,7 +692,7 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                 </select>
               </div>
 
-              <div className="flex">
+              <div className="flex items-center">
                 <p className="w-1/6">사이즈</p>
                 <select
                   ref={sizeInputRef}
@@ -712,94 +713,100 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
                 </select>
               </div>
 
-              <ul className="w-full mt-[30px]">
-                {cart &&
-                  cart?.map((c) => {
-                    return (
-                      <li
-                        key={c.id}
-                        className="w-full p-4 mb-2 box-border bg-[#f6f6f6] flex justify-between items-center text-[0.875rem] text-[#333]"
-                      >
-                        <div>
-                          <p>{c.title}</p>
-                          <p className="text-[#888888]">{`- ${c.color} / ${c.size}`}</p>
-                        </div>
+              <ul
+                className={`${
+                  cart?.length > 0 ? "block" : "hidden"
+                } w-full md:mt-8 sm:mt-6 3sm:mt-4`}
+              >
+                {cart?.map((c) => {
+                  return (
+                    <li
+                      key={c.id}
+                      className={`${
+                        cart?.length > 1 ? "mb-2" : "mb-0"
+                      } w-full p-4 box-border bg-[#f6f6f6] grid grid-cols-3 gap-x-3 md:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]`}
+                    >
+                      <div className="flex flex-col justify-center w-full">
+                        <p>{c.title}</p>
+                        <p className="text-[#888888]">{`- ${c.color} / ${c.size}`}</p>
+                      </div>
 
-                        {/* count 증가 감소 버튼 */}
-                        <div className="flex items border-[1px] border-solid border-[#cacaca] font-normal">
+                      {/* count 증가 감소 버튼 */}
+                      <div className=":w-full font-normal md:text-[1.2rem] sm:text-[1rem] 3sm:text-[0.9rem] flex justify-center items-center">
+                        <div className="flex items-center justify-center 2sm:w-1/2 3sm:w-full border-[1px] border-solid border-[#cacaca]">
                           <button
                             onClick={() => {
                               handleMinusCount(c.id);
                             }}
-                            className="w-8 h-8 bg-[#cacaca] text-[1.2rem] flex justify-center items-center border-r-[1px] border-solid border-[#cacaca]"
+                            className="w-1/3 aspect-square bg-[#cacaca] flex justify-center items-center"
                           >
                             -
                           </button>
-                          <p className="flex items-center justify-center w-8 h-8">
+                          <p className="flex items-center justify-center w-1/3 aspect-square">
                             {c.count}
                           </p>
                           <button
                             onClick={() => {
                               handlePlusCount(c.id);
                             }}
-                            className="w-8 h-8 bg-[#cacaca] text-[1.2rem] flex justify-center items-center border-l-[1px] border-solid border-[#cacaca]"
+                            className="w-1/3 aspect-square bg-[#cacaca] flex justify-center items-center"
                           >
                             +
                           </button>
                         </div>
+                      </div>
 
-                        {/* salePrice 계산 */}
-                        <div className="flex justify-end w-1/5">
-                          <p className="text-[0.9375rem] mr-2">
-                            {attach_won(c.price * c.count)}
-                          </p>
+                      {/* salePrice 계산 */}
+                      <div className="flex items-center justify-end w-full">
+                        <p className="md:mr-2 3sm:mr-1">
+                          {attach_won(c.price * c.count)}
+                        </p>
 
-                          <button
-                            onClick={() => deleteCart(c.id)}
-                            className="text-[1.4rem] text-[#787878]"
-                          >
-                            <GoX />
-                          </button>
-                        </div>
-                      </li>
-                    );
-                  })}
+                        <Button
+                          icon={<GoX />}
+                          onClick={() => deleteCart(c.id)}
+                          styles="md:text-[1.6rem] sm:text-[1.4rem] 3sm:text-[1.3rem] text-[#787878]"
+                        />
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
-            <div className="w-full py-[30px] text-[0.875rem] text-[#333] font-semibold flex justify-between items-center">
+            <div className="w-full md:py-8 sm:py-6 3sm:py-4 md:text-[0.875rem] 3sm:text-[0.75rem] text-[#333] font-semibold flex justify-between items-center">
               <p>총 상품 금액</p>
 
-              <div className="flex items-center text-[0.875rem] text-[#000] font-normal">
-                <p className="text-[1.5rem]  font-bold">
+              <div className="flex items-center text-[#000] font-normal">
+                <p className="md:text-[1.5rem] sm:text-[1.2rem] 3sm:text-[1.1rem] font-bold">
                   {attach_won(totalPrice)}
                 </p>
                 <p className="ml-2">{`(${totalCount}개)`}</p>
               </div>
             </div>
 
-            <div className="flex items-center justify-between font-semibold">
+            <div className="grid grid-cols-3 font-semibold gap-x-2 md:text-[1rem] 3sm:text-[0.875rem]">
               <button
                 onClick={() => {
                   handlePushCarts();
                   navigate("/carts");
                 }}
-                className="w-[32%] py-5 border-[1px] border-solid border-black"
+                className="w-full md:py-5 3sm:py-3 border-[1px] border-solid border-black"
               >
                 장바구니
               </button>
-              <button className="w-[32%] py-5 bg-[#333] text-white">
+              <button className="w-full md:py-5 3sm:py-3 bg-[#333] text-white">
                 구매하기
               </button>
-              <button className="w-[32%] py-5 bg-black flex justify-center items-center text-white">
-                <p className="text-[1.6rem] text-[#ff5151]">
+              <button className="flex items-center justify-center w-full text-white bg-black md:py-5 3sm:py-3">
+                <p className="md:text-[1.6rem] sm:text-[1.3rem] 3sm:text-[1.1rem] text-[#ff5151]">
                   <CiGift />
                 </p>
                 <p className="ml-1">선물하기</p>
               </button>
             </div>
 
-            <div className="w-full pt-[30px]">
+            <div className="w-full md:pt-8 sm:pt-6 3sm:pt-4">
               <img
                 src={
                   process.env.PUBLIC_URL +
@@ -811,170 +818,177 @@ export default function Detail({ user, setAllCarts, setNonMemberAllCarts }) {
           </div>
         </div>
 
-        <div className="w-full pt-10">
-          <div>
-            <h1 className="mb-6 text-[1.5rem] text-[#333] font-semibold">
+        {/* Bottom 구간 */}
+        <div className="w-full">
+          <div className="w-full md:pt-10 sm:pt-8 3sm:pt-6">
+            <h1 className="md:mb-6 sm:mb-4 3sm:mb-2 md:text-[1.5rem] sm:text-[1.2rem] 3sm:text-[1.1rem] text-[#333] font-semibold 2sm:text-left 3sm:text-center">
               특별한 회원 혜택
             </h1>
 
-            <ul className="w-full flex justify-between items-center text-[0.8125rem] text-[#999]">
-              <li className="cursor-pointer w-1/6 py-1 border-r-[1px] border-solid border-[#ccc] flex flex-col items-center">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <RiCoupon3Fill />
+            <ul className="w-full flex justify-between items-center flex-wrap md:text-[0.8125rem] 3sm:text-[0.75rem] text-[#999] 2sm:text-center">
+              <li className="cursor-pointer lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full md:py-1 md:px-4 3sm:py-3 box-border 2sm:border-r-[1px] 2sm:border-b-0 3sm:border-b-[1px] border-solid border-[#ccc] flex 2sm:flex-col items-center 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4">
+                <RiCoupon3Fill className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#eb4545]" />
+
+                <div>
+                  <p className="mb-2 md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    신규회원 할인혜택
+                  </p>
+                  <p>회원가입 시 신규가입 축하</p>
+                  <p>
+                    <span className="text-[#f57778]">20,000원 쿠폰팩</span> 즉시
+                    지급
+                  </p>
                 </div>
-                <p className="mb-2 text-[0.9375rem] text-[#333] font-semibold">
-                  신규회원 할인혜택
-                </p>
-                <p>회원가입 시 신규가입 축하</p>
-                <p>
-                  <span className="text-[#f57778]">20,000원 쿠폰팩</span> 즉시
-                  지급
-                </p>
               </li>
 
-              <li className="cursor-pointer w-1/6 py-1 border-r-[1px] border-solid border-[#ccc] flex flex-col items-center">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <GiCutDiamond />
+              <li className="cursor-pointer lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full md:py-1 md:px-4 3sm:py-3 box-border md:border-r-[1px] 2sm:border-b-0 3sm:border-b-[1px] border-solid border-[#ccc] flex 2sm:flex-col items-center 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4">
+                <GiCutDiamond className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#f57778]" />
+
+                <div>
+                  <p className="mb-2 md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    등급별 추가할인
+                  </p>
+                  <p>
+                    <span className="text-[#f57778]">
+                      회원 할인 + 구매 적립
+                    </span>
+                  </p>
+                  <p>
+                    <span className="text-[#f57778]">
+                      + 무료배송 + 사이즈 무료 교환
+                    </span>
+                  </p>
                 </div>
-                <p className="mb-2 text-[0.9375rem] text-[#333] font-semibold">
-                  등급별 추가할인
-                </p>
-                <p>
-                  <span className="text-[#f57778]">회원 할인 + 구매 적립</span>
-                </p>
-                <p>
-                  <span className="text-[#f57778]">
-                    + 무료배송 + 사이즈 무료 교환
-                  </span>
-                </p>
               </li>
 
-              <li className="cursor-pointer w-1/6 py-1 border-r-[1px] border-solid border-[#ccc] flex flex-col items-center">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <HiGift />
+              <li className="cursor-pointer lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full md:py-1 md:px-4 3sm:py-3 box-border lg:border-r-[1px] md:border-r-0 2sm:border-r-[1px] 2sm:border-b-0 3sm:border-b-[1px] border-solid border-[#ccc] flex 2sm:flex-col items-center 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4">
+                <HiGift className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#f57778]" />
+
+                <div>
+                  <p className="mb-2 md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    생일 쿠폰 지급
+                  </p>
+                  <p>즐거운 날을 위해</p>
+                  <p>
+                    <span className="text-[#f57778]">
+                      365일 사용 가능한 할인쿠폰
+                    </span>{" "}
+                    지급
+                  </p>
                 </div>
-                <p className="mb-2 text-[0.9375rem] text-[#333] font-semibold">
-                  생일 쿠폰 지급
-                </p>
-                <p>즐거운 날을 위해</p>
-                <p>
-                  <span className="text-[#f57778]">
-                    365일 사용 가능한 할인쿠폰
-                  </span>{" "}
-                  지급
-                </p>
               </li>
 
-              <li className="cursor-pointer w-1/6 py-1 border-r-[1px] border-solid border-[#ccc] flex flex-col items-center">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <CiDeliveryTruck />
+              <li className="cursor-pointer lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full md:py-1 md:px-4 3sm:py-3 box-border md:border-r-[1px] sm:border-r-0 2sm:border-b-0  3sm:border-b-[1px] border-solid border-[#ccc] flex 2sm:flex-col items-center 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4">
+                <CiDeliveryTruck className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#f57778]" />
+
+                <div>
+                  <p className="md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    5만원이상 무료배송
+                  </p>
+                  <p>Birthday Party 전상품</p>
+                  <p>
+                    <span className="text-[#f57778]">
+                      5만원이상 결제시 무료배송
+                    </span>
+                  </p>
                 </div>
-                <p className="text-[0.9375rem] text-[#333] font-semibold">
-                  5만원이상 무료배송
-                </p>
-                <p>Birthday Party 전상품</p>
-                <p>
-                  <span className="text-[#f57778]">
-                    5만원이상 결제시 무료배송
-                  </span>
-                </p>
               </li>
 
-              <li className="cursor-pointer w-1/6 py-1 border-r-[1px] border-solid border-[#ccc] flex flex-col items-center">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <CiEdit />
+              <li className="cursor-pointer lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full md:py-1 md:px-4 3sm:py-3 box-border 2sm:border-r-[1px] 2sm:border-b-0 3sm:border-b-[1px] border-solid border-[#ccc] flex 2sm:flex-col items-center 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4">
+                <CiEdit className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#f57778]" />
+
+                <div>
+                  <p className="mb-2 md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    리뷰 작성시 적립금
+                  </p>
+                  <p>유형에 따라 적립금</p>
+                  <p>
+                    <span className="text-[#f57778]">500원 ~ 1500원 차등</span>{" "}
+                    지급
+                  </p>
                 </div>
-                <p className="mb-2 text-[0.9375rem] text-[#333] font-semibold">
-                  리뷰 작성시 적립금
-                </p>
-                <p>유형에 따라 적립금</p>
-                <p>
-                  <span className="text-[#f57778]">500원 ~ 1500원 차등</span>{" "}
-                  지급
-                </p>
               </li>
 
-              <li className="flex flex-col items-center w-1/6 py-1 cursor-pointer">
-                <div className="mb-4 text-[3rem] text-[#f57778]">
-                  <MdFiberNew />
+              <li className="box-border flex items-center cursor-pointer 2sm:flex-col 2sm:justify-normal 3sm:justify-center 2sm:gap-x-0 3sm:gap-x-4 md:py-1 md:px-4 3sm:py-3 lg:w-1/6 md:w-1/3 2sm:w-1/2 3sm:w-full">
+                <MdFiberNew className="mb-4 md:text-[3rem] sm:text-[2.4rem] 3sm:text-[2rem] text-[#f57778]" />
+
+                <div>
+                  <p className="mb-2 md:text-[0.9375rem] sm:text-[0.875rem] 3sm:text-[0.8rem] text-[#333] font-semibold">
+                    신상 5% 할인
+                  </p>
+                  <p>매일 매일 UP되는 신상</p>
+                  <p>
+                    <span className="text-[#f57778]">5% 할인가</span>에 득템
+                  </p>
                 </div>
-                <p className="mb-2 text-[0.9375rem] text-[#333] font-semibold">
-                  신상 5% 할인
-                </p>
-                <p>매일 매일 UP되는 신상</p>
-                <p>
-                  <span className="text-[#f57778]">5% 할인가</span>에 득템
-                </p>
               </li>
             </ul>
           </div>
-        </div>
 
-        {/* detail banner */}
-        <div className="w-full py-32">
-          <img
-            className="object-cover w-full cursor-pointer"
-            src={process.env.PUBLIC_URL + "/../image/banner/detailBanner1.png"}
-            alt="detail_banner"
-          />
-          <img
-            className="object-cover w-full mt-6 cursor-pointer"
-            src={process.env.PUBLIC_URL + "/../image/banner/detailBanner2.png"}
-            alt="detail_banner"
-          />
-        </div>
-
-        {/* detail page tab */}
-        <div className="w-full">
-          <div className="flex w-full">
-            {category?.map((c) => {
-              return (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCat(c);
-                  }}
-                  className={`${
-                    c === cat ? "bg-opacity-100" : "bg-opacity-0"
-                  } w-1/4 py-5 border-[1px] bg-[#282828] border-solid border-[#ccc] border-b-[#333] rounded-t-lg transition-all duration-700`}
-                >
-                  <p
-                    className={`${
-                      c === cat ? "text-white" : "text-[#333]"
-                    } text-[0.9375rem] font-semibold`}
-                  >
-                    {c}
-                  </p>
-                </button>
-              );
-            })}
+          <div className="w-full md:py-32 sm:py-24 3sm:pt-8 3sm:pb-10">
+            <img
+              className="object-cover w-full 2sm:h-auto 3sm:h-[80px] cursor-pointer"
+              src={
+                process.env.PUBLIC_URL + "/../image/banner/detailBanner1.png"
+              }
+              alt="detail_banner"
+            />
+            <img
+              className="object-cover w-full 2sm:h-auto 3sm:h-[80px] cursor-pointer md:mt-6 sm:mt-4 3sm:mt-2"
+              src={
+                process.env.PUBLIC_URL + "/../image/banner/detailBanner2.png"
+              }
+              alt="detail_banner"
+            />
           </div>
 
-          {cat === "상품정보" && <DetailInfo detailImg={item.detailImg} />}
-          {cat === "사용후기" && (
-            <DetailReview
-              user={user}
-              item={item}
-              firestoreReviewData={firestoreReviewData}
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              openReviewDetailModal={(id) => {
-                setSelectedReviewId(id);
-                setReviewDetailModalOpen(true);
-              }}
-              handleClickBenefitBtn={handleClickBenefitBtn}
-              handleDeleteReview={handleDeleteReview}
-              handleEditReview={handleEditReview}
-              handleEditReviewSuccess={handleEditReviewSuccess}
-              reviewEdit={reviewEdit}
-              setChangeText={setChangeText}
-              changeText={changeText}
-              openMyBodySizeModal={() => setMyBodySizeModalOpen(true)}
-              myBodyInfo={myBodyInfo}
-            />
-          )}
-          {cat === "교환 및 반품" && <DetailCS />}
-          {cat === "상품문의" && <DetailQuestion user={user} item={item} />}
+          {/* detail page tab */}
+          <div className="w-full">
+            <div className="flex w-full">
+              {category?.map((c) => {
+                return (
+                  <button
+                    onClick={() => {
+                      setCat(c);
+                    }}
+                    className={`${
+                      c === cat
+                        ? "bg-opacity-100 text-white"
+                        : "bg-opacity-0 text-[#333]"
+                    } w-1/4 md:py-5 sm:py-3 2sm:py-2 3sm:py-[2px] border-[1px] bg-[#282828] border-solid border-[#ccc] border-b-[#333] rounded-t-lg transition-all duration-700 md:text-[0.9375rem] sm:text-[0.85rem] 3sm:text-[0.8rem] font-semibold`}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+
+            {cat === "상품정보" && <DetailInfo detailImg={item.detailImg} />}
+            {cat === "사용후기" && (
+              <DetailReview
+                user={user}
+                item={item}
+                firestoreReviewData={firestoreReviewData}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                openReviewDetailModal={(id) => {
+                  setSelectedReviewId(id);
+                  setReviewDetailModalOpen(true);
+                }}
+                handleClickBenefitBtn={handleClickBenefitBtn}
+                handleDeleteReview={handleDeleteReview}
+                handleEditReview={handleEditReview}
+                handleEditReviewSuccess={handleEditReviewSuccess}
+                reviewEdit={reviewEdit}
+                setChangeText={setChangeText}
+                changeText={changeText}
+                openMyBodySizeModal={() => setMyBodySizeModalOpen(true)}
+                myBodyInfo={myBodyInfo}
+              />
+            )}
+            {cat === "교환 및 반품" && <DetailCS />}
+            {cat === "상품문의" && <DetailQuestion user={user} item={item} />}
+          </div>
         </div>
       </div>
 

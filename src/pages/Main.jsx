@@ -17,28 +17,23 @@ export default function Main() {
       .then((res) => res.data.items);
   });
 
+  const comment = isLoading ? "Loading..." : error ? "Occured error...!" : null;
+
   const newItems = items?.products
     ?.filter((item) => item.banner.includes("new"))
     ?.slice(0, 8);
-
   const bestItems = items?.products
     ?.filter((item) => item.banner.includes("best"))
     ?.slice(0, 8);
-
   const allItems = items?.products?.slice(0, 20);
 
   return (
     <div className="w-full">
       <MainSlider />
 
-      {isLoading && "Loading..."}
-      {error && "Occured error...!"}
+      <div className="w-full max-w-[90%] mx-auto md:py-20 3sm:py-12 flex flex-col">
+        {comment}
 
-      <div
-        className={`${
-          items ? "block" : "hidden"
-        } w-full max-w-[90%] mx-auto py-20 flex flex-col`}
-      >
         <CategoryItems
           title="NEW ITEMS"
           items={newItems}
@@ -52,7 +47,7 @@ export default function Main() {
           onClick={() => {
             navigate("/products/best");
           }}
-          styles="mt-40"
+          styles="md:mt-40 3sm:mt-28"
         />
 
         <div className="mt-40">
@@ -69,7 +64,7 @@ export default function Main() {
           onClick={() => {
             navigate("/products/All");
           }}
-          styles="mt-40"
+          styles="md:mt-40 3sm:mt-28"
         />
       </div>
     </div>

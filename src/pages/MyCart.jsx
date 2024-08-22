@@ -195,7 +195,7 @@ export default function MyCart({
   return (
     <div className="w-full">
       <div className="mx-auto mt-32 md:pt-10 3sm:pt-4 w-full xl:max-w-[70%] 3sm:w-[90%]">
-        <h1 className="font-semibold text-[1.875rem] lg:mb-16 sm:mb-10 3sm:mb-6 text-center">
+        <h1 className="font-semibold md:text-[1.875rem] 3sm:text-[1.5rem] lg:mb-16 sm:mb-10 3sm:mb-6 text-center">
           Cart
         </h1>
 
@@ -309,13 +309,13 @@ export default function MyCart({
                 value="삭제하기"
                 onClick={handleDelete}
                 styleType="grayBorder"
-                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center sm:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
+                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center md:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
               />
               <Button
                 value="장바구니 비우기"
                 onClick={handleAllDelete}
                 styleType="grayBorder"
-                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center sm:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
+                styles="h-[35px] md:px-3 3sm:px-2 border-[1px] flex justify-center items-center md:text-[0.875rem] 3sm:text-[0.75rem] text-[#333]"
               />
             </div>
           </div>

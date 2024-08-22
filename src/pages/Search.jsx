@@ -134,7 +134,7 @@ export default function Search() {
         <p
           className={`${
             filteredProducts?.length > 0 ? "" : "text-center"
-          } md:text-[0.9rem] 3sm:text-[0.8rem] mt-10 whitespace-pre-wrap`}
+          } md:text-[0.9rem] 3sm:text-[0.8rem] my-10 whitespace-pre-wrap`}
         >
           {comment}
         </p>

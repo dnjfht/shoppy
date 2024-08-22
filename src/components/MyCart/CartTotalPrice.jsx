@@ -26,7 +26,7 @@ export default function CartTotalPrice({ totalPrice, totalCount }) {
       </div>
 
       <div className="w-full mt-6 font-semibold">
-        <p className="w-full text-[1rem] text-[#333] ">결제예정금액</p>
+        <p className="w-full text-[1rem] text-[#333]">결제예정금액</p>
         <p className="w-full text-[1.5rem] text-[#f57778]">
           {attach_won(totalPrice + deliveryCharge)}
         </p>

@@ -164,7 +164,7 @@ export default function DetailReview({
   }, [search, myBodyInfo, reviewOfMyBodyType, firestoreReviewData]);
 
   return (
-    <div className="relative w-full overflow-hidden py-14">
+    <div className="relative w-full overflow-hidden md:py-14 sm:py-9 3sm:py-4">
       <div>
         <img
           src={process.env.PUBLIC_URL + "/image/banner/review_event.png"}
@@ -172,7 +172,7 @@ export default function DetailReview({
         />
 
         <img
-          className="mt-5"
+          className="md:mt-5 3sm:mt-2 lg:h-auto md:h-[100px] sm:h-[80px] 2sm:h-[70px] 3sm:h-[60px] object-cover"
           src={process.env.PUBLIC_URL + "/image/banner/filter_good_banners.png"}
           alt="filter_good_banners"
         />
@@ -181,61 +181,61 @@ export default function DetailReview({
       {/* 리뷰 관련 영역 */}
       <div>
         {/* 제품 평균 리뷰*/}
-        <ul className="flex justify-between w-full mt-6">
-          <li className="w-1/3 py-6 text-[0.9375rem] text-center text-[#1e1d1d] font-semibold border-r-[1px] border-solid border-[#f3f3f3]">
+        <ul className="justify-between w-full md:flex md:mt-6 3sm:mt-4">
+          <li className="md:w-1/3 3sm:w-full py-6 md:text-[0.9375rem] sm:text-[0.85rem] 3sm:text-[0.8rem] text-center text-[#1e1d1d] font-semibold md:border-r-[1px] 3sm:border-b-[1px] border-solid border-[#f3f3f3]">
             <p>구매고객 총 평점</p>
             <div className="mt-8">
-              <p className="text-[2.6875rem]">{averageRatingResult}</p>
-              <div>
-                <RatingResult averageRatingResult={averageRatingResult} />
-              </div>
+              <p className="lg:text-[2.6875rem] md:text-[2.4rem]">
+                {averageRatingResult}
+              </p>
+              <RatingResult averageRatingResult={averageRatingResult} />
             </div>
           </li>
 
-          <li className="w-1/3 px-6 py-6 box-border text-[0.9375rem] text-center text-[#1e1d1d] font-semibold border-r-[1px] border-solid border-[#f3f3f3] flex flex-col justify-between items-center">
-            <p>평점 비율</p>
+          <li className="md:w-1/3 3sm:w-full px-6 py-6 box-border lg:text-[0.9375rem] md:text-[0.85rem] sm:text-[0.8rem] 3sm:text-[0.765rem] text-center text-[#1e1d1d] font-semibold md:border-r-[1px] 3sm:border-b-[1px] border-solid border-[#f3f3f3] flex flex-col justify-between items-center">
+            <p className="md:text-[0.9375rem] sm:text-[0.85rem] 3sm:text-[0.8rem] ">
+              평점 비율
+            </p>
             <div className="flex-col items-center w-full">
-              {/* 색상 */}
-              <div className="flex items-center justify-between w-full mb-5 font-normal">
+              <div className="flex items-center justify-between w-full font-normal md:mb-5 3sm:mb-3">
                 <div className="w-1/5 py-2 text-[#343434] border-[1px] border-solid border-[#c4c4c4] rounded-full">
-                  <p>색상</p>
+                  색상
                 </div>
 
                 <div className="w-[76%] flex justify-between items-center">
                   <p className="w-3/12">똑같아요</p>
 
-                  <div className="w-7/12 h-4 bg-transparent border-[1px] border-solid border-[#e0e0e0e0] rounded-full relative">
+                  <div className="lg:w-7/12 3sm:w-6/12 h-4 bg-transparent border-[1px] border-solid border-[#e0e0e0e0] rounded-full relative">
                     <span
                       className="h-4 bg-[#d3d3d3] rounded-full absolute top-0 left-0 transition-all duration-700"
                       style={progressBarStyle}
                     />
                   </div>
-                  <p className="w-2/12 text-[1.125rem]">{`${colorSamePrecent}%`}</p>
+                  <p className="w-2/12 lg:text-[1.125rem] md:text-[1rem] sm:text-[0.9rem] 3sm:text-[0.8rem]">{`${colorSamePrecent}%`}</p>
                 </div>
               </div>
 
-              {/* 사이즈 */}
               <div className="flex items-center justify-between w-full font-normal">
                 <div className="w-1/5 py-2 text-[#343434] font-normal border-[1px] border-solid border-[#c4c4c4] rounded-full">
-                  <p>사이즈</p>
+                  사이즈
                 </div>
 
                 <div className="w-[76%] flex justify-between items-center">
                   <p className="w-3/12">잘 맞아요</p>
 
-                  <div className="w-7/12 h-4 bg-transparent border-[1px] border-solid border-[#e0e0e0e0] rounded-full relative">
+                  <div className="lg:w-7/12 3sm:w-6/12 h-4 bg-transparent border-[1px] border-solid border-[#e0e0e0e0] rounded-full relative">
                     <span
                       className="h-4 bg-[#d3d3d3] rounded-full absolute top-0 left-0 transition-all duration-700"
                       style={progressBarStyle2}
                     />
                   </div>
-                  <p className="w-2/12 text-[1.125rem]">{`${sizeSamePrecent}%`}</p>
+                  <p className="w-2/12 lg:text-[1.125rem] md:text-[1rem] sm:text-[0.9rem] 3sm:text-[0.8rem]">{`${sizeSamePrecent}%`}</p>
                 </div>
               </div>
             </div>
           </li>
 
-          <li className="w-1/3 px-6 py-6 box-border text-[0.9375rem] text-center text-[#1e1d1d] font-semibold flex flex-col justify-between items-center">
+          <li className="md:w-1/3 3sm:w-full px-6 py-6 box-border md:text-[0.9375rem] sm:text-[0.85rem] 3sm:text-[0.8rem] text-center text-[#1e1d1d] font-semibold flex flex-col justify-between items-center">
             <p>리뷰필터</p>
             <div className="w-full flex flex-col items-center text-[0.75rem] font-normal">
               <div className="flex items-center justify-between w-full">
